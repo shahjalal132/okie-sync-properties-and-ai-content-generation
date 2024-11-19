@@ -21,6 +21,7 @@ class Admin_Sub_Menu {
         // save api credentials
         add_action( 'wp_ajax_save_credentials', [ $this, 'save_api_credentials' ] );
         add_action( 'wp_ajax_save_options', [ $this, 'save_options' ] );
+        add_action( 'wp_ajax_fetch_properties', [ $this, 'fetch_properties' ] );
     }
 
     public function save_api_credentials() {
@@ -74,6 +75,28 @@ class Admin_Sub_Menu {
 
     public function menu_callback_html() {
         include_once PLUGIN_BASE_PATH . '/templates/template-admin-sub-menu.php';
+    }
+
+    public function fetch_properties() {
+        
+        $url = "https://www.housinghub.org.au/_next/data/OEYJiWSM7MIEi5m9OATBw/search-results.json?latitude=-33.8688197&longitude=151.2092955&location_string=Sydney%20NSW%2C%20Australia&checkboxRent=true";
+
+        $response = wp_remote_get( $url );
+
+        if ( is_wp_error( $response ) ) {
+            wp_send_json_error( 'An error occurred! Please try again.' );
+        }
+
+        $body = wp_remote_retrieve_body( $response );
+
+        if ( empty( $body ) ) {
+            wp_send_json_error( 'An error occurred! Please try again.' );
+        }
+
+        $this->put_program_logs( $body );
+
+        wp_send_json_success( 'Properties fetched successfully!' );
+        die();
     }
 
 }

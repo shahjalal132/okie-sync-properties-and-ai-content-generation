@@ -171,5 +171,48 @@
       });
     });
     // save options end
+
+    // Fetch properties
+    $("#fetch_properties").click(function () {
+      // add loading spinner
+      const loader_button = $(".fetch-properties-spinner-loader-wrapper");
+      $(loader_button).addClass("loader-spinner");
+
+      $.ajax({
+        type: "POST",
+        url: wpb_admin_localize.ajax_url,
+        data: {
+          action: "fetch_properties",
+        },
+        success: function (response) {
+          // remove loading spinner
+          $(loader_button).removeClass("loader-spinner");
+
+          if (true === response.success) {
+            showToast({
+              type: "success",
+              timeout: 2000,
+              title: `${response.data}`,
+            });
+          } else {
+            showToast({
+              type: "error",
+              timeout: 2000,
+              title: `${response.data}`,
+            });
+          }
+        },
+        error: function (xhr, status, error) {
+          // remove loading spinner
+          $(loader_button).removeClass("loader-spinner");
+
+          showToast({
+            type: "error",
+            timeout: 2000,
+            title: `${response.data}`,
+          });
+        },
+      });
+    });
   });
 })(jQuery);
