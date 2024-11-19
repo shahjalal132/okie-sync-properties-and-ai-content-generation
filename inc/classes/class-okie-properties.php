@@ -36,29 +36,80 @@ class Okie_Properties {
     }
 
     public function get_properties() {
+        $hash          = get_option( 'okie_api_hash_key' ) ?? '';
+        $property_list = [
+            [
+                'latitude'        => "-33.8129803",
+                'longitude'       => "151.1049802",
+                'location_string' => "New South Wales, Australia",
+            ],
+            [
+                'latitude'        => "-37.8871381",
+                'longitude'       => "144.5959948",
+                'location_string' => "Victoria, Australia",
+            ],
+            [
+                'latitude'        => "-27.6124586",
+                'longitude'       => "153.3030618",
+                'location_string' => "Queensland, Australia",
+            ],
+            [
+                'latitude'        => "-34.676285",
+                'longitude'       => "138.6764994",
+                'location_string' => "South Australia, Australia",
+            ],
+            [
+                'latitude'        => "-31.8910934",
+                'longitude'       => "115.9464652",
+                'location_string' => "Western Australia, Australia",
+            ],
+            [
+                'latitude'        => "-12.5056706",
+                'longitude'       => "131.0082063",
+                'location_string' => "Northern Territory, Australia",
+            ],
+            [
+                'latitude'        => "-35.41342",
+                'longitude'       => "149.1084712",
+                'location_string' => "Australian Capital Territory, Australia",
+            ],
+            [
+                'latitude'        => "-42.893889",
+                'longitude'       => "147.431111",
+                'location_string' => "Tasmania, Australia",
+            ],
+        ];
 
-        $hash            = get_option( 'okie_api_hash_key' ) ?? '';
-        $latitude        = "-33.8688197";
-        $longitude       = "151.2092955";
-        $location_string = "Sydney NSW, Australia";
+        $all_properties = [];
 
         try {
-            $response = $this->fetch_properties_from_api( $hash, $latitude, $longitude, $location_string );
+            foreach ( $property_list as $property ) {
+                
+                $latitude        = $property['latitude'];
+                $longitude       = $property['longitude'];
+                $location_string = $property['location_string'];
 
-            if ( is_wp_error( $response ) ) {
-                return $response;
+                $response = $this->fetch_properties_from_api( $hash, $latitude, $longitude, $location_string );
+
+                if ( is_wp_error( $response ) ) {
+                    return $response;
+                }
+
+                $data = json_decode( $response, true );
+
+                if ( json_last_error() !== JSON_ERROR_NONE ) {
+                    return new \WP_Error( 'json_decode_error', 'Error decoding API response.', [ 'status' => 500 ] );
+                }
+
+                $properties = $data['pageProps']['results']['hits'] ?? [];
+
+                if ( !empty( $properties ) && is_array( $properties ) ) {
+                    $all_properties = array_merge( $all_properties, $properties );
+                }
             }
 
-            $data = json_decode( $response, true );
-
-            if ( json_last_error() !== JSON_ERROR_NONE ) {
-                return new \WP_Error( 'json_decode_error', 'Error decoding API response.', [ 'status' => 500 ] );
-            }
-
-            $properties = $data['pageProps']['results']['hits'] ?? [];
-
-            if ( !empty( $properties ) && is_array( $properties ) ) {
-                $insert_result = $this->insert_properties_to_database( $properties );
+            if ( !empty( $all_properties ) ) {
+                $insert_result = $this->insert_properties_to_database( $all_properties );
 
                 if ( is_wp_error( $insert_result ) ) {
                     return $insert_result;
@@ -66,7 +117,7 @@ class Okie_Properties {
 
                 return [
                     'status'  => 'success',
-                    'message' => 'Properties fetched and Inserted to database successfully!',
+                    'message' => 'Properties fetched and inserted to the database successfully!',
                 ];
             } else {
                 return [
