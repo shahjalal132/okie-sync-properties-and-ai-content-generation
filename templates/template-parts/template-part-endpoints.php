@@ -11,6 +11,11 @@
         </thead>
         <tbody>
             <tr>
+                <td><?= $base_url ?>/get-hash-key</td>
+                <td>Get Hash Key</td>
+                <td><button class="copy-button">Copy</button></td>
+            </tr>
+            <tr>
                 <td><?= $base_url ?>/get-properties</td>
                 <td>Get Properties</td>
                 <td><button class="copy-button">Copy</button></td>

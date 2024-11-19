@@ -20,16 +20,24 @@ class Okie_Properties {
     }
 
     public function register_rest_route() {
+
         register_rest_route( 'okie/v1', '/get-properties', [
             'methods'             => 'GET',
             'callback'            => [ $this, 'get_properties' ],
             'permission_callback' => '__return_true',
         ] );
+
+        register_rest_route( 'okie/v1', '/get-hash-key', [
+            'methods'             => 'GET',
+            'callback'            => [ $this, 'get_hash_value' ],
+            'permission_callback' => '__return_true',
+        ] );
+
     }
 
     public function get_properties() {
-        
-        $hash            = "oVAhQ9P5GoMLlJLF6mHhE";
+
+        $hash            = get_option( 'okie_api_hash_key' ) ?? '';
         $latitude        = "-33.8688197";
         $longitude       = "151.2092955";
         $location_string = "Sydney NSW, Australia";
@@ -58,7 +66,7 @@ class Okie_Properties {
 
                 return [
                     'status'  => 'success',
-                    'message' => 'Properties fetched and saved successfully!',
+                    'message' => 'Properties fetched and Inserted to database successfully!',
                 ];
             } else {
                 return [
@@ -70,6 +78,53 @@ class Okie_Properties {
             $this->put_program_logs( $e->getMessage() );
             return new \WP_Error( 'unexpected_error', 'An unexpected error occurred! Please try again later.', [ 'status' => 500 ] );
         }
+    }
+
+    public function get_hash_value() {
+        // Initialize cURL
+        $curl = curl_init();
+        curl_setopt_array( $curl, array(
+            CURLOPT_URL            => 'https://www.housinghub.org.au/search-results?latitude=-33.8688197&longitude=151.2092955&location_string=Sydney%20NSW%2C%20Australia',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING       => '',
+            CURLOPT_MAXREDIRS      => 10,
+            CURLOPT_TIMEOUT        => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION   => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST  => 'GET',
+        ) );
+
+        // Execute the cURL request and get the response
+        $response = curl_exec( $curl );
+
+        // Close the cURL session
+        curl_close( $curl );
+
+        // Check if the response is valid
+        if ( $response === false ) {
+            return 'Failed to fetch data.';
+        }
+
+        // Extract the key from the response
+        $pattern = '/<link[^>]+href="\/_next\/static\/([^\/]+)\/pages\/_app\.module\.js"/';
+
+        if ( preg_match( $pattern, $response, $matches ) ) {
+            // Return the captured key
+            $key = $matches[1];
+            update_option( 'okie_api_hash_key', $key );
+
+            return [
+                'status'  => 'success',
+                'key '    => $key,
+                'message' => 'Key extracted successfully.',
+            ];
+        }
+
+        // Return a message if the key is not found
+        return [
+            'status'  => 'error',
+            'message' => 'Key not found in response.',
+        ];
     }
 
     public function insert_properties_to_database( $properties ) {
