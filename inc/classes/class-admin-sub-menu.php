@@ -56,7 +56,7 @@ class Admin_Sub_Menu {
     }
 
     function add_plugin_action_links( $links ) {
-        $settings_link = '<a href="admin.php?page=menu-slug2">' . __( 'Settings', 'wp-plugin-boilerplate' ) . '</a>';
+        $settings_link = '<a href="admin.php?page=okie-settings">' . __( 'Settings', 'wp-plugin-boilerplate' ) . '</a>';
         array_unshift( $links, $settings_link );
         return $links;
     }
@@ -64,10 +64,10 @@ class Admin_Sub_Menu {
     public function register_admin_sub_menu() {
         add_submenu_page(
             'options-general.php',
-            'Page Title',
-            'Menu Title',
+            'Okie Settings',
+            'Okie Settings',
             'manage_options',
-            'menu-slug2',
+            'okie-settings',
             [ $this, 'menu_callback_html' ],
         );
     }
