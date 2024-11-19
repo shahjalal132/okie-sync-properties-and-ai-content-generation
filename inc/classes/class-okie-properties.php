@@ -20,52 +20,107 @@ class Okie_Properties {
     }
 
     public function register_rest_route() {
-
         register_rest_route( 'okie/v1', '/get-properties', [
             'methods'             => 'GET',
             'callback'            => [ $this, 'get_properties' ],
             'permission_callback' => '__return_true',
         ] );
-
     }
 
     public function get_properties() {
-
+        
+        $hash            = "oVAhQ9P5GoMLlJLF6mHhE";
         $latitude        = "-33.8688197";
         $longitude       = "151.2092955";
         $location_string = "Sydney NSW, Australia";
 
         try {
-            $response = $this->fetch_properties_from_api( $latitude, $longitude, $location_string );
+            $response = $this->fetch_properties_from_api( $hash, $latitude, $longitude, $location_string );
 
             if ( is_wp_error( $response ) ) {
-                return new \WP_Error( 'api_fetch_error', 'Failed to fetch properties from API.', [ 'status' => 500 ] );
+                return $response;
             }
 
-            $data       = json_decode( $response, true );
-            $properties = $data['pageProps']['results']['hits'];
+            $data = json_decode( $response, true );
 
-            // Return success message with data
-            return [
-                'status'  => 'success',
-                'message' => 'Properties fetched successfully!',
-            ];
+            if ( json_last_error() !== JSON_ERROR_NONE ) {
+                return new \WP_Error( 'json_decode_error', 'Error decoding API response.', [ 'status' => 500 ] );
+            }
+
+            $properties = $data['pageProps']['results']['hits'] ?? [];
+
+            if ( !empty( $properties ) && is_array( $properties ) ) {
+                $insert_result = $this->insert_properties_to_database( $properties );
+
+                if ( is_wp_error( $insert_result ) ) {
+                    return $insert_result;
+                }
+
+                return [
+                    'status'  => 'success',
+                    'message' => 'Properties fetched and saved successfully!',
+                ];
+            } else {
+                return [
+                    'status'  => 'success',
+                    'message' => 'No properties found to save.',
+                ];
+            }
         } catch (\Exception $e) {
-            // Log exception and return error response
-            // $this->put_program_logs( $e->getMessage() );
-            return [
-                'status'  => 'error',
-                'message' => 'An error occurred! Please try again.',
-            ];
+            $this->put_program_logs( $e->getMessage() );
+            return new \WP_Error( 'unexpected_error', 'An unexpected error occurred! Please try again later.', [ 'status' => 500 ] );
         }
     }
 
-    public function fetch_properties_from_api( $latitude, $longitude, $location_string ) {
+    public function insert_properties_to_database( $properties ) {
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'sync_properties';
 
+        $wpdb->query( 'START TRANSACTION' ); // Begin transaction
+
+        try {
+            foreach ( $properties as $property ) {
+                $proper_id     = $property['objectID'];
+                $long_desc     = $property['propertyDescriptionLong'] ?? '';
+                $short_desc    = $property['propertyDescriptionShort'] ?? '';
+                $property_data = json_encode( $property );
+                $status        = 'pending';
+
+                $sql = $wpdb->prepare(
+                    "INSERT INTO $table_name (property_id, long_description, short_description, property_data, status) 
+                    VALUES (%s, %s, %s, %s, %s)
+                    ON DUPLICATE KEY UPDATE 
+                        long_description = VALUES(long_description), 
+                        short_description = VALUES(short_description), 
+                        property_data = VALUES(property_data), 
+                        status = VALUES(status)",
+                    $proper_id,
+                    $long_desc,
+                    $short_desc,
+                    $property_data,
+                    $status
+                );
+
+                if ( false === $wpdb->query( $sql ) ) {
+                    throw new \Exception( $wpdb->last_error );
+                }
+            }
+
+            $wpdb->query( 'COMMIT' ); // Commit transaction
+            return true;
+        } catch (\Exception $e) {
+            $wpdb->query( 'ROLLBACK' ); // Rollback transaction on error
+            $this->put_program_logs( $e->getMessage() );
+            return new \WP_Error( 'db_insert_error', 'Error inserting properties into the database.', [ 'status' => 500 ] );
+        }
+    }
+
+    public function fetch_properties_from_api( $hash, $latitude, $longitude, $location_string ) {
         $url = sprintf(
-            "https://www.housinghub.org.au/_next/data/OEYJiWSM7MIEi5m9OATBw/search-results.json?latitude=%s&longitude=%s&location_string=%s&checkboxRent=true",
-            $latitude,
-            $longitude,
+            "https://www.housinghub.org.au/_next/data/%s/search-results.json?latitude=%s&longitude=%s&location_string=%s&checkboxRent=true",
+            urlencode( $hash ),
+            urlencode( $latitude ),
+            urlencode( $longitude ),
             urlencode( $location_string )
         );
 
@@ -91,7 +146,6 @@ class Okie_Properties {
         }
 
         $http_code = curl_getinfo( $curl, CURLINFO_HTTP_CODE );
-
         curl_close( $curl );
 
         if ( $http_code !== 200 ) {
@@ -100,5 +154,4 @@ class Okie_Properties {
 
         return $response;
     }
-
 }
