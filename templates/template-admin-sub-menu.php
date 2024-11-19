@@ -1,6 +1,6 @@
 <?php
 
-$site_url = site_url() . '/wp-json';
+$base_url = site_url() . '/wp-json/okie/v1';
 $api_url  = get_option( 'api_url' );
 $api_key  = get_option( 'api_key' );
 $option1  = get_option( 'option1' );
