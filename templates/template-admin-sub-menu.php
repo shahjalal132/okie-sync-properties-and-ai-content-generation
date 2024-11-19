@@ -22,6 +22,7 @@ $option2  = get_option( 'option2' );
         <div class="tabs">
             <button class="tab active" data-tab="api">API</button>
             <button class="tab" data-tab="options">Options</button>
+            <button class="tab" data-tab="settings">Settings</button>
             <button class="tab" data-tab="endpoints">Endpoints</button>
         </div>
     </div>
@@ -34,6 +35,10 @@ $option2  = get_option( 'option2' );
 
         <div class="tab-content" id="options" style="display: none;">
             <?php include_once PLUGIN_BASE_PATH . '/templates/template-parts/template-part-options.php'; ?>
+        </div>
+
+        <div class="tab-content" id="settings" style="display: none;">
+            <?php include_once PLUGIN_BASE_PATH . '/templates/template-parts/template-part-settings.php'; ?>
         </div>
 
         <div class="tab-content" id="endpoints" style="display: none;">
