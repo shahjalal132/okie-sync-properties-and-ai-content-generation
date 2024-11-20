@@ -85,7 +85,7 @@ class Okie_Properties {
             [
                 'state' => 'NSW',
             ],
-            /* [
+            [
                 'state' => 'VIC',
             ],
             [
@@ -105,7 +105,7 @@ class Okie_Properties {
             ],
             [
                 'state' => 'NT',
-            ], */
+            ]
         ];
 
         $all_properties = [];
@@ -144,6 +144,7 @@ class Okie_Properties {
             }
 
             if ( !empty( $all_properties ) ) {
+                $start = time();
                 $insert_result = $this->insert_properties_to_database( $all_properties );
 
                 if ( is_wp_error( $insert_result ) ) {
@@ -153,6 +154,7 @@ class Okie_Properties {
                 return [
                     'status'  => 'success',
                     'message' => 'Properties fetched and inserted to the database successfully!',
+                    'time_took'=> time() - $start . ' seconds',
                 ];
             } else {
                 return [
@@ -217,50 +219,77 @@ class Okie_Properties {
 
         global $wpdb;
         $table_name = $wpdb->prefix . 'sync_properties';
+
         $wpdb->query( 'START TRANSACTION' ); // Begin transaction
         // truncate table
-        $wpdb->query("TRUNCATE TABLE $table_name");
-        
-        try {
-            $this->bulInsert($properties, $wpdb, $table_name);
-        } catch (\Exception $e) {
+        // $wpdb->query( "TRUNCATE TABLE $table_name");
 
+        try {
+            foreach ( $properties as $property ) {
+
+                $property_id       = $property['objectID'];
+                $long_desc         = $property['propertyDescriptionLong'] ?? '';
+                $short_desc        = $property['propertyDescriptionShort'] ?? '';
+                $short_id          = $property['shortId'] ?? '';
+                $provider_short_id = $property['providerShortId'] ?? '';
+
+                // get website url
+                $website_url = sprintf( "https://www.housinghub.org.au/property-detail/%s/%s", $provider_short_id, $short_id );
+
+                $property_data = json_encode( $property );
+                $insertInto = "INSERT INTO $table_name (property_id, long_description, short_description, short_id, provider_short_id, website_url, property_data)";
+                $placeholders = '(%s, %s, %s, %s, %s, %s, %s)';
+                $onDuplicate = "ON DUPLICATE KEY UPDATE 
+                        long_description = VALUES(long_description), 
+                        short_description = VALUES(short_description), 
+                        property_data = VALUES(property_data)";
+                $values = [
+                    $property_id,
+                    $long_desc,
+                    $short_desc,
+                    $short_id,
+                    $provider_short_id,
+                    $website_url,
+                    $property_data,
+                    $long_desc,
+                    $short_desc,
+                    $property_data
+                ];
+                $sql = $wpdb->prepare(
+                    "$insertInto
+                    VALUES $placeholders
+                    $onDuplicate",
+                    ...$values
+                );
+                if ( false === $wpdb->query( $sql ) ) {
+                    throw new \Exception( $wpdb->last_error );
+                }
+                
+
+                // $wpdb->insert(
+                //     $table_name,
+                //     [
+                //         'property_id'       => $property_id,
+                //         'long_description'  => $long_desc,
+                //         'short_description' => $short_desc,
+                //         'short_id'          => $short_id,
+                //         'provider_short_id' => $provider_short_id,
+                //         'website_url'       => $website_url,
+                //         'property_data'     => $property_data,
+                //     ]
+                // );
+            }
+           
+            
+            
+
+            $wpdb->query( 'COMMIT' ); // Commit transaction
+            return true;
+        } catch (\Exception $e) {
             $wpdb->query( 'ROLLBACK' ); // Rollback transaction on error
             $this->put_program_logs( $e->getMessage() );
             return new \WP_Error( 'db_insert_error', 'Error inserting properties into the database.', [ 'status' => 500 ] );
         }
-    }
-
-    function bulInsert($properties, $wpdb, $table_name) {
-        // Prepare placeholders and values
-        $placeholders = [];
-        $values = [];
-        foreach ( $properties as $property ) {
-
-            $short_id = $property['shortId'] ?? '';
-            $provider_short_id = $property['providerShortId'] ?? '';
-
-
-            // Prepare placeholders and values
-            $placeholders[] = "(%s, %s, %s, %s, %s, %s, %s)";
-            $values[] = $property['objectID'];
-            $values[] = $property['propertyDescriptionLong'] ?? '';
-            $values[] = $property['propertyDescriptionShort'] ?? '';
-            $values[] = $short_id;
-            $values[] = $provider_short_id;
-            // get website url
-            $values[] = sprintf( "https://www.housinghub.org.au/property-detail/%s/%s", $provider_short_id, $short_id );
-            $values[] = json_encode( $property );
-        }
-        // Construct the query
-        $placeholders = implode(', ', $placeholders);
-        $query = "INSERT INTO $table_name (property_id, long_description, short_description, short_id, provider_short_id, website_url, property_data) VALUES $placeholders";
-        $stmt = $wpdb->prepare($query, $values);
-        $this->put_program_logs( $stmt );
-        $wpdb->query($stmt);
-
-        $wpdb->query( 'COMMIT' ); // Commit transaction
-        return true;
     }
 
     public function fetch_properties_from_api( $hash, $latitude, $longitude, $location_string ) {
