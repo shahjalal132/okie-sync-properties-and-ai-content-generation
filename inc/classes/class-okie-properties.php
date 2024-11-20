@@ -189,7 +189,7 @@ class Okie_Properties {
                 $values       = [];
 
                 foreach ( $chunk as $property ) {
-                    
+
                     $placeholders[] = '(%s, %s, %s, %s, %s, %s, %s)';
 
                     $provider_short_id = $property['providerShortId'] ?? '';
@@ -211,7 +211,7 @@ class Okie_Properties {
                 $stmt = "
                 INSERT INTO $table_name (property_id, long_description, short_description, short_id, provider_short_id, website_url, property_data)
                 VALUES $placeholders 
-                ON DUPLICATE KEY UPDATE 
+                ON DUPLICATE KEY UPDATE
                 long_description = VALUES(long_description), 
                 short_description = VALUES(short_description), 
                 property_data = VALUES(property_data)";

@@ -225,5 +225,11 @@
         },
       });
     });
+
+    // File selected event
+    $("#csv_file").on("change", function () {
+      const fileName = this.files[0] ? this.files[0].name : "No file selected";
+      $("#file-name").text(fileName);
+    });
   });
 })(jQuery);

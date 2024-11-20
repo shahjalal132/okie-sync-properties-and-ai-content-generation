@@ -12,7 +12,7 @@
 
 # Local History for Visual Studio Code
 .history/
-program_logs/program_logs.log
+# program_logs/program_logs.log
 
 # composer
 vendor
