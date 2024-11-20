@@ -7,7 +7,10 @@
     </label>
     <input type="file" name="csv_file" id="csv_file" style="display: none;">
     <span id="file-name" class="file-name-display">No file selected</span>
-    <button type="submit" class="save-btn mt-10" style="display: block;">Submit</button>
+    <button type="submit" class="save-btn button-flex mt-10" id="upload_csv_btn" style="display: block;">
+        <span>Upload</span>
+        <span class="spinner-loader-wrapper-csv"></span>
+    </button>
 </form>
 
 <h4 class="common-title mt-20">Settings</h4>

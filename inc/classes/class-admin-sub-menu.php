@@ -22,6 +22,7 @@ class Admin_Sub_Menu {
         add_action( 'wp_ajax_save_credentials', [ $this, 'save_api_credentials' ] );
         add_action( 'wp_ajax_save_options', [ $this, 'save_options' ] );
         add_action( 'wp_ajax_fetch_properties', [ $this, 'fetch_properties' ] );
+        add_action( 'wp_ajax_upload_csv', [ $this, 'handle_csv_upload' ] );
     }
 
     public function save_api_credentials() {
@@ -126,6 +127,56 @@ class Admin_Sub_Menu {
             'data'    => $data,
         ] );
         return;
+    }
+
+    public function handle_csv_upload() {
+
+        // Check if a file was uploaded
+        if ( !isset( $_FILES['csv_file'] ) || empty( $_FILES['csv_file']['tmp_name'] ) ) {
+            wp_send_json_error( 'No file uploaded.' );
+            $this->put_program_logs( 'No file uploaded.' );
+        }
+
+        $file = $_FILES['csv_file'];
+
+        // Validate the file type
+        $file_type = wp_check_filetype( $file['name'] );
+        if ( $file_type['ext'] !== 'csv' ) {
+            wp_send_json_error( 'Invalid file format. Only CSV files are allowed.' );
+        }
+
+        // Open the file and process its contents
+        if ( ( $handle = fopen( $file['tmp_name'], 'r' ) ) !== false ) {
+            global $wpdb;
+            $table_name = $wpdb->prefix . 'sync_properties';
+
+            // Read the CSV line by line and insert into the database
+            $row_count = 0;
+            while ( ( $data = fgetcsv( $handle, 1000, ',' ) ) !== false ) {
+                // Skip empty rows
+                if ( empty( $data[0] ) ) {
+                    continue;
+                }
+
+                $website_url = sanitize_text_field( $data[12] );
+
+                $wpdb->insert(
+                    $table_name,
+                    [ 'website_url' => $website_url ],
+                    [ '%s' ]
+                );
+
+                $row_count++;
+            }
+
+            fclose( $handle );
+
+            wp_send_json_success( "Successfully imported $row_count rows." );
+        } else {
+            wp_send_json_error( 'Unable to open the uploaded file.' );
+        }
+
+        wp_die(); // Always include this in AJAX handlers to properly terminate execution
     }
 
 }

@@ -231,5 +231,76 @@
       const fileName = this.files[0] ? this.files[0].name : "No file selected";
       $("#file-name").text(fileName);
     });
+
+    $("#upload_csv_btn").click(function (e) {
+      e.preventDefault();
+
+      // Add loading spinner
+      const loader_button = $(".spinner-loader-wrapper-csv");
+      $(loader_button).addClass("loader-spinner");
+
+      const fileInput = $("#csv_file")[0];
+      const file = fileInput.files[0];
+
+      if (!file) {
+        $(loader_button).removeClass("loader-spinner");
+        showToast({
+          type: "error",
+          timeout: 3000,
+          title: "No file selected.",
+        });
+        return;
+      }
+
+      const fileExtension = file.name.split(".").pop().toLowerCase();
+      if (fileExtension !== "csv") {
+        $(loader_button).removeClass("loader-spinner");
+        showToast({
+          type: "error",
+          timeout: 3000,
+          title: "Invalid file format. Only CSV files are allowed.",
+        });
+        return;
+      }
+
+      // Create FormData and append the file
+      const formData = new FormData();
+      formData.append("action", "upload_csv");
+      formData.append("csv_file", file);
+
+      // Call AJAX request
+      $.ajax({
+        type: "POST",
+        url: wpb_admin_localize.ajax_url,
+        data: formData,
+        processData: false, // Prevent jQuery from processing the data
+        contentType: false, // Prevent jQuery from setting the Content-Type
+        success: function (response) {
+          $(loader_button).removeClass("loader-spinner");
+
+          if (response.success) {
+            showToast({
+              type: "success",
+              timeout: 2000,
+              title: `${response.data}`,
+            });
+          } else {
+            showToast({
+              type: "error",
+              timeout: 2000,
+              title: `${response.data}`,
+            });
+          }
+        },
+        error: function (xhr, status, error) {
+          $(loader_button).removeClass("loader-spinner");
+          showToast({
+            type: "error",
+            timeout: 2000,
+            title: "An error occurred while uploading the file.",
+          });
+        },
+      });
+    });
   });
 })(jQuery);

@@ -208,11 +208,10 @@
 }
 
 .custom-file-upload:hover {
-  background-color: var(--primary-light-color)
+  background-color: #4351c1;
 }
 
 .file-name-display {
-  font-size: 14px;
   color: var(--gray-color);
   display: inline-block;
   margin-top: 5px;
