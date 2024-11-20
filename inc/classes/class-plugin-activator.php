@@ -24,11 +24,30 @@ class Plugin_Activator {
             provider_short_id VARCHAR(255) NULL,
             website_url VARCHAR(255) UNIQUE NOT NULL,
             property_data JSON NULL,
-            is_active TINYINT(1) DEFAULT 0,
+            status VARCHAR(30) NOT NULL DEFAULT 'pending',
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
             PRIMARY KEY (id)
         ) $charset_collate;";
+
+        require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+        dbDelta( $sql );
+    }
+
+    public static function create_csv_file_data_table() {
+        // Create sync users table
+        global $wpdb;
+        $table_name      = $wpdb->prefix . 'sync_csv_file_data';
+        $charset_collate = $wpdb->get_charset_collate();
+
+        $sql = "CREATE TABLE IF NOT EXISTS $table_name (
+             id INT AUTO_INCREMENT,
+             website_url VARCHAR(300) UNIQUE NOT NULL,
+             status VARCHAR(30) NOT NULL DEFAULT 'pending',
+             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+             PRIMARY KEY (id)
+         ) $charset_collate;";
 
         require_once ABSPATH . 'wp-admin/includes/upgrade.php';
         dbDelta( $sql );

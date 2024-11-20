@@ -148,7 +148,7 @@ class Admin_Sub_Menu {
         // Open the file and process its contents
         if ( ( $handle = fopen( $file['tmp_name'], 'r' ) ) !== false ) {
             global $wpdb;
-            $table_name = $wpdb->prefix . 'sync_properties';
+            $table_name = $wpdb->prefix . 'sync_csv_file_data';
 
             // Read the CSV line by line and insert into the database
             $row_count = 0;
@@ -162,7 +162,9 @@ class Admin_Sub_Menu {
 
                 $wpdb->insert(
                     $table_name,
-                    [ 'website_url' => $website_url ],
+                    [
+                        'website_url' => $website_url,
+                    ],
                     [ '%s' ]
                 );
 

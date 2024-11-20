@@ -15,4 +15,10 @@ class Plugin_Deactivator {
         $wpdb->query( "DROP TABLE IF EXISTS $table_name" );
     }
 
+    public static function remove_csv_file_data_table() {
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'sync_csv_file_data';
+        $wpdb->query( "DROP TABLE IF EXISTS $table_name" );
+    }
+
 }
