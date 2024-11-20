@@ -166,7 +166,7 @@ class Okie_Properties {
 
             return [
                 'status'  => 'success',
-                'key '    => $key,
+                'key'    => $key,
                 'message' => 'Key extracted successfully.',
             ];
         }

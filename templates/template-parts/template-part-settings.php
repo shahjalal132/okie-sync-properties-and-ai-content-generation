@@ -2,7 +2,7 @@
 
 <div class="settings-wrapper overflow-hidden">
     <button type="button" class="save-btn mt-20 button-flex" id="fetch_properties">
-        <span>Fetch Properties</span>
+        <span>Get Properties</span>
         <span class="fetch-properties-spinner-loader-wrapper"></span>
     </button>
 </div>

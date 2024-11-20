@@ -57,7 +57,7 @@ class Admin_Sub_Menu {
     }
 
     function add_plugin_action_links( $links ) {
-        $settings_link = '<a href="admin.php?page=okie-settings">' . __( 'Settings', 'wp-plugin-boilerplate' ) . '</a>';
+        $settings_link = '<a href="admin.php?page=okie-settings">' . __( 'Settings', 'okie' ) . '</a>';
         array_unshift( $links, $settings_link );
         return $links;
     }
@@ -78,25 +78,54 @@ class Admin_Sub_Menu {
     }
 
     public function fetch_properties() {
-        
-        $url = "https://www.housinghub.org.au/_next/data/OEYJiWSM7MIEi5m9OATBw/search-results.json?latitude=-33.8688197&longitude=151.2092955&location_string=Sydney%20NSW%2C%20Australia&checkboxRent=true";
+        // Define the URL for the API endpoint
+        $url = site_url() . '/wp-json/okie/v1/get-properties';
 
-        $response = wp_remote_get( $url );
+        // Fetch response from the endpoint
+        $response = wp_remote_get( $url, [
+            'timeout' => 60,
+        ] );
 
+        // Check if the request resulted in an error
         if ( is_wp_error( $response ) ) {
-            wp_send_json_error( 'An error occurred! Please try again.' );
+            $error_message = $response->get_error_message();
+            wp_send_json_error( [
+                'message' => 'Failed to fetch properties.',
+                'error'   => $error_message,
+            ] );
+            return; // Stop further execution
         }
 
+        // Retrieve the response body
         $body = wp_remote_retrieve_body( $response );
 
+        // Check if the body is empty or invalid
         if ( empty( $body ) ) {
-            wp_send_json_error( 'An error occurred! Please try again.' );
+            wp_send_json_error( [
+                'message' => 'No data received from the server.',
+            ] );
+            return; // Stop further execution
         }
 
-        $this->put_program_logs( $body );
+        // Decode the JSON response to validate its structure
+        $data = json_decode( $body, true );
+        if ( json_last_error() !== JSON_ERROR_NONE ) {
+            wp_send_json_error( [
+                'message' => 'Invalid JSON response from the server.',
+                'error'   => json_last_error_msg(),
+            ] );
+            return; // Stop further execution
+        }
 
-        wp_send_json_success( 'Properties fetched successfully!' );
-        die();
+        // Optionally log the response (uncomment if needed)
+        // $this->put_program_logs($data);
+
+        // Send success response
+        wp_send_json_success( [
+            'message' => 'Properties fetched successfully!',
+            'data'    => $data,
+        ] );
+        return;
     }
 
 }

@@ -8,7 +8,7 @@
  * Author URI:  https://github.com/shahjalal132
  * Description: Sync properties with Okie
  * Version:     1.0.0
- * text-domain: wp-plugin-boilerplate
+ * text-domain: okie
  * Domain Path: /languages
  * 
  */

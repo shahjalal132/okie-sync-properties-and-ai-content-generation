@@ -174,7 +174,7 @@
 
     // Fetch properties
     $("#fetch_properties").click(function () {
-      // add loading spinner
+      // Add loading spinner
       const loader_button = $(".fetch-properties-spinner-loader-wrapper");
       $(loader_button).addClass("loader-spinner");
 
@@ -185,31 +185,43 @@
           action: "fetch_properties",
         },
         success: function (response) {
-          // remove loading spinner
+          console.log(response);
+          // Remove loading spinner
           $(loader_button).removeClass("loader-spinner");
 
-          if (true === response.success) {
+          if (response.success) {
+            // Success notification
+            const message =
+              response.data.message || "Properties fetched successfully!";
             showToast({
               type: "success",
-              timeout: 2000,
-              title: `${response.data}`,
+              timeout: 3000,
+              title: message,
             });
           } else {
+            // Error notification
+            const errorMessage =
+              response.data.error ||
+              response.data.message ||
+              "An error occurred!";
             showToast({
               type: "error",
-              timeout: 2000,
-              title: `${response.data}`,
+              timeout: 3000,
+              title: errorMessage,
             });
           }
         },
         error: function (xhr, status, error) {
-          // remove loading spinner
+          // Remove loading spinner
           $(loader_button).removeClass("loader-spinner");
 
+          // Fallback error notification
+          const errorMessage =
+            xhr.responseJSON?.data?.error || "Failed to process the request.";
           showToast({
             type: "error",
-            timeout: 2000,
-            title: `${response.data}`,
+            timeout: 3000,
+            title: errorMessage,
           });
         },
       });
