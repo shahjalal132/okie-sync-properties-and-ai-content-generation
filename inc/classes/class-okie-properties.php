@@ -36,8 +36,9 @@ class Okie_Properties {
     }
 
     public function get_properties() {
-        $hash          = get_option( 'okie_api_hash_key' ) ?? '';
-        $property_list = [
+
+        $hash = get_option( 'okie_api_hash_key' ) ?? '';
+        /* $property_list = [
             [
                 'latitude'        => "-33.8129803",
                 'longitude'       => "151.1049802",
@@ -78,6 +79,12 @@ class Okie_Properties {
                 'longitude'       => "147.431111",
                 'location_string' => "Tasmania, Australia",
             ],
+        ]; */
+
+        $property_list = [
+            [
+                'state' => 'NSW',
+            ],
         ];
 
         $all_properties = [];
@@ -85,11 +92,14 @@ class Okie_Properties {
         try {
             foreach ( $property_list as $property ) {
 
-                $latitude        = $property['latitude'];
+                /* $latitude        = $property['latitude'];
                 $longitude       = $property['longitude'];
-                $location_string = $property['location_string'];
+                $location_string = $property['location_string']; */
 
-                $response = $this->fetch_properties_from_api( $hash, $latitude, $longitude, $location_string );
+                $state = $property['state'];
+
+                // $response = $this->fetch_properties_from_api( $hash, $latitude, $longitude, $location_string );
+                $response = $this->fetch_properties_from_api_via_state( $hash, $state );
 
                 if ( is_wp_error( $response ) ) {
                     return $response;
@@ -101,7 +111,11 @@ class Okie_Properties {
                     return new \WP_Error( 'json_decode_error', 'Error decoding API response.', [ 'status' => 500 ] );
                 }
 
-                $properties = $data['pageProps']['results']['hits'] ?? [];
+                $first_properties       = $data['pageProps']['results']['hits'] ?? [];
+                $inspections_properties = $data['pageProps']['inspectionResults']['hits'] ?? [];
+                $_all_properties        = $data['pageProps']['allResultsForMap'][0]['hits'] ?? [];
+
+                $properties = array_merge( $first_properties, $inspections_properties, $_all_properties );
 
                 if ( !empty( $properties ) && is_array( $properties ) ) {
                     $all_properties = array_merge( $all_properties, $properties );
@@ -285,5 +299,44 @@ class Okie_Properties {
         }
 
         return $response;
+    }
+
+    public function fetch_properties_from_api_via_state( $hash, $state ) {
+
+        $url = sprintf(
+            "https://www.housinghub.org.au/_next/data/%s/search-results.json?state=%s&checkboxRent=true&sort=posted_desc",
+            urlencode( $hash ),
+            urlencode( $state )
+        );
+
+        $curl = curl_init();
+        curl_setopt_array( $curl, array(
+            CURLOPT_URL            => $url,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING       => '',
+            CURLOPT_MAXREDIRS      => 10,
+            CURLOPT_TIMEOUT        => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION   => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST  => 'GET',
+        ) );
+
+        $response = curl_exec( $curl );
+
+        if ( curl_errno( $curl ) ) {
+            $error_message = curl_error( $curl );
+            curl_close( $curl );
+            return new \WP_Error( 'curl_error', "cURL error: $error_message", [ 'status' => 500 ] );
+        }
+
+        $http_code = curl_getinfo( $curl, CURLINFO_HTTP_CODE );
+        curl_close( $curl );
+
+        if ( $http_code !== 200 ) {
+            return new \WP_Error( 'api_http_error', "API returned HTTP code $http_code", [ 'status' => $http_code ] );
+        }
+
+        return $response;
+
     }
 }
