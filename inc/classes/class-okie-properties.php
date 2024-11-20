@@ -169,58 +169,59 @@ class Okie_Properties {
         global $wpdb;
         $table_name = $wpdb->prefix . 'sync_properties';
 
-        $wpdb->query( 'START TRANSACTION' );
+        $wpdb->query( 'START TRANSACTION' ); // Begin transaction
+        // truncate table
+        $wpdb->query( "TRUNCATE TABLE $table_name" );
 
         try {
-            $chunks = array_chunk( $properties, 500 ); // Process in chunks of 500 to optimize performance
-            foreach ( $chunks as $chunk ) {
-                $placeholders = [];
-                $values       = [];
+            foreach ( $properties as $property ) {
 
-                foreach ( $chunk as $property ) {
-                    $placeholders[] = '(%s, %s, %s, %s, %s, %s, %s)';
+                $property_id       = $property['objectID'];
+                $long_desc         = $property['propertyDescriptionLong'] ?? '';
+                $short_desc        = $property['propertyDescriptionShort'] ?? '';
+                $short_id          = $property['shortId'] ?? '';
+                $provider_short_id = $property['providerShortId'] ?? '';
 
-                    $provider_short_id = $property['providerShortId'] ?? '';
-                    $short_id          = $property['shortId'] ?? '';
-                    $url               = sprintf( "https://www.housinghub.org.au/property-detail/%s/%s", $provider_short_id, $short_id );
+                // get website url
+                $website_url = sprintf( "https://www.housinghub.org.au/property-detail/%s/%s", $provider_short_id, $short_id );
 
-                    $long_description  = $property['propertyDescriptionLong'] ?? '';
-                    $short_description = $property['propertyDescriptionShort'] ?? '';
-                    $property_data     = json_encode( $property );
+                $property_data = json_encode( $property );
 
-                    // Add values for placeholders
-                    $values[] = $property['objectID'];
-                    $values[] = $long_description;
-                    $values[] = $short_description;
-                    $values[] = $short_id;
-                    $values[] = $provider_short_id;
-                    $values[] = $url;
-                    $values[] = $property_data;
+                /* $sql = $wpdb->prepare(
+                    "INSERT INTO $table_name (property_id, long_description, short_description, short_id, provider_short_id, website_url, property_data)
+                    VALUES (%s, %s, %s, %s, %s, %s, %s)
+                    ON DUPLICATE KEY UPDATE 
+                        long_description = VALUES(long_description), 
+                        short_description = VALUES(short_description), 
+                        property_data = VALUES(property_data)",
+                    $property_id,
+                    $long_desc,
+                    $short_desc,
+                    $short_id,
+                    $provider_short_id,
+                    $website_url,
+                    $property_data,
+                    $long_desc,
+                    $short_desc,
+                    $property_data
+                );
 
-                    // Add values for ON DUPLICATE KEY UPDATE
-                    $values[] = $property['objectID'];
-                    $values[] = $long_description;  // For long_description
-                    $values[] = $short_description; // For short_description
-                    $values[] = $property_data;     // For property_data
-                }
-
-                $placeholders = implode( ', ', $placeholders );
-
-                $stmt = "
-                INSERT INTO $table_name 
-                (property_id, long_description, short_description, short_id, provider_short_id, website_url, property_data)
-                VALUES $placeholders 
-                ON DUPLICATE KEY UPDATE
-                property_id = VALUES(property_id),
-                long_description = VALUES(long_description), 
-                short_description = VALUES(short_description), 
-                property_data = VALUES(property_data)";
-
-                // Prepare and execute SQL statement
-                $sql = $wpdb->prepare( $stmt, $values );
                 if ( false === $wpdb->query( $sql ) ) {
                     throw new \Exception( $wpdb->last_error );
-                }
+                } */
+
+                $wpdb->insert(
+                    $table_name,
+                    [
+                        'property_id'       => $property_id,
+                        'long_description'  => $long_desc,
+                        'short_description' => $short_desc,
+                        'short_id'          => $short_id,
+                        'provider_short_id' => $provider_short_id,
+                        'website_url'       => $website_url,
+                        'property_data'     => $property_data,
+                    ]
+                );
             }
 
             $wpdb->query( 'COMMIT' ); // Commit transaction
