@@ -3,7 +3,7 @@
 /**
  *  
  * Plugin Name: Okie Sync Properties
- * Plugin URI:  https://github.com/shahjalal132/okie-sync-properties
+ * Plugin URI:  https://github.com/shahjalal132/okie-sync-properties-and-ai-content-generation
  * Author:      Shah jalal
  * Author URI:  https://github.com/shahjalal132
  * Description: Sync properties with Okie

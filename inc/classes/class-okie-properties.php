@@ -83,19 +83,12 @@ class Okie_Properties {
 
                 $data = json_decode( $response, true );
 
-                if ( json_last_error() !== JSON_ERROR_NONE ) {
-                    return new \WP_Error( 'json_decode_error', 'Error decoding API response.', [ 'status' => 500 ] );
-                }
-
                 $first_properties       = $data['pageProps']['results']['hits'] ?? [];
                 $inspections_properties = $data['pageProps']['inspectionResults']['hits'] ?? [];
                 $_all_properties        = $data['pageProps']['allResultsForMap'][0]['hits'] ?? [];
 
-                $properties = array_merge( $first_properties, $inspections_properties, $_all_properties );
-
-                if ( !empty( $properties ) && is_array( $properties ) ) {
-                    $all_properties = array_merge( $all_properties, $properties );
-                }
+                $properties     = array_merge( $first_properties, $inspections_properties, $_all_properties );
+                $all_properties = array_merge( $all_properties, $properties );
             }
 
             if ( !empty( $all_properties ) ) {
@@ -177,50 +170,57 @@ class Okie_Properties {
         $table_name = $wpdb->prefix . 'sync_properties';
 
         $wpdb->query( 'START TRANSACTION' );
-        // truncate table
-        // $wpdb->query( "TRUNCATE TABLE $table_name" );
 
         try {
-
-            $chunks = array_chunk( $properties, 500 );
+            $chunks = array_chunk( $properties, 500 ); // Process in chunks of 500 to optimize performance
             foreach ( $chunks as $chunk ) {
-
                 $placeholders = [];
                 $values       = [];
 
                 foreach ( $chunk as $property ) {
-
                     $placeholders[] = '(%s, %s, %s, %s, %s, %s, %s)';
 
                     $provider_short_id = $property['providerShortId'] ?? '';
                     $short_id          = $property['shortId'] ?? '';
                     $url               = sprintf( "https://www.housinghub.org.au/property-detail/%s/%s", $provider_short_id, $short_id );
 
+                    $long_description  = $property['propertyDescriptionLong'] ?? '';
+                    $short_description = $property['propertyDescriptionShort'] ?? '';
+                    $property_data     = json_encode( $property );
+
+                    // Add values for placeholders
                     $values[] = $property['objectID'];
-                    $values[] = $property['propertyDescriptionLong'] ?? '';
-                    $values[] = $property['propertyDescriptionShort'] ?? '';
+                    $values[] = $long_description;
+                    $values[] = $short_description;
                     $values[] = $short_id;
                     $values[] = $provider_short_id;
                     $values[] = $url;
-                    $values[] = json_encode( $property );
-                }
+                    $values[] = $property_data;
 
+                    // Add values for ON DUPLICATE KEY UPDATE
+                    $values[] = $property['objectID'];
+                    $values[] = $long_description;  // For long_description
+                    $values[] = $short_description; // For short_description
+                    $values[] = $property_data;     // For property_data
+                }
 
                 $placeholders = implode( ', ', $placeholders );
 
                 $stmt = "
-                INSERT INTO $table_name (property_id, long_description, short_description, short_id, provider_short_id, website_url, property_data)
+                INSERT INTO $table_name 
+                (property_id, long_description, short_description, short_id, provider_short_id, website_url, property_data)
                 VALUES $placeholders 
                 ON DUPLICATE KEY UPDATE
+                property_id = VALUES(property_id),
                 long_description = VALUES(long_description), 
                 short_description = VALUES(short_description), 
                 property_data = VALUES(property_data)";
 
+                // Prepare and execute SQL statement
                 $sql = $wpdb->prepare( $stmt, $values );
                 if ( false === $wpdb->query( $sql ) ) {
                     throw new \Exception( $wpdb->last_error );
                 }
-
             }
 
             $wpdb->query( 'COMMIT' ); // Commit transaction
