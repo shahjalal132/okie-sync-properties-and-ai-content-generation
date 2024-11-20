@@ -83,7 +83,28 @@ class Okie_Properties {
 
         $property_list = [
             [
-                'state' => 'NSW',
+                'state' => 'QLD',
+            ],
+            [
+                'state' => 'VIC',
+            ],
+            [
+                'state' => 'QLD',
+            ],
+            [
+                'state' => 'SA',
+            ],
+            [
+                'state' => 'WA',
+            ],
+            [
+                'state' => 'TAS',
+            ],
+            [
+                'state' => 'ACT',
+            ],
+            [
+                'state' => 'NT',
             ],
         ];
 
