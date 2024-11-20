@@ -185,7 +185,6 @@
           action: "fetch_properties",
         },
         success: function (response) {
-          console.log(response);
           // Remove loading spinner
           $(loader_button).removeClass("loader-spinner");
 
