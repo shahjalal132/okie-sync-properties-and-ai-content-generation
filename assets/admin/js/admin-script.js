@@ -128,6 +128,16 @@
       const option1 = $("#option1").val();
       const option2 = $("#option2").val();
 
+      // check if option1 value > 100 return error
+      if (option1 > 100) {
+        showToast({
+          type: "error",
+          timeout: 2000,
+          title: "Limit value must be less than 100",
+        });
+        return;
+      }
+
       // add loading spinner
       const loader_button = $(".spinner-loader-wrapper");
       $(loader_button).addClass("loader-spinner");

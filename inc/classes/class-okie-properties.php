@@ -12,7 +12,7 @@ class Okie_Properties {
 
     private $apiSecretKey;
     private $apiEndpoint;
-    private $limit = 1;
+    private $limit;
 
     public function __construct() {
         $this->setup_hooks();
@@ -26,6 +26,7 @@ class Okie_Properties {
         // get api secret key and endpoint
         $this->apiEndpoint  = get_option( 'okie_chatgpt_api_endpoint' );
         $this->apiSecretKey = get_option( 'okie_chatgpt_api_secret_key' );
+        $this->limit        = get_option( 'option1', 1 );
     }
 
     public function register_rest_route() {

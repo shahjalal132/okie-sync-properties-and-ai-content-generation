@@ -2,8 +2,8 @@
 
 <div class="options-wrapper">
     <div class="common-input-group">
-        <label for="option1">Option1</label>
-        <input type="text" class="common-form-input" name="option1" id="option1" placeholder="Option1"
+        <label for="option1" title="How many description will be generate at a time? max limit 100">Limit ?</label>
+        <input type="number" max="100" class="common-form-input" name="option1" id="option1" placeholder="Limit"
             value="<?= $option1 ?>">
     </div>
     <div class="common-input-group mt-20">
