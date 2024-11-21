@@ -15,10 +15,14 @@
     </div>
 </form>
 
-<h4 class="common-title mt-20">Get Properties</h4>
+<h4 class="common-title mt-20">Get Properties From API</h4>
 
 <div class="settings-wrapper overflow-hidden">
-    <button type="button" class="save-btn mt-20 button-flex" id="fetch_properties">
+    <button type="button" class="save-btn mt-20 button-flex" id="generate_hash">
+        <span>Generate Hash</span>
+        <span class="generate-hash-spinner-loader-wrapper"></span>
+    </button>
+    <button type="button" class="save-btn mt-10 button-flex" id="fetch_properties">
         <span>Get Properties</span>
         <span class="fetch-properties-spinner-loader-wrapper"></span>
     </button>

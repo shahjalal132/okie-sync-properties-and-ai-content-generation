@@ -173,6 +173,60 @@
     // save options end
 
     // Fetch properties
+    $("#generate_hash").click(function () {
+      // Add loading spinner
+      const loader_button = $(".generate-hash-spinner-loader-wrapper");
+      $(loader_button).addClass("loader-spinner");
+
+      $.ajax({
+        type: "POST",
+        url: wpb_admin_localize.ajax_url,
+        data: {
+          action: "generate_hash",
+        },
+        success: function (response) {
+          // Remove loading spinner
+          $(loader_button).removeClass("loader-spinner");
+
+          if (response.success) {
+            // Success notification
+            const message =
+              response.data.message || "Hash generated successfully!";
+            showToast({
+              type: "success",
+              timeout: 3000,
+              title: message,
+            });
+          } else {
+            // Error notification
+            const errorMessage =
+              response.data.error ||
+              response.data.message ||
+              "An error occurred!";
+            showToast({
+              type: "error",
+              timeout: 3000,
+              title: errorMessage,
+            });
+          }
+        },
+        error: function (xhr, status, error) {
+          // Remove loading spinner
+          $(loader_button).removeClass("loader-spinner");
+
+          // Fallback error notification
+          const errorMessage =
+            xhr.responseJSON?.data?.error || "Failed to process the request.";
+          showToast({
+            type: "error",
+            timeout: 3000,
+            title: errorMessage,
+          });
+        },
+      });
+    });
+
+    // Fetch properties
     $("#fetch_properties").click(function () {
       // Add loading spinner
       const loader_button = $(".fetch-properties-spinner-loader-wrapper");

@@ -22,6 +22,7 @@ class Admin_Sub_Menu {
         add_action( 'wp_ajax_save_credentials', [ $this, 'save_api_credentials' ] );
         add_action( 'wp_ajax_save_options', [ $this, 'save_options' ] );
         add_action( 'wp_ajax_fetch_properties', [ $this, 'fetch_properties' ] );
+        add_action( 'wp_ajax_generate_hash', [ $this, 'generate_hash' ] );
         add_action( 'wp_ajax_upload_csv', [ $this, 'handle_csv_upload' ] );
     }
 
@@ -76,6 +77,43 @@ class Admin_Sub_Menu {
 
     public function menu_callback_html() {
         include_once PLUGIN_BASE_PATH . '/templates/template-admin-sub-menu.php';
+    }
+
+    public function generate_hash() {
+
+        // Define the URL for the API endpoint
+        $url = site_url() . '/wp-json/okie/v1/get-hash-key';
+
+        // Fetch response from the endpoint
+        $response = wp_remote_get( $url, [
+            'timeout' => 300,
+        ] );
+
+        // Check if the request resulted in an error
+        if ( is_wp_error( $response ) ) {
+            $error_message = $response->get_error_message();
+            wp_send_json_error( [
+                'message' => 'Failed to generate hash.',
+                'error'   => $error_message,
+            ] );
+            return; // Stop further execution
+        }
+
+        // check if status code is not 200 return error
+        if ( wp_remote_retrieve_response_code( $response ) !== 200 ) {
+            $error_message = wp_remote_retrieve_response_message( $response );
+            wp_send_json_error( [
+                'message' => 'Failed to generate hash.',
+                'error'   => $error_message,
+            ] );
+            return; // Stop further execution
+        }
+
+        // Send success response
+        wp_send_json_success( [
+            'message' => 'Hash generated successfully!',
+        ] );
+        return;
     }
 
     public function fetch_properties() {
