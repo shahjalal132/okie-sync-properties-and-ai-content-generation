@@ -10,6 +10,10 @@ class Okie_Properties {
     use Singleton;
     use Program_Logs;
 
+    private $apiSecretKey;
+    private $apiEndpoint;
+    private $limit = 1;
+
     public function __construct() {
         $this->setup_hooks();
     }
@@ -17,6 +21,11 @@ class Okie_Properties {
     public function setup_hooks() {
         // Register REST API action
         add_action( 'rest_api_init', [ $this, 'register_rest_route' ] );
+
+
+        // get api secret key and endpoint
+        $this->apiEndpoint  = get_option( 'okie_chatgpt_api_endpoint' );
+        $this->apiSecretKey = get_option( 'okie_chatgpt_api_secret_key' );
     }
 
     public function register_rest_route() {
@@ -30,6 +39,12 @@ class Okie_Properties {
         register_rest_route( 'okie/v1', '/get-hash-key', [
             'methods'             => 'GET',
             'callback'            => [ $this, 'get_hash_value' ],
+            'permission_callback' => '__return_true',
+        ] );
+
+        register_rest_route( 'okie/v1', '/generate-description', [
+            'methods'             => 'GET',
+            'callback'            => [ $this, 'generate_description' ],
             'permission_callback' => '__return_true',
         ] );
 
@@ -230,6 +245,64 @@ class Okie_Properties {
         }
     }
 
+    public function generate_description() {
+
+        global $wpdb;
+        $csv_table        = $wpdb->prefix . 'sync_csv_file_data';
+        $properties_table = $wpdb->prefix . 'sync_properties';
+
+        $sql = "
+            SELECT wscfd.id, wsp.property_id, wscfd.website_url, wsp.long_description, wsp.short_description
+            FROM {$csv_table} AS wscfd
+            INNER JOIN {$properties_table} AS wsp
+            ON wscfd.website_url = wsp.website_url
+            WHERE wscfd.status = 'pending'
+            LIMIT {$this->limit}
+        ";
+
+        $results = $wpdb->get_results( $sql );
+
+        if ( empty( $results ) ) {
+            $this->put_program_logs( 'No pending records found.' );
+            return 'No pending records to process.';
+        }
+
+        foreach ( $results as $result ) {
+            try {
+                $csv_row_id      = $result->id;
+                $property_row_id = $result->property_id;
+                $website_url     = $result->website_url;
+                $long_desc       = $result->long_description;
+                $this->put_program_logs( 'Old description: ' . $long_desc );
+
+                // Generate a new description
+                $new_description = $this->regenerate_description_via_chatgpt( $long_desc );
+
+                if ( strpos( $new_description, 'Error:' ) === 0 || strpos( $new_description, 'API Error:' ) === 0 ) {
+                    throw new \Exception( 'Failed to regenerate description: ' . $new_description );
+                }
+
+                $this->put_program_logs( 'New description: ' . $new_description );
+
+                // Update description in properties table
+                if ( !$this->update_description_in_database_in_properties_table( $property_row_id, $new_description ) ) {
+                    throw new \Exception( 'Failed to update description in properties table for property ID: ' . $property_row_id );
+                }
+
+                // Update status in CSV table
+                if ( !$this->update_status_in_database_in_csv_table( $csv_row_id, 'updated' ) ) {
+                    throw new \Exception( 'Failed to update status in CSV table for CSV ID: ' . $csv_row_id );
+                }
+
+            } catch (\Exception $e) {
+                $this->put_program_logs( 'Error: ' . $e->getMessage() );
+                return 'An error occurred: ' . $e->getMessage();
+            }
+        }
+
+        return 'Description regeneration completed successfully.';
+    }
+
     public function fetch_properties_from_api( $hash, $latitude, $longitude, $location_string ) {
         $url = sprintf(
             "https://www.housinghub.org.au/_next/data/%s/search-results.json?latitude=%s&longitude=%s&location_string=%s&checkboxRent=true",
@@ -307,5 +380,86 @@ class Okie_Properties {
 
         return $response;
 
+    }
+
+    public function regenerate_description_via_chatgpt( $old_description ) {
+        $tone = 'formal';
+
+        // Create the headers for the request
+        $headers = [
+            'Content-Type: application/json',
+            'Authorization: Bearer ' . $this->apiSecretKey,
+        ];
+
+        // Create the payload for the request
+        $data = [
+            'model'       => 'gpt-4',
+            'messages'    => [
+                [ 'role' => 'system', 'content' => "You are an assistant that rewrites text in a {$tone} tone." ],
+                [ 'role' => 'user', 'content' => "Please rewrite the following text:\n\n{$old_description}" ],
+            ],
+            'temperature' => 0.7,
+        ];
+
+        $ch = curl_init();
+        curl_setopt( $ch, CURLOPT_URL, $this->apiEndpoint );
+        curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+        curl_setopt( $ch, CURLOPT_HTTPHEADER, $headers );
+        curl_setopt( $ch, CURLOPT_POST, true );
+        curl_setopt( $ch, CURLOPT_POSTFIELDS, json_encode( $data ) );
+
+        $response = curl_exec( $ch );
+
+        if ( curl_errno( $ch ) ) {
+            $error_message = curl_error( $ch );
+            curl_close( $ch );
+            return 'Error: ' . $error_message;
+        }
+
+        curl_close( $ch );
+        $responseData = json_decode( $response, true );
+
+        if ( isset( $responseData['choices'][0]['message']['content'] ) ) {
+            return $responseData['choices'][0]['message']['content'];
+        }
+
+        $errorMessage = $responseData['error']['message'] ?? 'Unknown error occurred.';
+        return 'API Error: ' . $errorMessage;
+    }
+
+    public function update_description_in_database_in_properties_table( $property_row_id, $new_description ) {
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'sync_properties';
+
+        $result = $wpdb->update(
+            $table_name,
+            [ 'long_description' => $new_description, 'status' => 'updated' ],
+            [ 'property_id' => $property_row_id ]
+        );
+
+        if ( $result === false ) {
+            $this->put_program_logs( 'Failed to update properties table: ' . $wpdb->last_error );
+            return false;
+        }
+
+        return true;
+    }
+
+    public function update_status_in_database_in_csv_table( $csv_row_id, $new_status ) {
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'sync_csv_file_data';
+
+        $result = $wpdb->update(
+            $table_name,
+            [ 'status' => $new_status ],
+            [ 'id' => $csv_row_id ]
+        );
+
+        if ( $result === false ) {
+            $this->put_program_logs( 'Failed to update CSV table: ' . $wpdb->last_error );
+            return false;
+        }
+
+        return true;
     }
 }

@@ -1,8 +1,8 @@
 <?php
 
 $base_url = site_url() . '/wp-json/okie/v1';
-$api_url  = get_option( 'api_url' );
-$api_key  = get_option( 'api_key' );
+$api_url  = get_option( 'okie_chatgpt_api_endpoint', 'https://api.openai.com/v1/chat/completions' );
+$api_key  = get_option( 'okie_chatgpt_api_secret_key' );
 $option1  = get_option( 'option1' );
 $option2  = get_option( 'option2' );
 

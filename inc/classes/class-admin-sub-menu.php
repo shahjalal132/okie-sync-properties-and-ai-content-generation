@@ -35,8 +35,8 @@ class Admin_Sub_Menu {
             wp_send_json_error( 'An error occurred! Please fill all the fields.' );
         }
 
-        update_option( 'api_url', $api_url );
-        update_option( 'api_key', $api_key );
+        update_option( 'okie_chatgpt_api_endpoint', $api_url );
+        update_option( 'okie_chatgpt_api_secret_key', $api_key );
 
         wp_send_json_success( 'Credentials saved successfully!' );
         die();
