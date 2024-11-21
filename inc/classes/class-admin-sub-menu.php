@@ -23,7 +23,7 @@ class Admin_Sub_Menu {
         add_action( 'wp_ajax_save_options', [ $this, 'save_options' ] );
         add_action( 'wp_ajax_fetch_properties', [ $this, 'fetch_properties' ] );
         add_action( 'wp_ajax_generate_hash', [ $this, 'generate_hash' ] );
-        add_action( 'wp_ajax_generate_hash', [ $this, 'generate_description' ] );
+        add_action( 'wp_ajax_generate_description', [ $this, 'generate_description' ] );
         add_action( 'wp_ajax_upload_csv', [ $this, 'handle_csv_upload' ] );
     }
 
@@ -226,6 +226,9 @@ class Admin_Sub_Menu {
 
             global $wpdb;
             $table_name = $wpdb->prefix . 'sync_csv_file_data';
+
+            // truncate table
+            $wpdb->query( "TRUNCATE TABLE $table_name" );
 
             // Read the CSV line by line and insert into the database
             $row_count = 0;

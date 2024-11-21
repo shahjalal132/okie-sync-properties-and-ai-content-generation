@@ -207,8 +207,8 @@ class Okie_Properties {
                     "INSERT INTO $table_name (property_id, long_description, short_description, short_id, provider_short_id, website_url, property_data)
                     VALUES (%s, %s, %s, %s, %s, %s, %s)
                     ON DUPLICATE KEY UPDATE 
-                        long_description = VALUES(long_description), 
-                        short_description = VALUES(short_description), 
+                        -- long_description = VALUES(long_description), 
+                        -- short_description = VALUES(short_description),
                         property_data = VALUES(property_data)",
                     $property_id,
                     $long_desc,
@@ -257,7 +257,7 @@ class Okie_Properties {
             FROM {$csv_table} AS wscfd
             INNER JOIN {$properties_table} AS wsp
             ON wscfd.website_url = wsp.website_url
-            WHERE wscfd.status = 'pending'
+            WHERE wscfd.status = 'pending' AND wsp.status = 'pending'
             LIMIT {$this->limit}
         ";
 
@@ -274,7 +274,7 @@ class Okie_Properties {
                 $property_row_id = $result->property_id;
                 $website_url     = $result->website_url;
                 $long_desc       = $result->long_description;
-                $this->put_program_logs( 'Old description: ' . $long_desc );
+                // $this->put_program_logs( 'Old description: ' . $long_desc );
 
                 // Generate a new description
                 $new_description = $this->regenerate_description_via_chatgpt( $long_desc );
@@ -283,7 +283,7 @@ class Okie_Properties {
                     throw new \Exception( 'Failed to regenerate description: ' . $new_description );
                 }
 
-                $this->put_program_logs( 'New description: ' . $new_description );
+                // $this->put_program_logs( 'New description: ' . $new_description );
 
                 // Update description in properties table
                 if ( !$this->update_description_in_database_in_properties_table( $property_row_id, $new_description ) ) {

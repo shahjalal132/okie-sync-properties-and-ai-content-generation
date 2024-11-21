@@ -6,7 +6,7 @@
         <input type="number" max="100" class="common-form-input" name="option1" id="option1" placeholder="Limit"
             value="<?= $option1 ?>">
     </div>
-    <div class="common-input-group mt-20">
+    <div class="common-input-group mt-20" style="display: none;">
         <label for="option2">Option2</label>
         <input type="text" class="common-form-input" name="option2" id="option2" placeholder="Option2"
             value="<?= $option2 ?>">

@@ -1,4 +1,4 @@
-<h4 class="common-title">API Credentials</h4>
+<h4 class="common-title">Chat GPT API Credentials</h4>
 
 <div class="credentials-wrapper overflow-hidden">
     <div class="common-input-group">
