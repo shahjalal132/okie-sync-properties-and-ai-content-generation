@@ -23,16 +23,16 @@
 }
 
 .common-shadow {
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1) !important;
 }
 
-.tabs-container {
-  background: transparent;
-  border-radius: 50px;
-  padding: 10px 30px;
-  display: inline-block;
-  margin-left: 30px;
-  margin-top: 30px;
+.okie-tabs-container {
+  background: transparent !important;
+  border-radius: 50px !important;
+  padding: 10px 30px !important;
+  display: inline-block !important;
+  margin-left: 30px !important;
+  margin-top: 30px !important;
 }
 
 .tabs {
@@ -81,7 +81,7 @@
 }
 
 .mt-10 {
-  margin-top: 10px;
+  margin-top: 10px !important;
 }
 
 .mt-20 {

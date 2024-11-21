@@ -17,7 +17,7 @@ $option2  = get_option( 'option2' );
 
     <div id="toast-container"></div>
 
-    <div class="tabs-container common-shadow">
+    <div class="okie-tabs-container common-shadow">
 
         <div class="tabs">
             <button class="tab active" data-tab="api">API</button>
