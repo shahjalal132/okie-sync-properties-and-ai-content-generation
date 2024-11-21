@@ -2,11 +2,11 @@
 
 /**
  *  
- * Plugin Name: Okie Sync Properties
+ * Plugin Name: Okie Sync Properties & AI Content Generation
  * Plugin URI:  https://github.com/shahjalal132/okie-sync-properties-and-ai-content-generation
  * Author:      Shah jalal
  * Author URI:  https://github.com/shahjalal132
- * Description: Sync properties with Okie
+ * Description: Sync properties with Okie and generate AI content
  * Version:     1.0.0
  * text-domain: okie
  * Domain Path: /languages

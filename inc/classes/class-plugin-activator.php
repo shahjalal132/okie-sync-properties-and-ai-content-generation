@@ -17,13 +17,13 @@ class Plugin_Activator {
 
         $sql = "CREATE TABLE IF NOT EXISTS $table_name (
             id INT AUTO_INCREMENT,
-            property_id VARCHAR(255) UNIQUE NULL,
+            property_id VARCHAR(255) UNIQUE NOT NULL,
             long_description TEXT NULL,
             short_description TEXT NULL,
             short_id VARCHAR(255) NULL,
             provider_short_id VARCHAR(255) NULL,
             website_url VARCHAR(255) UNIQUE NOT NULL,
-            property_data JSON NULL,
+            property_data LONGTEXT NULL,
             status VARCHAR(30) NOT NULL DEFAULT 'pending',
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

@@ -84,7 +84,7 @@ class Admin_Sub_Menu {
 
         // Fetch response from the endpoint
         $response = wp_remote_get( $url, [
-            'timeout' => 60,
+            'timeout' => 300,
         ] );
 
         // Check if the request resulted in an error
@@ -134,7 +134,7 @@ class Admin_Sub_Menu {
         // Check if a file was uploaded
         if ( !isset( $_FILES['csv_file'] ) || empty( $_FILES['csv_file']['tmp_name'] ) ) {
             wp_send_json_error( 'No file uploaded.' );
-            $this->put_program_logs( 'No file uploaded.' );
+            // $this->put_program_logs( 'No file uploaded.' );
         }
 
         $file = $_FILES['csv_file'];
@@ -147,6 +147,7 @@ class Admin_Sub_Menu {
 
         // Open the file and process its contents
         if ( ( $handle = fopen( $file['tmp_name'], 'r' ) ) !== false ) {
+
             global $wpdb;
             $table_name = $wpdb->prefix . 'sync_csv_file_data';
 
@@ -164,6 +165,7 @@ class Admin_Sub_Menu {
                     $table_name,
                     [
                         'website_url' => $website_url,
+                        'status'      => 'pending',
                     ],
                     [ '%s' ]
                 );

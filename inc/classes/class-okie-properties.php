@@ -171,7 +171,7 @@ class Okie_Properties {
 
         $wpdb->query( 'START TRANSACTION' ); // Begin transaction
         // truncate table
-        $wpdb->query( "TRUNCATE TABLE $table_name" );
+        // $wpdb->query( "TRUNCATE TABLE $table_name" );
 
         try {
             foreach ( $properties as $property ) {
@@ -187,7 +187,7 @@ class Okie_Properties {
 
                 $property_data = json_encode( $property );
 
-                /* $sql = $wpdb->prepare(
+                $sql = $wpdb->prepare(
                     "INSERT INTO $table_name (property_id, long_description, short_description, short_id, provider_short_id, website_url, property_data)
                     VALUES (%s, %s, %s, %s, %s, %s, %s)
                     ON DUPLICATE KEY UPDATE 
@@ -200,17 +200,14 @@ class Okie_Properties {
                     $short_id,
                     $provider_short_id,
                     $website_url,
-                    $property_data,
-                    $long_desc,
-                    $short_desc,
                     $property_data
                 );
 
                 if ( false === $wpdb->query( $sql ) ) {
                     throw new \Exception( $wpdb->last_error );
-                } */
+                }
 
-                $wpdb->insert(
+                /* $wpdb->insert(
                     $table_name,
                     [
                         'property_id'       => $property_id,
@@ -221,7 +218,7 @@ class Okie_Properties {
                         'website_url'       => $website_url,
                         'property_data'     => $property_data,
                     ]
-                );
+                ); */
             }
 
             $wpdb->query( 'COMMIT' ); // Commit transaction
