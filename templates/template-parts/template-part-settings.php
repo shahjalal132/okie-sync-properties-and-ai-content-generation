@@ -27,3 +27,12 @@
         <span class="fetch-properties-spinner-loader-wrapper"></span>
     </button>
 </div>
+
+<h4 class="common-title mt-20">Generate Description</h4>
+
+<div class="settings-wrapper overflow-hidden">
+    <button type="button" class="save-btn mt-20 button-flex" id="generate_description">
+        <span>Generate Description</span>
+        <span class="generate-description-spinner-loader-wrapper"></span>
+    </button>
+</div>
