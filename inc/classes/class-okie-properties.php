@@ -199,7 +199,7 @@ class Okie_Properties {
                 $number_of_rooms      = $number_of_bath_rooms + $number_of_bed_rooms;
                 $property_price       = $property['propertyPrice'] ?? '';
                 $sda_design_category  = $property['sdaDesignCategory'][0] ?? '';
-                $booked_status        = $property['status'][0] ?? '';
+                $booked_status        = $property['status'] ?? '';
                 $long_desc            = $property['propertyDescriptionLong'] ?? '';
                 $short_id             = $property['shortId'] ?? '';
                 $provider_short_id    = $property['providerShortId'] ?? '';
@@ -250,7 +250,7 @@ class Okie_Properties {
                 }
 
                 // Insert or update the property in the properties table
-                $wpdb->replace(
+                /* $wpdb->replace(
                     $properties_table,
                     [
                         'property_id'                 => $property_id,
@@ -275,9 +275,104 @@ class Okie_Properties {
                         'long_description'            => $long_desc,
                         'website_url'                 => $website_url,
                         'property_data'               => $property_data,
-                        'status'                      => 'pending', // Default status
                     ]
+                ); */
+
+                $sql = $wpdb->prepare(
+                    "INSERT INTO {$properties_table} (
+                        property_id,
+                        name,
+                        location,
+                        building_type,
+                        number_of_rooms,
+                        max_price_per_room,
+                        sda_design_category,
+                        booked_status,
+                        vacancy,
+                        has_fire_sprinklers,
+                        has_breakout_room,
+                        onsite_overnight_assistance,
+                        email,
+                        phone,
+                        website1,
+                        website2,
+                        website3,
+                        website4,
+                        website5,
+                        long_description,
+                        website_url,
+                        property_data
+                    ) VALUES (
+                        %s, -- property_id
+                        %s, -- name
+                        %s, -- location
+                        %s, -- building_type
+                        %d, -- number_of_rooms
+                        %s, -- max_price_per_room
+                        %s, -- sda_design_category
+                        %s, -- booked_status
+                        %d, -- vacancy
+                        %d, -- has_fire_sprinklers
+                        %d, -- has_breakout_room
+                        %d, -- onsite_overnight_assistance
+                        %s, -- email
+                        %s, -- phone
+                        %s, -- website1
+                        %s, -- website2
+                        %s, -- website3
+                        %s, -- website4
+                        %s, -- website5
+                        %s, -- long_description
+                        %s, -- website_url
+                        %s  -- property_data
+                    )
+                    ON DUPLICATE KEY UPDATE
+                        property_id = VALUES(property_id),
+                        name = VALUES(name),
+                        location = VALUES(location),
+                        building_type = VALUES(building_type),
+                        number_of_rooms = VALUES(number_of_rooms),
+                        max_price_per_room = VALUES(max_price_per_room),
+                        sda_design_category = VALUES(sda_design_category),
+                        booked_status = VALUES(booked_status),
+                        vacancy = VALUES(vacancy),
+                        has_fire_sprinklers = VALUES(has_fire_sprinklers),
+                        has_breakout_room = VALUES(has_breakout_room),
+                        onsite_overnight_assistance = VALUES(onsite_overnight_assistance),
+                        email = VALUES(email),
+                        phone = VALUES(phone),
+                        website1 = VALUES(website1),
+                        website2 = VALUES(website2),
+                        website3 = VALUES(website3),
+                        website4 = VALUES(website4),
+                        website5 = VALUES(website5),
+                        website_url = VALUES(website_url),
+                        property_data = VALUES(property_data)
+                    ",
+                    $property_id,
+                    $name,
+                    $location,
+                    $building_type,
+                    $number_of_rooms,
+                    $property_price,
+                    $sda_design_category,
+                    $booked_status,
+                    $vacancy,
+                    $has_fire_sprinklers,
+                    $has_breakout_room,
+                    $onsite_overnight_assistance,
+                    $email,
+                    $phone,
+                    $website1,
+                    $website2,
+                    $website3,
+                    $website4,
+                    $website5,
+                    $website_url,
+                    $property_data
                 );
+
+                $wpdb->query( $sql );
             }
 
             $wpdb->query( 'COMMIT' ); // Commit transaction

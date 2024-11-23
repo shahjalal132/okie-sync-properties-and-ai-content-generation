@@ -76,7 +76,6 @@ class Plugin_Activator {
             website4 VARCHAR(255) NULL,
             website5 VARCHAR(255) NULL,
             website_url VARCHAR(300) UNIQUE NOT NULL,
-            status VARCHAR(30) NOT NULL DEFAULT 'pending',
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
             PRIMARY KEY (id)
