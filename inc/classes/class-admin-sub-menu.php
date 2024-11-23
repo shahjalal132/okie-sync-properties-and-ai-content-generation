@@ -210,7 +210,6 @@ class Admin_Sub_Menu {
         // Check if a file was uploaded
         if ( !isset( $_FILES['csv_file'] ) || empty( $_FILES['csv_file']['tmp_name'] ) ) {
             wp_send_json_error( 'No file uploaded.' );
-            // $this->put_program_logs( 'No file uploaded.' );
         }
 
         $file = $_FILES['csv_file'];
@@ -227,26 +226,70 @@ class Admin_Sub_Menu {
             global $wpdb;
             $table_name = $wpdb->prefix . 'sync_csv_file_data';
 
-            // truncate table
+            // Truncate table
             $wpdb->query( "TRUNCATE TABLE $table_name" );
 
-            // Read the CSV line by line and insert into the database
+            // Read the header row to map column names
+            $header = fgetcsv( $handle, 1000, ',' );
+            if ( !$header ) {
+                wp_send_json_error( 'Unable to read the CSV header row.' );
+            }
+
+            // Map CSV header columns to database fields
+            $header_map = array_flip( $header );
+
             $row_count = 0;
+
             while ( ( $data = fgetcsv( $handle, 1000, ',' ) ) !== false ) {
-                // Skip empty rows
-                if ( empty( $data[0] ) ) {
-                    continue;
-                }
+                // Safely map CSV data to variables
+                $name = sanitize_text_field( $data[0] ?? '' );
+                // $name                        = sanitize_text_field( $data[$header_map['Name']] ?? '' );
+                $location                    = sanitize_text_field( $data[$header_map['Location']] ?? '' );
+                $building_type               = sanitize_text_field( $data[$header_map['Building Type']] ?? '' );
+                $number_of_rooms             = sanitize_text_field( $data[$header_map['Number of Rooms']] ?? '' );
+                $max_price_per_room          = sanitize_text_field( $data[$header_map['Max Price Per Room']] ?? '' );
+                $sda_design_category         = sanitize_text_field( $data[$header_map['SDA Design Category']] ?? '' );
+                $booked_status               = sanitize_text_field( $data[$header_map['Status']] ?? '' );
+                $vacancy                     = sanitize_text_field( $data[$header_map['Vacancy']] ?? '' );
+                $has_fire_sprinklers         = sanitize_text_field( $data[$header_map['Has Fire Sprinklers']] ?? '' );
+                $has_breakout_room           = sanitize_text_field( $data[$header_map['Has Breakout Room']] ?? '' );
+                $onsite_overnight_assistance = sanitize_text_field( $data[$header_map['Onsite Overnight Assistance']] ?? '' );
+                $email                       = sanitize_email( $data[$header_map['Email']] ?? '' );
+                $phone                       = sanitize_text_field( $data[$header_map['Phone']] ?? '' );
+                $website1                    = esc_url_raw( $data[$header_map['Website 1']] ?? '' );
+                $website2                    = esc_url_raw( $data[$header_map['Website 2']] ?? '' );
+                $website3                    = esc_url_raw( $data[$header_map['Website 3']] ?? '' );
+                $website4                    = esc_url_raw( $data[$header_map['Website 4']] ?? '' );
+                $website5                    = esc_url_raw( $data[$header_map['Website 5']] ?? '' );
 
-                $website_url = sanitize_text_field( $data[13] );
+                // Use the value from Website 1 as the main website URL
+                $website_url = $website1;
 
+                // Insert data into the database
                 $wpdb->insert(
                     $table_name,
                     [
-                        'website_url' => $website_url,
-                        'status'      => 'pending',
-                    ],
-                    [ '%s' ]
+                        'name'                        => $name,
+                        'location'                    => $location,
+                        'building_type'               => $building_type,
+                        'number_of_rooms'             => $number_of_rooms,
+                        'max_price_per_room'          => $max_price_per_room,
+                        'sda_design_category'         => $sda_design_category,
+                        'booked_status'               => $booked_status,
+                        'vacancy'                     => $vacancy,
+                        'has_fire_sprinklers'         => $has_fire_sprinklers,
+                        'has_breakout_room'           => $has_breakout_room,
+                        'onsite_overnight_assistance' => $onsite_overnight_assistance,
+                        'email'                       => $email,
+                        'phone'                       => $phone,
+                        'website1'                    => $website1,
+                        'website2'                    => $website2,
+                        'website3'                    => $website3,
+                        'website4'                    => $website4,
+                        'website5'                    => $website5,
+                        'website_url'                 => $website_url,
+                        'status'                      => 'pending',
+                    ]
                 );
 
                 $row_count++;
@@ -261,5 +304,6 @@ class Admin_Sub_Menu {
 
         wp_die(); // Always include this in AJAX handlers to properly terminate execution
     }
+
 
 }
