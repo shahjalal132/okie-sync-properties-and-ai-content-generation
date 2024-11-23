@@ -181,60 +181,103 @@ class Okie_Properties {
     }
 
     public function insert_properties_to_database( $properties ) {
-
         global $wpdb;
-        $table_name = $wpdb->prefix . 'sync_properties';
+        $csv_file_data_table = $wpdb->prefix . 'sync_csv_file_data';
+        $properties_table    = $wpdb->prefix . 'sync_properties';
 
         $wpdb->query( 'START TRANSACTION' ); // Begin transaction
-        // truncate table
-        // $wpdb->query( "TRUNCATE TABLE $table_name" );
 
         try {
             foreach ( $properties as $property ) {
-
-                $property_id       = $property['objectID'];
-                $long_desc         = $property['propertyDescriptionLong'] ?? '';
-                $short_desc        = $property['propertyDescriptionShort'] ?? '';
-                $short_id          = $property['shortId'] ?? '';
-                $provider_short_id = $property['providerShortId'] ?? '';
-
-                // get website url
-                $website_url = sprintf( "https://www.housinghub.org.au/property-detail/%s/%s", $provider_short_id, $short_id );
+                // Extract property data
+                $name                 = $property['name'] ?? '';
+                $property_id          = $property['objectID'];
+                $location             = $property['sdaLocation'] ?? '';
+                $building_type        = $property['sdaBuildingType'] ?? '';
+                $number_of_bath_rooms = $property['numberOfBathrooms'] ?? 0;
+                $number_of_bed_rooms  = $property['numberOfBedrooms'] ?? 0;
+                $number_of_rooms      = $number_of_bath_rooms + $number_of_bed_rooms;
+                $property_price       = $property['propertyPrice'] ?? '';
+                $sda_design_category  = $property['sdaDesignCategory'][0] ?? '';
+                $booked_status        = $property['status'][0] ?? '';
+                $long_desc            = $property['propertyDescriptionLong'] ?? '';
+                $short_id             = $property['shortId'] ?? '';
+                $provider_short_id    = $property['providerShortId'] ?? '';
+                $website_url          = sprintf(
+                    "https://www.housinghub.org.au/property-detail/%s/%s",
+                    $provider_short_id,
+                    $short_id
+                );
 
                 $property_data = json_encode( $property );
 
-                $sql = $wpdb->prepare(
-                    "INSERT INTO $table_name (property_id, long_description, short_description, short_id, provider_short_id, website_url, property_data)
-                    VALUES (%s, %s, %s, %s, %s, %s, %s)
-                    ON DUPLICATE KEY UPDATE 
-                        -- long_description = VALUES(long_description), 
-                        -- short_description = VALUES(short_description),
-                        property_data = VALUES(property_data)",
-                    $property_id,
-                    $long_desc,
-                    $short_desc,
-                    $short_id,
-                    $provider_short_id,
-                    $website_url,
-                    $property_data
-                );
+                // Check if the property exists in the csv_file_data table
+                $existing_csv_data = $this->get_existing_property_row( $website_url );
 
-                if ( false === $wpdb->query( $sql ) ) {
-                    throw new \Exception( $wpdb->last_error );
+                if ( $existing_csv_data ) {
+                    // Use data from the CSV file if available
+                    $name                        = $existing_csv_data->name ?? $name;
+                    $location                    = $existing_csv_data->location ?? $location;
+                    $building_type               = $existing_csv_data->building_type ?? $building_type;
+                    $number_of_rooms             = $existing_csv_data->number_of_rooms ?? $number_of_rooms;
+                    $property_price              = $existing_csv_data->max_price_per_room ?? $property_price;
+                    $sda_design_category         = $existing_csv_data->sda_design_category ?? $sda_design_category;
+                    $booked_status               = $existing_csv_data->booked_status ?? $booked_status;
+                    $vacancy                     = $existing_csv_data->vacancy ?? 0;
+                    $has_fire_sprinklers         = $existing_csv_data->has_fire_sprinklers ?? 0;
+                    $has_breakout_room           = $existing_csv_data->has_breakout_room ?? 0;
+                    $onsite_overnight_assistance = $existing_csv_data->onsite_overnight_assistance ?? 0;
+                    $email                       = $existing_csv_data->email ?? '';
+                    $phone                       = $existing_csv_data->phone ?? '';
+                    $website1                    = $existing_csv_data->website1 ?? '';
+                    $website2                    = $existing_csv_data->website2 ?? '';
+                    $website3                    = $existing_csv_data->website3 ?? '';
+                    $website4                    = $existing_csv_data->website4 ?? '';
+                    $website5                    = $existing_csv_data->website5 ?? '';
+                } else {
+                    // Default values for fields not provided
+                    $vacancy                     = 0;
+                    $has_fire_sprinklers         = 0;
+                    $has_breakout_room           = 0;
+                    $onsite_overnight_assistance = 0;
+                    $email                       = '';
+                    $phone                       = '';
+                    $website1                    = '';
+                    $website2                    = '';
+                    $website3                    = '';
+                    $website4                    = '';
+                    $website5                    = '';
                 }
 
-                /* $wpdb->insert(
-                    $table_name,
+                // Insert or update the property in the properties table
+                $wpdb->replace(
+                    $properties_table,
                     [
-                        'property_id'       => $property_id,
-                        'long_description'  => $long_desc,
-                        'short_description' => $short_desc,
-                        'short_id'          => $short_id,
-                        'provider_short_id' => $provider_short_id,
-                        'website_url'       => $website_url,
-                        'property_data'     => $property_data,
+                        'property_id'                 => $property_id,
+                        'name'                        => $name,
+                        'location'                    => $location,
+                        'building_type'               => $building_type,
+                        'number_of_rooms'             => $number_of_rooms,
+                        'max_price_per_room'          => $property_price,
+                        'sda_design_category'         => $sda_design_category,
+                        'booked_status'               => $booked_status,
+                        'vacancy'                     => $vacancy,
+                        'has_fire_sprinklers'         => $has_fire_sprinklers,
+                        'has_breakout_room'           => $has_breakout_room,
+                        'onsite_overnight_assistance' => $onsite_overnight_assistance,
+                        'email'                       => $email,
+                        'phone'                       => $phone,
+                        'website1'                    => $website1,
+                        'website2'                    => $website2,
+                        'website3'                    => $website3,
+                        'website4'                    => $website4,
+                        'website5'                    => $website5,
+                        'long_description'            => $long_desc,
+                        'website_url'                 => $website_url,
+                        'property_data'               => $property_data,
+                        'status'                      => 'pending', // Default status
                     ]
-                ); */
+                );
             }
 
             $wpdb->query( 'COMMIT' ); // Commit transaction
@@ -244,6 +287,19 @@ class Okie_Properties {
             $this->put_program_logs( $e->getMessage() );
             return new \WP_Error( 'db_insert_error', 'Error inserting properties into the database.', [ 'status' => 500 ] );
         }
+    }
+
+    public function get_existing_property_row( $website_url ) {
+
+        global $wpdb;
+        $csv_file_data_table = $wpdb->prefix . 'sync_csv_file_data';
+
+        $sql = $wpdb->prepare(
+            "SELECT * FROM $csv_file_data_table WHERE website_url = %s",
+            $website_url
+        );
+
+        return $wpdb->get_row( $sql );
     }
 
     public function generate_description() {
