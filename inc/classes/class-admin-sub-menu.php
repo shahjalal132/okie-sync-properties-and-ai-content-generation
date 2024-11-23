@@ -238,7 +238,7 @@ class Admin_Sub_Menu {
                     continue;
                 }
 
-                $website_url = sanitize_text_field( $data[12] );
+                $website_url = sanitize_text_field( $data[13] );
 
                 $wpdb->insert(
                     $table_name,
