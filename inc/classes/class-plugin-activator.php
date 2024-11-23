@@ -41,12 +41,29 @@ class Plugin_Activator {
         $charset_collate = $wpdb->get_charset_collate();
 
         $sql = "CREATE TABLE IF NOT EXISTS $table_name (
-             id INT AUTO_INCREMENT,
-             website_url VARCHAR(300) UNIQUE NOT NULL,
-             status VARCHAR(30) NOT NULL DEFAULT 'pending',
-             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-             PRIMARY KEY (id)
+            id INT AUTO_INCREMENT,
+            name VARCHAR(255) NULL,
+            location VARCHAR(255) NULL,
+            building_type VARCHAR(255) NULL,
+            max_price_per_room VARCHAR(255) NULL,
+            sda_design_category VARCHAR(255) NULL,
+            booked_status VARCHAR(255) NULL,
+            vacancy VARCHAR(255) NULL,
+            has_fire_sprinklers VARCHAR(255) NULL,
+            has_breakout_room VARCHAR(255) NULL,
+            onsite_overnight_assistance VARCHAR(255) NULL,
+            email VARCHAR(255) NULL,
+            phone VARCHAR(255) NULL,
+            website1 VARCHAR(255) NULL,
+            website2 VARCHAR(255) NULL,
+            website3 VARCHAR(255) NULL,
+            website4 VARCHAR(255) NULL,
+            website5 VARCHAR(255) NULL,
+            website_url VARCHAR(300) UNIQUE NOT NULL,
+            status VARCHAR(30) NOT NULL DEFAULT 'pending',
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            PRIMARY KEY (id)
          ) $charset_collate;";
 
         require_once ABSPATH . 'wp-admin/includes/upgrade.php';
