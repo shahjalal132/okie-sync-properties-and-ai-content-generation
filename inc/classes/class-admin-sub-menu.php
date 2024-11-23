@@ -288,7 +288,6 @@ class Admin_Sub_Menu {
                         'website4'                    => $website4,
                         'website5'                    => $website5,
                         'website_url'                 => $website_url,
-                        'status'                      => 'pending',
                     ]
                 );
 
@@ -297,7 +296,7 @@ class Admin_Sub_Menu {
 
             fclose( $handle );
 
-            wp_send_json_success( "Successfully imported $row_count rows." );
+            wp_send_json_success( "Successfully imported" );
         } else {
             wp_send_json_error( 'Unable to open the uploaded file.' );
         }
