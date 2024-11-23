@@ -249,35 +249,6 @@ class Okie_Properties {
                     $website5                    = '';
                 }
 
-                // Insert or update the property in the properties table
-                /* $wpdb->replace(
-                    $properties_table,
-                    [
-                        'property_id'                 => $property_id,
-                        'name'                        => $name,
-                        'location'                    => $location,
-                        'building_type'               => $building_type,
-                        'number_of_rooms'             => $number_of_rooms,
-                        'max_price_per_room'          => $property_price,
-                        'sda_design_category'         => $sda_design_category,
-                        'booked_status'               => $booked_status,
-                        'vacancy'                     => $vacancy,
-                        'has_fire_sprinklers'         => $has_fire_sprinklers,
-                        'has_breakout_room'           => $has_breakout_room,
-                        'onsite_overnight_assistance' => $onsite_overnight_assistance,
-                        'email'                       => $email,
-                        'phone'                       => $phone,
-                        'website1'                    => $website1,
-                        'website2'                    => $website2,
-                        'website3'                    => $website3,
-                        'website4'                    => $website4,
-                        'website5'                    => $website5,
-                        'long_description'            => $long_desc,
-                        'website_url'                 => $website_url,
-                        'property_data'               => $property_data,
-                    ]
-                ); */
-
                 $sql = $wpdb->prepare(
                     "INSERT INTO {$properties_table} (
                         property_id,
