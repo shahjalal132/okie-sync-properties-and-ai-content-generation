@@ -309,11 +309,8 @@ class Okie_Properties {
         $properties_table = $wpdb->prefix . 'sync_properties';
 
         $sql = "
-            SELECT wscfd.id, wsp.property_id, wscfd.website_url, wsp.long_description, wsp.short_description
-            FROM {$csv_table} AS wscfd
-            INNER JOIN {$properties_table} AS wsp
-            ON wscfd.website_url = wsp.website_url
-            WHERE wscfd.status = 'pending' AND wsp.status = 'pending'
+            SELECT wsp.property_id, wsp.long_description
+            FROM {$properties_table} wsp WHERE wsp.status = 'pending'
             LIMIT {$this->limit}
         ";
 
@@ -326,7 +323,6 @@ class Okie_Properties {
 
         foreach ( $results as $result ) {
             try {
-                $csv_row_id      = $result->id;
                 $property_row_id = $result->property_id;
                 $website_url     = $result->website_url;
                 $long_desc       = $result->long_description;
@@ -344,11 +340,6 @@ class Okie_Properties {
                 // Update description in properties table
                 if ( !$this->update_description_in_database_in_properties_table( $property_row_id, $new_description ) ) {
                     throw new \Exception( 'Failed to update description in properties table for property ID: ' . $property_row_id );
-                }
-
-                // Update status in CSV table
-                if ( !$this->update_status_in_database_in_csv_table( $csv_row_id, 'updated' ) ) {
-                    throw new \Exception( 'Failed to update status in CSV table for CSV ID: ' . $csv_row_id );
                 }
 
             } catch (\Exception $e) {
