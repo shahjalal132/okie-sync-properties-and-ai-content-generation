@@ -108,6 +108,8 @@ class Okie_Properties {
             }
 
             if ( !empty( $all_properties ) ) {
+
+                // $this->put_program_logs( 'Total properties fetched: ' . count( $all_properties ) );
                 $startDb       = time();
                 $insert_result = $this->insert_properties_to_database( $all_properties );
 
@@ -249,6 +251,35 @@ class Okie_Properties {
                     $website5                    = '';
                 }
 
+                // Insert or update the property in the properties table
+                /* $wpdb->replace(
+                    $properties_table,
+                    [
+                        'property_id'                 => $property_id,
+                        'name'                        => $name,
+                        'location'                    => $location,
+                        'building_type'               => $building_type,
+                        'number_of_rooms'             => $number_of_rooms,
+                        'max_price_per_room'          => $property_price,
+                        'sda_design_category'         => $sda_design_category,
+                        'booked_status'               => $booked_status,
+                        'vacancy'                     => $vacancy,
+                        'has_fire_sprinklers'         => $has_fire_sprinklers,
+                        'has_breakout_room'           => $has_breakout_room,
+                        'onsite_overnight_assistance' => $onsite_overnight_assistance,
+                        'email'                       => $email,
+                        'phone'                       => $phone,
+                        'website1'                    => $website1,
+                        'website2'                    => $website2,
+                        'website3'                    => $website3,
+                        'website4'                    => $website4,
+                        'website5'                    => $website5,
+                        'long_description'            => $long_desc,
+                        'website_url'                 => $website_url,
+                        'property_data'               => $property_data,
+                    ]
+                ); */
+
                 $sql = $wpdb->prepare(
                     "INSERT INTO {$properties_table} (
                         property_id,
@@ -274,31 +305,9 @@ class Okie_Properties {
                         website_url,
                         property_data
                     ) VALUES (
-                        %s, -- property_id
-                        %s, -- name
-                        %s, -- location
-                        %s, -- building_type
-                        %d, -- number_of_rooms
-                        %s, -- max_price_per_room
-                        %s, -- sda_design_category
-                        %s, -- booked_status
-                        %d, -- vacancy
-                        %d, -- has_fire_sprinklers
-                        %d, -- has_breakout_room
-                        %d, -- onsite_overnight_assistance
-                        %s, -- email
-                        %s, -- phone
-                        %s, -- website1
-                        %s, -- website2
-                        %s, -- website3
-                        %s, -- website4
-                        %s, -- website5
-                        %s, -- long_description
-                        %s, -- website_url
-                        %s  -- property_data
+                        %s, %s, %s, %s, %s, %s, %s, %s, %d, %d, %d, %d, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s
                     )
                     ON DUPLICATE KEY UPDATE
-                        property_id = VALUES(property_id),
                         name = VALUES(name),
                         location = VALUES(location),
                         building_type = VALUES(building_type),
@@ -317,6 +326,7 @@ class Okie_Properties {
                         website3 = VALUES(website3),
                         website4 = VALUES(website4),
                         website5 = VALUES(website5),
+                        long_description = VALUES(long_description),
                         website_url = VALUES(website_url),
                         property_data = VALUES(property_data)
                     ",
@@ -339,11 +349,17 @@ class Okie_Properties {
                     $website3,
                     $website4,
                     $website5,
+                    $long_desc,
                     $website_url,
                     $property_data
                 );
 
+                // Log the SQL for debugging
+                // $this->put_program_logs( $sql );
+
+                // Execute the query
                 $wpdb->query( $sql );
+
             }
 
             $wpdb->query( 'COMMIT' ); // Commit transaction
@@ -354,7 +370,6 @@ class Okie_Properties {
             return new \WP_Error( 'db_insert_error', 'Error inserting properties into the database.', [ 'status' => 500 ] );
         }
     }
-
     public function get_existing_property_row( $website_url ) {
 
         global $wpdb;
@@ -383,7 +398,7 @@ class Okie_Properties {
         $results = $wpdb->get_results( $sql );
 
         if ( empty( $results ) ) {
-            $this->put_program_logs( 'No pending records found.' );
+            // $this->put_program_logs( 'No pending records found.' );
             return 'No pending records to process.';
         }
 
