@@ -25,6 +25,11 @@
                 <td>Generate Description</td>
                 <td><button class="copy-button">Copy</button></td>
             </tr>
+            <tr>
+                <td><?= $base_url ?>/sync-properties</td>
+                <td>Sync Properties</td>
+                <td><button class="copy-button">Copy</button></td>
+            </tr>
         </tbody>
     </table>
 </div>
