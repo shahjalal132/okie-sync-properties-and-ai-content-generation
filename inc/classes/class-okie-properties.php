@@ -117,11 +117,13 @@ class Okie_Properties {
 
                 // $this->put_program_logs( 'Total properties fetched: ' . count( $all_properties ) );
                 $startDb       = time();
-                $insert_result = $this->insert_properties_to_database( $all_properties );
 
+                seed_properties_to_database( $all_properties );
+
+                /* $insert_result = $this->insert_properties_to_database( $all_properties );
                 if ( is_wp_error( $insert_result ) ) {
                     return $insert_result;
-                }
+                } */
 
                 return [
                     'status'     => 'success',

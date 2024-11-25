@@ -16,8 +16,8 @@ $capsule->addConnection( [
     'database'  => DB_NAME,      // WordPress database name
     'username'  => DB_USER,      // WordPress database username
     'password'  => DB_PASSWORD,  // WordPress database password
-    'charset'   => 'utf8',
-    'collation' => 'utf8_unicode_ci',
+    'charset'   => 'utf8mb4',
+    'collation' => 'utf8mb4_unicode_520_ci',
     'prefix'    => $wpdb->prefix, // WordPress table prefix
 ] );
 
