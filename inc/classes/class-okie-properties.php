@@ -49,6 +49,12 @@ class Okie_Properties {
             'permission_callback' => '__return_true',
         ] );
 
+        register_rest_route( 'okie/v1', '/get-posts', [
+            'methods'             => 'GET',
+            'callback'            => [ $this, 'get_posts_via_query_builder' ],
+            'permission_callback' => '__return_true',
+        ] );
+
     }
 
     public function get_properties() {
@@ -590,5 +596,9 @@ class Okie_Properties {
         }
 
         return true;
+    }
+
+    public function get_posts_via_query_builder(){
+        return get_posts_via_query_builder();
     }
 }
