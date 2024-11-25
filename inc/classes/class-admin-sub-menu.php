@@ -223,12 +223,6 @@ class Admin_Sub_Menu {
         // Open the file and process its contents
         if ( ( $handle = fopen( $file['tmp_name'], 'r' ) ) !== false ) {
 
-            global $wpdb;
-            $table_name = $wpdb->prefix . 'sync_csv_file_data';
-
-            // Truncate table
-            $wpdb->query( "TRUNCATE TABLE $table_name" );
-
             // Read the header row to map column names
             $header = fgetcsv( $handle, 1000, ',' );
             if ( !$header ) {
@@ -238,9 +232,8 @@ class Admin_Sub_Menu {
             // Map CSV header columns to database fields
             $header_map = array_flip( $header );
 
-            $row_count = 0;
-
             while ( ( $data = fgetcsv( $handle, 1000, ',' ) ) !== false ) {
+
                 // Safely map CSV data to variables
                 $name = sanitize_text_field( $data[0] ?? '' );
                 // $name                        = sanitize_text_field( $data[$header_map['Name']] ?? '' );
@@ -265,38 +258,59 @@ class Admin_Sub_Menu {
                 // Use the value from Website 1 as the main website URL
                 $website_url = $website1;
 
-                // Insert data into the database
-                $wpdb->insert(
-                    $table_name,
-                    [
-                        'name'                        => $name,
-                        'location'                    => $location,
-                        'building_type'               => $building_type,
-                        'number_of_rooms'             => $number_of_rooms,
-                        'max_price_per_room'          => $max_price_per_room,
-                        'sda_design_category'         => $sda_design_category,
-                        'booked_status'               => $booked_status,
-                        'vacancy'                     => $vacancy,
-                        'has_fire_sprinklers'         => $has_fire_sprinklers,
-                        'has_breakout_room'           => $has_breakout_room,
-                        'onsite_overnight_assistance' => $onsite_overnight_assistance,
-                        'email'                       => $email,
-                        'phone'                       => $phone,
-                        'website1'                    => $website1,
-                        'website2'                    => $website2,
-                        'website3'                    => $website3,
-                        'website4'                    => $website4,
-                        'website5'                    => $website5,
-                        'website_url'                 => $website_url,
-                    ]
-                );
+                $values = [
+                    'name'                        => $name,
+                    'location'                    => $location,
+                    'building_type'               => $building_type,
+                    'number_of_rooms'             => $number_of_rooms,
+                    'max_price_per_room'          => $max_price_per_room,
+                    'sda_design_category'         => $sda_design_category,
+                    'booked_status'               => $booked_status,
+                    'vacancy'                     => $vacancy,
+                    'has_fire_sprinklers'         => $has_fire_sprinklers,
+                    'has_breakout_room'           => $has_breakout_room,
+                    'onsite_overnight_assistance' => $onsite_overnight_assistance,
+                    'email'                       => $email,
+                    'phone'                       => $phone,
+                    'website1'                    => $website1,
+                    'website2'                    => $website2,
+                    'website3'                    => $website3,
+                    'website4'                    => $website4,
+                    'website5'                    => $website5,
+                    'website_url'                 => $website_url,
+                ];
 
-                $row_count++;
+                $unique_by = [ 'website_url' ];
+
+                $update_columns = [
+                    'name',
+                    'location',
+                    'building_type',
+                    'number_of_rooms',
+                    'max_price_per_room',
+                    'sda_design_category',
+                    'booked_status',
+                    'vacancy',
+                    'has_fire_sprinklers',
+                    'has_breakout_room',
+                    'onsite_overnight_assistance',
+                    'email',
+                    'phone',
+                    'website1',
+                    'website2',
+                    'website3',
+                    'website4',
+                    'website5',
+                ];
+
+                // Perform upsert operation
+                seed_properties_to_database_from_csv( $values, $unique_by, $update_columns );
+
             }
 
             fclose( $handle );
 
-            wp_send_json_success( "Successfully imported" );
+            wp_send_json_success( "Successfully imported the CSV file." );
         } else {
             wp_send_json_error( 'Unable to open the uploaded file.' );
         }

@@ -17,7 +17,7 @@ class Plugin_Activator {
 
         $sql = "CREATE TABLE IF NOT EXISTS $table_name (
             id INT AUTO_INCREMENT,
-            property_id VARCHAR(255) UNIQUE NOT NULL,
+            property_id VARCHAR(255) UNIQUE NULL,
             name VARCHAR(255) NULL,
             location VARCHAR(300) NULL,
             building_type VARCHAR(255) NULL,
