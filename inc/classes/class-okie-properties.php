@@ -49,6 +49,12 @@ class Okie_Properties {
             'permission_callback' => '__return_true',
         ] );
 
+        register_rest_route( 'okie/v1', '/sync-properties', [
+            'methods'             => 'GET',
+            'callback'            => [ $this, 'sync_properties' ],
+            'permission_callback' => '__return_true',
+        ] );
+
     }
 
     public function get_properties() {
@@ -110,7 +116,7 @@ class Okie_Properties {
             if ( !empty( $all_properties ) ) {
 
                 // $this->put_program_logs( 'Total properties fetched: ' . count( $all_properties ) );
-                $startDb       = time();
+                $startDb = time();
 
                 seed_properties_to_database( $all_properties );
 
@@ -200,9 +206,10 @@ class Okie_Properties {
 
         foreach ( $results as $result ) {
             try {
+
                 $property_row_id = $result->property_id;
-                $website_url     = $result->website_url;
-                $long_desc       = $result->long_description;
+                // $website_url     = $result->website_url;
+                $long_desc = $result->long_description;
                 // $this->put_program_logs( 'Old description: ' . $long_desc );
 
                 // Generate a new description
@@ -278,7 +285,7 @@ class Okie_Properties {
 
         // Create the payload for the request
         $data = [
-            'model'       => 'gpt-4',
+            'model'       => 'gpt-4o',
             'messages'    => [
                 [ 'role' => 'system', 'content' => "You are an assistant that rewrites text in a {$tone} tone." ],
                 [ 'role' => 'user', 'content' => "Please rewrite the following text:\n\n{$old_description}" ],
@@ -329,4 +336,205 @@ class Okie_Properties {
 
         return true;
     }
+
+    public function sync_properties() {
+
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'sync_properties';
+
+        // Prepare the query
+        $sql = $wpdb->prepare( "SELECT * FROM $table_name WHERE status = 'pending' AND is_synced = 'no' LIMIT $this->limit" );
+
+        $properties = $wpdb->get_results( $sql );
+
+        if ( $wpdb->last_error ) {
+            // put_program_logs( 'Database error: ' . $wpdb->last_error );
+            return 'Error fetching properties from the database.';
+        }
+
+        if ( !empty( $properties ) && is_array( $properties ) ) {
+            foreach ( $properties as $property ) {
+                $this->insert_property_to_stay_post_type( $property );
+            }
+        } else {
+            return 'No pending properties found for syncing.';
+        }
+
+        return 'Properties synchronized successfully.';
+    }
+
+    public function insert_property_to_stay_post_type( $property ) {
+
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'sync_properties';
+
+        try {
+            $serial_id                   = $property->id;
+            $property_id                 = $property->property_id ?? '';
+            $title                       = $property->name ?? '';
+            $description                 = $property->long_description ?? '';
+            $location                    = $property->location ?? '';
+            $building_type               = $property->building_type ?? '';
+            $number_of_rooms             = $property->number_of_rooms ?? 0;
+            $sda_design_category         = $property->sda_design_category ?? '';
+            $booked_status               = $property->booked_status ?? '';
+            $vacancy                     = $property->vacancy ?? 0;
+            $has_fire_sprinklers         = $property->has_fire_sprinklers ?? 0;
+            $has_breakout_room           = $property->has_breakout_room ?? 0;
+            $onsite_overnight_assistance = $property->onsite_overnight_assistance ?? 0;
+            $email                       = $property->email ?? '';
+            $phone                       = $property->phone ?? '';
+            $image_urls                  = $property->image_urls ?? '';
+            put_program_logs( 'Image URLs: ' . $image_urls );
+            $image_urls = json_decode( $image_urls, true );
+
+            $property_data = $property->property_data ?? '';
+            $property_data = json_decode( $property_data, true );
+
+            $latitude  = $property_data['latitude'] ?? '';
+            $longitude = $property_data['longitude'] ?? '';
+
+            $beds                    = $property_data['numberOfBedrooms'] ?? 0;
+            $bathrooms               = $property_data['numberOfBathrooms'] ?? 0;
+            $parking                 = $property_data['parking'] ?? 0;
+            $numberOfSdaResidents    = $property_data['numberOfSdaResidents'] ?? 0;
+            $ooaAppointmentAndReview = $property_data['ooaAppointmentAndReview'] ?? '';
+
+            // return "Beds : $beds, Baths : $bathrooms, Parking : $parking, NumberOfSdaResidents : $numberOfSdaResidents";
+
+            $additional_infos = [
+                '_property_id'    => $property_id,
+                'beds'            => $beds,
+                'bathrooms'       => $bathrooms,
+                'parking'         => $parking,
+                'location'        => array( 'location' => $location, 'map_picker' => '', 'latitude' => $latitude, 'longitude' => $longitude ),
+                'location-2'      => array(),
+                'location-3'      => array(),
+                'location-4'      => array(),
+                'location-5'      => array(),
+                'location-6'      => array(),
+                'location-7'      => array(),
+                'location-8'      => array(),
+                'location-9'      => array(),
+                'location-10'     => array(),
+                'location-11'     => array(),
+                'rooms'           => $number_of_rooms,
+                'sda-residents'   => $numberOfSdaResidents,
+                'text-2'          => '',
+                'text-3'          => '',
+                'text-4'          => $ooaAppointmentAndReview,
+                // Nearby places data
+                'shopping'        => '',
+                'parks'           => '',
+                'medical_centre'  => '',
+                'hospital'        => '',
+                'train'           => '',
+                'bus'             => 1,
+                'recreational'    => '',
+                'fast_food'       => '',
+                'descriptionarea' => '',
+                'counciltext'     => '',
+                'councillink'     => '',
+                'wikitext'        => '',
+                'wikilink'        => '',
+                'lac_details'     => '',
+            ];
+
+            // post data
+            $post_data = array(
+                'post_title'   => sanitize_text_field( $title ),
+                'post_content' => $description,
+                'post_status'  => 'publish',
+                'post_type'    => 'place',
+            );
+
+            // Check if the property already exists
+            $args = array(
+                'post_type'  => 'place',
+                'meta_query' => array(
+                    array(
+                        'key'     => '_property_id',
+                        'value'   => $property_id,
+                        'compare' => '=',
+                    ),
+                ),
+            );
+
+            // Check if the product already exists
+            $existing_post = new \WP_Query( $args );
+
+            if ( $existing_post->have_posts() ) {
+
+                put_program_logs( 'Existing post found.' );
+
+                // Update the existing post
+                $existing_post_id = $existing_post->posts[0]->ID;
+
+                wp_update_post( [
+                    'ID'           => $existing_post_id,
+                    'post_title'   => sanitize_text_field( $title ),
+                    'post_content' => wp_kses_post( $description ),
+                ] );
+
+                $post_id = $existing_post_id;
+
+                // set additional information's
+                foreach ( $additional_infos as $key => $value ) {
+                    update_post_meta( $post_id, sanitize_key( $key ), sanitize_text_field( $value ) );
+                }
+
+
+                // update is synced status
+                $wpdb->update(
+                    $table_name,
+                    array( 'is_synced' => 'yes' ),
+                    array( 'id' => $serial_id ),
+                    array( '%s' ), // Data format for is_synced
+                    array( '%d' )  // Data format for serial_id
+                );
+
+            } else {
+
+                put_program_logs( 'No existing post found.' );
+
+                // Insert a new post
+                $post_data = [
+                    'post_title'   => sanitize_text_field( $title ),
+                    'post_content' => wp_kses_post( $description ),
+                    'post_status'  => 'publish',
+                    'post_type'    => 'place',
+                ];
+
+                $post_id = wp_insert_post( $post_data );
+
+                // set property gallery images
+                set_property_gallery_images( $post_id, $image_urls );
+
+                // set additional information's
+                foreach ( $additional_infos as $key => $value ) {
+                    update_post_meta( $post_id, sanitize_key( $key ), sanitize_text_field( $value ) );
+                }
+
+                if ( is_wp_error( $post_id ) ) {
+                    throw new \Exception( 'Failed to insert post: ' . $post_id->get_error_message() );
+                }
+
+                // update is synced status
+                $wpdb->update(
+                    $table_name,
+                    array( 'is_synced' => 'yes' ),
+                    array( 'id' => $serial_id ),
+                    array( '%s' ), // Data format for is_synced
+                    array( '%d' )  // Data format for serial_id
+                );
+            }
+
+
+        } catch (\Exception $e) {
+            put_program_logs( 'Error inserting property: ' . $e->getMessage() );
+            return $e->getMessage();
+        }
+
+    }
+
 }
