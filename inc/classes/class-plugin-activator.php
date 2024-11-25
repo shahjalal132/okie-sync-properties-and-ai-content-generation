@@ -36,10 +36,12 @@ class Plugin_Activator {
             website3 VARCHAR(255) NULL,
             website4 VARCHAR(255) NULL,
             website5 VARCHAR(255) NULL,
+            image_urls TEXT NULL,
             long_description TEXT NULL,
             website_url VARCHAR(255) UNIQUE NOT NULL,
             property_data LONGTEXT NULL,
             status VARCHAR(30) NOT NULL DEFAULT 'pending',
+            is_synced VARCHAR(30) NOT NULL DEFAULT 'no',
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
             PRIMARY KEY (id)
