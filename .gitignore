@@ -15,7 +15,7 @@
 # program_logs/program_logs.log
 
 # composer
-vendor
+# vendor
 
 # Built Visual Studio Code Extensions
 *.vsix
