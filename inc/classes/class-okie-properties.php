@@ -374,7 +374,6 @@ class Okie_Properties {
             $title                       = $property->name ?? '';
             $description                 = $property->long_description ?? '';
             $location                    = $property->location ?? '';
-            $building_type               = $property->building_type ?? '';
             $number_of_rooms             = $property->number_of_rooms ?? 0;
             $sda_design_category         = $property->sda_design_category ?? '';
             $booked_status               = $property->booked_status ?? '';
@@ -385,7 +384,7 @@ class Okie_Properties {
             $email                       = $property->email ?? '';
             $phone                       = $property->phone ?? '';
             $image_urls                  = $property->image_urls ?? '';
-            put_program_logs( 'Image URLs: ' . $image_urls );
+            // put_program_logs( 'Image URLs: ' . $image_urls );
             $image_urls = json_decode( $image_urls, true );
 
             $property_data = $property->property_data ?? '';
@@ -399,6 +398,17 @@ class Okie_Properties {
             $parking                 = $property_data['parking'] ?? 0;
             $numberOfSdaResidents    = $property_data['numberOfSdaResidents'] ?? 0;
             $ooaAppointmentAndReview = $property_data['ooaAppointmentAndReview'] ?? '';
+
+            // taxonomies
+            $accommodationLength      = $property_data['accommodationLength'] ?? '';
+            $propertyAvailableOptions = $property_data['propertyAvailableOptions'] ?? '';
+            $propertySdaType          = $property_data['propertySdaType'] ?? '';
+            $building_type            = $property->building_type ?? '';
+            // safety features
+            $accessibleFeatures       = $property_data['accessibleFeatures'];
+            $alarmSystem = $property_data['alarmSystem'];
+            $automatedDoors = $property_data['automatedDoors'];
+            $broadbandInternetAvailable = $property_data['broadbandInternetAvailable'];
 
             // return "Beds : $beds, Baths : $bathrooms, Parking : $parking, NumberOfSdaResidents : $numberOfSdaResidents";
 
@@ -465,7 +475,7 @@ class Okie_Properties {
 
             if ( $existing_post->have_posts() ) {
 
-                put_program_logs( 'Existing post found.' );
+                // put_program_logs( 'Existing post found.' );
 
                 // Update the existing post
                 $existing_post_id = $existing_post->posts[0]->ID;
@@ -495,7 +505,7 @@ class Okie_Properties {
 
             } else {
 
-                put_program_logs( 'No existing post found.' );
+                // put_program_logs( 'No existing post found.' );
 
                 // Insert a new post
                 $post_data = [
