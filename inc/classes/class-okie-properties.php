@@ -475,8 +475,6 @@ class Okie_Properties {
 
             if ( $existing_post->have_posts() ) {
 
-                // put_program_logs( 'Existing post found.' );
-
                 // Update the existing post
                 $existing_post_id = $existing_post->posts[0]->ID;
 
@@ -504,8 +502,6 @@ class Okie_Properties {
                 );
 
             } else {
-
-                // put_program_logs( 'No existing post found.' );
 
                 // Insert a new post
                 $post_data = [
@@ -538,7 +534,6 @@ class Okie_Properties {
                     array( '%d' )  // Data format for serial_id
                 );
             }
-
 
         } catch (\Exception $e) {
             put_program_logs( 'Error inserting property: ' . $e->getMessage() );
