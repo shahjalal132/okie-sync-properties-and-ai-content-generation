@@ -81,3 +81,62 @@ function set_property_gallery_images( $product_id, $images ) {
         }
     }
 }
+
+// Helper function to transform values
+function transform_data($data) {
+    if (is_array($data)) {
+        // Transform each item in the array
+        return array_map(function($item) {
+            return strtolower(str_replace('_', '-', $item));
+        }, $data);
+    } elseif (is_string($data)) {
+        // Transform a single string value
+        return strtolower(str_replace('_', '-', $data));
+    }
+    return $data; // Return as-is for unsupported types
+}
+
+// Helper: Fetch term IDs for given taxonomies
+function match_terms_and_get_ids($transformed_data, $taxonomies_map) {
+    $matched_terms = [];
+
+    foreach ($taxonomies_map as $data_key => $taxonomy_name) {
+        if (taxonomy_exists($taxonomy_name)) {
+            // Fetch terms for the taxonomy
+            $terms = get_terms(['taxonomy' => $taxonomy_name, 'hide_empty' => false]);
+
+            if (!is_wp_error($terms) && !empty($terms)) {
+                // Extract the corresponding transformed_data key
+                $data_key_cleaned = str_replace('_tax_name', '', $data_key);
+
+                // Check if the cleaned key exists in transformed_data
+                if (isset($transformed_data[$data_key_cleaned])) {
+                    // Ensure the transformed data is an array
+                    $values_to_check = (array) $transformed_data[$data_key_cleaned];
+
+                    foreach ($terms as $term) {
+                        // Match values to term slug
+                        foreach ($values_to_check as $value) {
+                            if ($value === $term->slug) {
+                                $matched_terms[$taxonomy_name][] = $term->term_id;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    return $matched_terms;
+}
+
+// Helper: Assign terms to a post
+function assign_terms_to_post($post_id, $terms_data, $taxonomies_map) {
+    foreach ($terms_data as $taxonomy_key => $term_ids) {
+        $taxonomy_name = $taxonomies_map[$taxonomy_key] ?? $taxonomy_key;
+
+        if (!empty($term_ids)) {
+            wp_set_post_terms($post_id, $term_ids, $taxonomy_name, true);
+        }
+    }
+}
