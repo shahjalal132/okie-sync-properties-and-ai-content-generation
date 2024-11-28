@@ -38,10 +38,13 @@ class Plugin_Activator {
             website5 VARCHAR(255) NULL,
             image_urls TEXT NULL,
             long_description TEXT NULL,
+            short_description TEXT NULL,
             website_url VARCHAR(255) UNIQUE NOT NULL,
             property_data LONGTEXT NULL,
             status VARCHAR(30) NOT NULL DEFAULT 'pending',
             is_synced VARCHAR(30) NOT NULL DEFAULT 'no',
+            is_title_updated VARCHAR(30) NOT NULL DEFAULT 'no',
+            is_short_description_updated VARCHAR(30) NOT NULL DEFAULT 'no',
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
             PRIMARY KEY (id)
