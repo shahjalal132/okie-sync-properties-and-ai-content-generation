@@ -392,8 +392,9 @@ class Okie_Properties {
         $table_name = $wpdb->prefix . 'sync_properties';
 
         // Prepare the query
-        $sql = $wpdb->prepare( "SELECT * FROM $table_name WHERE status = 'updated' AND is_synced = 'no' LIMIT $this->limit" );
+        $sql = $wpdb->prepare( "SELECT * FROM $table_name WHERE status = 'updated' AND is_title_updated = 'yes' AND is_short_description_updated = 'yes' AND is_synced = 'no' LIMIT $this->limit" );
 
+        // Execute the query
         $properties = $wpdb->get_results( $sql );
 
         if ( $wpdb->last_error ) {
