@@ -25,6 +25,7 @@ function seed_properties_to_database( $properties ) {
             $sda_design_category  = $property['sdaDesignCategory'][0] ?? '';
             $booked_status        = $property['status'] ?? '';
             $long_desc            = $property['propertyDescriptionLong'] ?? '';
+            $short_desc           = $property['propertyDescriptionShort'] ?? '';
             $short_id             = $property['shortId'] ?? '';
             $provider_short_id    = $property['providerShortId'] ?? '';
             $website_url          = sprintf(
@@ -48,6 +49,7 @@ function seed_properties_to_database( $properties ) {
                 'sda_design_category' => $sda_design_category,
                 'booked_status'       => $booked_status,
                 'long_description'    => $long_desc,
+                'short_description'   => $short_desc,
                 'website_url'         => $website_url,
                 'image_urls'          => $image_urls,
                 'property_data'       => $property_data,
