@@ -480,8 +480,6 @@ class Okie_Properties {
                 'area_tax_name' => 'area',
             ];
 
-
-
             // return "Beds : $beds, Baths : $bathrooms, Parking : $parking, NumberOfSdaResidents : $numberOfSdaResidents";
 
             $additional_infos = [
@@ -521,9 +519,7 @@ class Okie_Properties {
                 'wikilink'        => '',
                 'lac_details'     => '',
             ];
-            put_program_logs("Location: " . $location);
-            put_program_logs("Latitude: " . $latitude);
-            put_program_logs("Longitude: " . $longitude);
+
             // post data
             $post_data = array(
                 'post_title'   => sanitize_text_field( $title ),
