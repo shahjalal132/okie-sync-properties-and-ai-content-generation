@@ -13,6 +13,9 @@ class Okie_Properties {
     private $apiSecretKey;
     private $apiEndpoint;
     private $limit;
+    private $title_rewrite_instruction;
+    private $short_description_rewrite_instruction;
+    private $description_rewrite_instruction;
 
     public function __construct() {
         $this->setup_hooks();
@@ -24,9 +27,12 @@ class Okie_Properties {
 
 
         // get api secret key and endpoint
-        $this->apiEndpoint  = get_option( 'okie_chatgpt_api_endpoint' );
-        $this->apiSecretKey = get_option( 'okie_chatgpt_api_secret_key' );
-        $this->limit        = get_option( 'option1', 1 );
+        $this->apiEndpoint                           = get_option( 'okie_chatgpt_api_endpoint' );
+        $this->apiSecretKey                          = get_option( 'okie_chatgpt_api_secret_key' );
+        $this->limit                                 = get_option( 'option1', 1 );
+        $this->title_rewrite_instruction             = get_option( 'okie_title_rewrite_instruction' );
+        $this->short_description_rewrite_instruction = get_option( 'okie_short_rewrite_instruction' );
+        $this->description_rewrite_instruction       = get_option( 'okie_description_rewrite_instruction' );
     }
 
     public function register_rest_route() {
@@ -43,9 +49,9 @@ class Okie_Properties {
             'permission_callback' => '__return_true',
         ] );
 
-        register_rest_route( 'okie/v1', '/generate-description', [
+        register_rest_route( 'okie/v1', '/rewrite-contents', [
             'methods'             => 'GET',
-            'callback'            => [ $this, 'generate_description' ],
+            'callback'            => [ $this, 'rewrite_contents_callback' ],
             'permission_callback' => '__return_true',
         ] );
 
@@ -185,54 +191,86 @@ class Okie_Properties {
         ];
     }
 
-    public function generate_description() {
+    public function rewrite_contents_callback() {
 
         global $wpdb;
-        $csv_table        = $wpdb->prefix . 'sync_csv_file_data';
         $properties_table = $wpdb->prefix . 'sync_properties';
 
+        // Prepare the SQL query
         $sql = "
-            SELECT wsp.property_id, wsp.long_description
+            SELECT wsp.id, wsp.property_id, wsp.name, wsp.long_description, wsp.short_description
             FROM {$properties_table} wsp WHERE wsp.status = 'pending'
             LIMIT {$this->limit}
         ";
 
+        // Execute the SQL query
         $results = $wpdb->get_results( $sql );
 
+        // Check if there are any results
         if ( empty( $results ) ) {
-            // $this->put_program_logs( 'No pending records found.' );
+            $this->put_program_logs( 'No pending records found.' );
             return 'No pending records to process.';
         }
 
+        $error_count = 0;
+
         foreach ( $results as $result ) {
             try {
-
+                // Get values
+                $row_id = $result->id;
+                // $this->put_program_logs( 'row id: ' . $row_id );
                 $property_row_id = $result->property_id;
-                // $website_url     = $result->website_url;
-                $long_desc = $result->long_description;
-                // $this->put_program_logs( 'Old description: ' . $long_desc );
+                $title           = $result->name ?? '';
+                // $this->put_program_logs( 'old title: ' . $title );
+                $long_desc = $result->long_description ?? '';
+                // $this->put_program_logs( 'old description: ' . $long_desc );
+                $short_desc = $result->short_description ?? '';
+                // $this->put_program_logs( 'old short description: ' . $short_desc );
+
+                // Generate title
+                $new_title = $this->rewrite_content_via_chatgpt( $this->title_rewrite_instruction, $title );
+                if ( strpos( $new_title, 'Error:' ) === 0 ) {
+                    throw new \Exception( "Failed to generate title for property ID: {$property_row_id}" );
+                }
+                // $this->put_program_logs( 'new title: ' . $new_title );
+
+                // Generate short description
+                $new_short_desc = $this->rewrite_content_via_chatgpt( $this->short_description_rewrite_instruction, $short_desc );
+                if ( strpos( $new_short_desc, 'Error:' ) === 0 ) {
+                    throw new \Exception( "Failed to generate short description for property ID: {$property_row_id}" );
+                }
+                // $this->put_program_logs( 'new short description: ' . $new_short_desc );
 
                 // Generate a new description
-                $new_description = $this->regenerate_description_via_chatgpt( $long_desc );
-
-                if ( strpos( $new_description, 'Error:' ) === 0 || strpos( $new_description, 'API Error:' ) === 0 ) {
-                    throw new \Exception( 'Failed to regenerate description: ' . $new_description );
+                $new_description = $this->rewrite_content_via_chatgpt( $this->description_rewrite_instruction, $long_desc );
+                if ( strpos( $new_description, 'Error:' ) === 0 ) {
+                    throw new \Exception( "Failed to generate description for property ID: {$property_row_id}" );
                 }
+                // $this->put_program_logs( 'new description: ' . $new_description );
 
-                // $this->put_program_logs( 'New description: ' . $new_description );
+                // Prepare new contents
+                $new_contents = [
+                    'title'             => $new_title,
+                    'short_description' => $new_short_desc,
+                    'description'       => $new_description,
+                ];
 
-                // Update description in properties table
-                if ( !$this->update_description_in_database_in_properties_table( $property_row_id, $new_description ) ) {
-                    throw new \Exception( 'Failed to update description in properties table for property ID: ' . $property_row_id );
+                // Update new contents in properties table
+                if ( !$this->update_new_contents_in_properties_table( $row_id, $new_contents ) ) {
+                    throw new \Exception( "Failed to update contents in properties table for property ID: {$property_row_id}" );
                 }
 
             } catch (\Exception $e) {
+                $error_count++;
                 $this->put_program_logs( 'Error: ' . $e->getMessage() );
-                return 'An error occurred: ' . $e->getMessage();
             }
         }
 
-        return 'Description regeneration completed successfully.';
+        $status_message = $error_count > 0
+            ? "Process completed with {$error_count} errors."
+            : 'Description regeneration completed successfully.';
+
+        return $status_message;
     }
 
     public function fetch_properties_from_api_via_state( $hash, $state ) {
@@ -274,21 +312,24 @@ class Okie_Properties {
 
     }
 
-    public function regenerate_description_via_chatgpt( $old_description ) {
-        $tone = 'formal';
+    public function rewrite_content_via_chatgpt( string $user_instruction = '', string $old_contents ) {
 
+        $tone = 'formal';
         // Create the headers for the request
         $headers = [
             'Content-Type: application/json',
             'Authorization: Bearer ' . $this->apiSecretKey,
         ];
 
+        // Set the user_instruction
+        $user_instruction = $user_instruction ?? "Please rewrite the following text";
+
         // Create the payload for the request
         $data = [
             'model'       => 'gpt-4o',
             'messages'    => [
                 [ 'role' => 'system', 'content' => "You are an assistant that rewrites text in a {$tone} tone." ],
-                [ 'role' => 'user', 'content' => "Please rewrite the following text:\n\n{$old_description}" ],
+                [ 'role' => 'user', 'content' => "{$user_instruction}:\n\n{$old_contents}" ],
             ],
             'temperature' => 0.7,
         ];
@@ -319,19 +360,27 @@ class Okie_Properties {
         return 'API Error: ' . $errorMessage;
     }
 
-    public function update_description_in_database_in_properties_table( $property_row_id, $new_description ) {
+    public function update_new_contents_in_properties_table( int $row_id, array $new_contents ) {
+
         global $wpdb;
         $table_name = $wpdb->prefix . 'sync_properties';
 
         $result = $wpdb->update(
             $table_name,
-            [ 'long_description' => $new_description, 'status' => 'updated' ],
-            [ 'property_id' => $property_row_id ]
+            [
+                'name'                         => $new_contents['title'],
+                'long_description'             => $new_contents['description'],
+                'short_description'            => $new_contents['short_description'],
+                'status'                       => 'updated',
+                'is_title_updated'             => 'yes',
+                'is_short_description_updated' => 'yes',
+            ],
+            [ 'id' => $row_id ]
         );
 
         if ( $result === false ) {
             $this->put_program_logs( 'Failed to update properties table: ' . $wpdb->last_error );
-            return false;
+            return $wpdb->last_error;
         }
 
         return true;
@@ -402,17 +451,17 @@ class Okie_Properties {
 
             // Taxonomies data
             $data = [
-                'accommodationLength' => $property_data['accommodationLength'] ?? '',
-                'propertyAvailableOptions' => $property_data['propertyAvailableOptions'] ?? '',
-                'place_sda_home' => $property_data['propertySdaType'] ?? '',
-                'place_sda_building_type' => $property_data['sdaBuildingType'] ?? '',
-                'place_gender_of_housemate' => $property_data['genderOfHousemates'] ?? '',
+                'accommodationLength'           => $property_data['accommodationLength'] ?? '',
+                'propertyAvailableOptions'      => $property_data['propertyAvailableOptions'] ?? '',
+                'place_sda_home'                => $property_data['propertySdaType'] ?? '',
+                'place_sda_building_type'       => $property_data['sdaBuildingType'] ?? '',
+                'place_gender_of_housemate'     => $property_data['genderOfHousemates'] ?? '',
                 'place_looking_for_a_housemate' => $property_data['lookingForAHousemate'] ?? '',
-                'place_who_can_live_here' => $property_data['whoCanLiveHere'] ?? '',
-                'place_age_of_housemates' => $property_data['ageOfHousemates'] ?? '',
-                'place_sda_design_category' => $property_data['sdaDesignCategory'] ?? '',
-                'place_support_provided' => $property_data['supportProvided'] ?? '',
-                'housefeatures' => array_filter(array(
+                'place_who_can_live_here'       => $property_data['whoCanLiveHere'] ?? '',
+                'place_age_of_housemates'       => $property_data['ageOfHousemates'] ?? '',
+                'place_sda_design_category'     => $property_data['sdaDesignCategory'] ?? '',
+                'place_support_provided'        => $property_data['supportProvided'] ?? '',
+                'housefeatures'                 => array_filter( array(
                     $property_data['broadbandInternetAvailable'] == 'true' ? 'broadband-internet-available' : null,
                     $property_data['cooling'] == 'true' ? 'cooling' : null,
                     // $property_data['coolingSystem'] == 'true' ? 'cooling-system' : null,
@@ -428,8 +477,8 @@ class Okie_Properties {
                     $property_data['solarHotWater'] == 'true' ? 'solar-hot-water' : null,
                     $property_data['solarPanels'] == 'true' ? 'solar-panels' : null,
                     $property_data['sprinklers'] == 'true' ? 'sprinklers' : null,
-                )),
-                'accessibilityandsafety' => array_filter(array(
+                ) ),
+                'accessibilityandsafety'        => array_filter( array(
                     $property_data['accessibleFeatures'] == 'true' ? 'accessible-features' : null,
                     $property_data['ceilingHoist'] == 'true' ? 'ceiling-hoist' : null,
                     $property_data['commonwealthRentAssistanceAvailable'] == 'true' ? 'commonwealth-rent-assistance-available' : null,
@@ -439,8 +488,8 @@ class Okie_Properties {
                     $property_data['onsiteOvernightAssistance'] == 'true' ? 'onsite-overnight-assistance' : null,
                     $property_data['petAllowed'] == 'true' ? 'pets-allowed' : null,
                     $property_data['wheelchairAccessible'] == 'true' ? 'wheelchair-accessible' : null,
-                )),
-                'livingspacefeatures' => array_filter(array(
+                ) ),
+                'livingspacefeatures'           => array_filter( array(
                     $property_data['alarmSystem'] == 'true' ? 'alarm-system' : null,
                     $property_data['automatedDoors'] == 'true' ? 'automated-doors' : null,
                     $property_data['builtInWardrobes'] == 'true' ? 'built-in-wardrobes' : null,
@@ -453,31 +502,31 @@ class Okie_Properties {
                     // $property_data['strongAndRobustBuild'] == 'true' ? 'strong-robust-build' : null,
                     $property_data['strongAndRobustConstruction'] == 'true' ? 'strong-robustconstruction' : null,
                     $property_data['study'] == 'true' ? 'study' : null,
-                )),
+                ) ),
             ];
-            
+
             // Transform input data
             $transformed_data = [];
-            foreach ($data as $key => $value) {
-                $transformed_data[$key] = transform_data($value);
+            foreach ( $data as $key => $value ) {
+                $transformed_data[$key] = transform_data( $value );
             }
 
             // Define taxonomy mappings
             $taxonomies_names = [
-                'accommodationLength_tax_name' => 'place_accommodation_length',
-                'propertyAvailableOptions_tax_name' => 'place_property_availability',
-                'place_sda_home_tax_name' => 'place_sda_home',
-                'place_sda_building_type_tax_name' => 'place_sda_building_type',
-                'housefeatures_tax_name' => 'housefeatures',
-                'accessibilityandsafety_tax_name' => 'accessibilityandsafety',
-                'livingspacefeatures_tax_name' => 'livingspacefeatures',
-                'place_gender_of_housemate_tax_name' => 'place_gender_of_housemate',
+                'accommodationLength_tax_name'           => 'place_accommodation_length',
+                'propertyAvailableOptions_tax_name'      => 'place_property_availability',
+                'place_sda_home_tax_name'                => 'place_sda_home',
+                'place_sda_building_type_tax_name'       => 'place_sda_building_type',
+                'housefeatures_tax_name'                 => 'housefeatures',
+                'accessibilityandsafety_tax_name'        => 'accessibilityandsafety',
+                'livingspacefeatures_tax_name'           => 'livingspacefeatures',
+                'place_gender_of_housemate_tax_name'     => 'place_gender_of_housemate',
                 'place_looking_for_a_housemate_tax_name' => 'place_looking_for_a_housemate',
-                'place_who_can_live_here_tax_name' => 'place_who_can_live_here',
-                'place_age_of_housemates_tax_name' => 'place_age_of_housemates',
-                'place_sda_design_category_tax_name' => 'place_sda_design_category',
-                'place_support_provided_tax_name' => 'place_support_provided',
-                'area_tax_name' => 'area',
+                'place_who_can_live_here_tax_name'       => 'place_who_can_live_here',
+                'place_age_of_housemates_tax_name'       => 'place_age_of_housemates',
+                'place_sda_design_category_tax_name'     => 'place_sda_design_category',
+                'place_support_provided_tax_name'        => 'place_support_provided',
+                'area_tax_name'                          => 'area',
             ];
 
             // return "Beds : $beds, Baths : $bathrooms, Parking : $parking, NumberOfSdaResidents : $numberOfSdaResidents";
@@ -596,10 +645,10 @@ class Okie_Properties {
                 }
 
                 // Fetch term IDs for taxonomies
-                $terms_ids = match_terms_and_get_ids( $transformed_data, $taxonomies_names);
+                $terms_ids = match_terms_and_get_ids( $transformed_data, $taxonomies_names );
 
                 // Assign terms to the post
-                assign_terms_to_post($post_id, $terms_ids, $taxonomies_names);
+                assign_terms_to_post( $post_id, $terms_ids, $taxonomies_names );
 
                 // update is synced status
                 $wpdb->update(
