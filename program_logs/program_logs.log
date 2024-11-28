@@ -1,20 +1,1797 @@
-Image URLs: ["https:\/\/res.cloudinary.com\/hc4clemkt\/image\/upload\/v1708858815\/wnc8j43nn4ieywgyoiyn.jpg","https:\/\/res.cloudinary.com\/hc4clemkt\/image\/upload\/v1683680607\/sxt5dd1mx1r9hwwan30o.jpg","https:\/\/res.cloudinary.com\/hc4clemkt\/image\/upload\/v1708858815\/wwduojqfsiqsk1hjlzjc.jpg","https:\/\/res.cloudinary.com\/hc4clemkt\/image\/upload\/v1708858816\/cqghcnhj23mhgsa4lppn.jpg","https:\/\/res.cloudinary.com\/hc4clemkt\/image\/upload\/v1708858825\/zcy2fmsilf12to5ucane.jpg","https:\/\/res.cloudinary.com\/hc4clemkt\/image\/upload\/v1708858831\/v0wjthcu9shgeyjdgfw7.jpg"] - 2024-11-25 12:54:05
+Input data: Array
+(
+    [accommodationLength] => Array
+        (
+            [0] => MEDIUM_TERM
+            [1] => ONGOING_LEASE
+            [2] => SHORT_TERM
+        )
 
-No existing post found. - 2024-11-25 12:54:05
+    [propertyAvailableOptions] => BEDROOM_ONLY
+    [place_sda_home] => NON_SDA
+    [building_type] => 
+    [accessibleFeatures] => 1
+    [alarmSystem] => 
+    [automatedDoors] => 
+    [broadbandInternetAvailable] => 1
+)
+ - 2024-11-27 04:29:15
 
-Image URLs: ["https:\/\/res.cloudinary.com\/hc4clemkt\/image\/upload\/v1708993358\/lp3vtcbqj17o8mlkedfd.jpg","https:\/\/res.cloudinary.com\/hc4clemkt\/image\/upload\/v1708993365\/jspmxj2hglz2koepwx1n.jpg","https:\/\/res.cloudinary.com\/hc4clemkt\/image\/upload\/v1708993372\/cysucjllnx1hxgrpoonq.jpg","https:\/\/res.cloudinary.com\/hc4clemkt\/image\/upload\/v1708993378\/nf7titbsxvspgwjvjcgc.jpg","https:\/\/res.cloudinary.com\/hc4clemkt\/image\/upload\/v1708993385\/wfqw1wy6sirujpnk2vzn.jpg"] - 2024-11-25 12:57:24
+Transformed data: 1 - 2024-11-27 04:29:15
 
-Existing post found. - 2024-11-25 12:57:24
+Successfully assigned terms to taxonomy 'place_accommodation_length'. - 2024-11-27 04:29:23
 
-Image URLs: ["https:\/\/res.cloudinary.com\/hc4clemkt\/image\/upload\/v1708858815\/wnc8j43nn4ieywgyoiyn.jpg","https:\/\/res.cloudinary.com\/hc4clemkt\/image\/upload\/v1683680607\/sxt5dd1mx1r9hwwan30o.jpg","https:\/\/res.cloudinary.com\/hc4clemkt\/image\/upload\/v1708858815\/wwduojqfsiqsk1hjlzjc.jpg","https:\/\/res.cloudinary.com\/hc4clemkt\/image\/upload\/v1708858816\/cqghcnhj23mhgsa4lppn.jpg","https:\/\/res.cloudinary.com\/hc4clemkt\/image\/upload\/v1708858825\/zcy2fmsilf12to5ucane.jpg","https:\/\/res.cloudinary.com\/hc4clemkt\/image\/upload\/v1708858831\/v0wjthcu9shgeyjdgfw7.jpg"] - 2024-11-25 12:57:27
+Successfully assigned terms to taxonomy 'place_property_availability'. - 2024-11-27 04:29:23
 
-Existing post found. - 2024-11-25 12:57:27
+Input data: Array
+(
+    [accommodationLength] => Array
+        (
+            [0] => MEDIUM_TERM
+            [1] => ONGOING_LEASE
+            [2] => SHORT_TERM
+        )
 
-Image URLs: ["https:\/\/res.cloudinary.com\/hc4clemkt\/image\/upload\/v1708993358\/lp3vtcbqj17o8mlkedfd.jpg","https:\/\/res.cloudinary.com\/hc4clemkt\/image\/upload\/v1708993365\/jspmxj2hglz2koepwx1n.jpg","https:\/\/res.cloudinary.com\/hc4clemkt\/image\/upload\/v1708993372\/cysucjllnx1hxgrpoonq.jpg","https:\/\/res.cloudinary.com\/hc4clemkt\/image\/upload\/v1708993378\/nf7titbsxvspgwjvjcgc.jpg","https:\/\/res.cloudinary.com\/hc4clemkt\/image\/upload\/v1708993385\/wfqw1wy6sirujpnk2vzn.jpg"] - 2024-11-25 12:58:41
+    [propertyAvailableOptions] => WHOLE_HOME
+    [place_sda_home] => SDA
+    [building_type] => APARTMENT
+    [accessibleFeatures] => 1
+    [alarmSystem] => 
+    [automatedDoors] => 1
+    [broadbandInternetAvailable] => 1
+)
+ - 2024-11-27 04:29:58
 
-No existing post found. - 2024-11-25 12:58:41
+Transformed data: 1 - 2024-11-27 04:29:58
 
-Image URLs: ["https:\/\/res.cloudinary.com\/hc4clemkt\/image\/upload\/v1708858815\/wnc8j43nn4ieywgyoiyn.jpg","https:\/\/res.cloudinary.com\/hc4clemkt\/image\/upload\/v1683680607\/sxt5dd1mx1r9hwwan30o.jpg","https:\/\/res.cloudinary.com\/hc4clemkt\/image\/upload\/v1708858815\/wwduojqfsiqsk1hjlzjc.jpg","https:\/\/res.cloudinary.com\/hc4clemkt\/image\/upload\/v1708858816\/cqghcnhj23mhgsa4lppn.jpg","https:\/\/res.cloudinary.com\/hc4clemkt\/image\/upload\/v1708858825\/zcy2fmsilf12to5ucane.jpg","https:\/\/res.cloudinary.com\/hc4clemkt\/image\/upload\/v1708858831\/v0wjthcu9shgeyjdgfw7.jpg"] - 2024-11-25 12:58:45
+Successfully assigned terms to taxonomy 'place_accommodation_length'. - 2024-11-27 04:30:05
 
-No existing post found. - 2024-11-25 12:58:45
+Successfully assigned terms to taxonomy 'place_property_availability'. - 2024-11-27 04:30:05
+
+Successfully assigned terms to taxonomy 'place_sda_home'. - 2024-11-27 04:30:05
+
+Input data: Array
+(
+    [accommodationLength] => Array
+        (
+            [0] => ONGOING_LEASE
+        )
+
+    [propertyAvailableOptions] => WHOLE_HOME
+    [place_sda_home] => SDA
+    [place_sda_building_type] => Villa / Duplex / Townhouse, 1 residents
+    [accessibilityandsafety] => 
+    [alarmSystem] => 
+    [automatedDoors] => 
+    [broadbandInternetAvailable] => 1
+)
+ - 2024-11-27 04:31:59
+
+Transformed data: 1 - 2024-11-27 04:31:59
+
+Successfully assigned terms to taxonomy 'place_accommodation_length'. - 2024-11-27 04:32:08
+
+Successfully assigned terms to taxonomy 'place_property_availability'. - 2024-11-27 04:32:08
+
+Successfully assigned terms to taxonomy 'place_sda_home'. - 2024-11-27 04:32:08
+
+Input data: Array
+(
+    [accommodationLength] => Array
+        (
+            [0] => MEDIUM_TERM
+            [1] => ONGOING_LEASE
+        )
+
+    [propertyAvailableOptions] => BEDROOM_ONLY
+    [place_sda_home] => NON_SDA
+    [place_sda_building_type] => 
+    [accessibilityandsafety] => 
+    [alarmSystem] => 
+    [automatedDoors] => 
+    [broadbandInternetAvailable] => 1
+    [place_gender_of_housemate] => Array
+        (
+            [0] => FEMALE
+        )
+
+    [place_looking_for_a_housemate] => Array
+        (
+            [0] => SOCIALISE_TOGETHER
+            [1] => THEMSELVES
+        )
+
+    [place_who_can_live_here] => Array
+        (
+            [0] => SHARE_HOUSE_WITH_DISABILITY
+        )
+
+    [place_age_of_housemates] => Array
+        (
+            [0] => THIRTY_SIX_TO_FOURTY_FIVE
+        )
+
+    [place_sda_design_category] => 
+    [place_support_provided] => Array
+        (
+            [0] => TWENTY_FOUR_HOURS
+        )
+
+)
+ - 2024-11-27 04:58:53
+
+Transformed data: 1 - 2024-11-27 04:58:53
+
+Successfully assigned terms to taxonomy 'place_accommodation_length'. - 2024-11-27 04:59:01
+
+Successfully assigned terms to taxonomy 'place_property_availability'. - 2024-11-27 04:59:01
+
+Successfully assigned terms to taxonomy 'place_gender_of_housemate'. - 2024-11-27 04:59:01
+
+Successfully assigned terms to taxonomy 'place_age_of_housemates'. - 2024-11-27 04:59:01
+
+Successfully assigned terms to taxonomy 'place_support_provided'. - 2024-11-27 04:59:01
+
+Input data: Array
+(
+    [accommodationLength] => Array
+        (
+            [0] => MEDIUM_TERM
+            [1] => ONGOING_LEASE
+        )
+
+    [propertyAvailableOptions] => BEDROOM_ONLY
+    [place_sda_home] => NON_SDA
+    [place_sda_building_type] => 
+    [accessibilityandsafety] => 
+    [alarmSystem] => 
+    [automatedDoors] => 
+    [broadbandInternetAvailable] => 1
+    [place_gender_of_housemate] => Array
+        (
+            [0] => NO_PREFERENCE
+        )
+
+    [place_looking_for_a_housemate] => Array
+        (
+            [0] => SOCIALISE_TOGETHER
+            [1] => THEMSELVES
+        )
+
+    [place_who_can_live_here] => Array
+        (
+            [0] => SHARE_HOUSE_WITH_DISABILITY
+        )
+
+    [place_age_of_housemates] => Array
+        (
+            [0] => TWENTY_SIX_TO_THIRTY_FIVE
+            [1] => THIRTY_SIX_TO_FOURTY_FIVE
+        )
+
+    [place_sda_design_category] => 
+    [place_support_provided] => Array
+        (
+            [0] => TWENTY_FOUR_HOURS
+        )
+
+)
+ - 2024-11-27 05:03:20
+
+Transformed data: 1 - 2024-11-27 05:03:20
+
+Successfully assigned terms to taxonomy 'place_accommodation_length'. - 2024-11-27 05:03:29
+
+Successfully assigned terms to taxonomy 'place_property_availability'. - 2024-11-27 05:03:29
+
+Successfully assigned terms to taxonomy 'place_gender_of_housemate'. - 2024-11-27 05:03:29
+
+Successfully assigned terms to taxonomy 'place_age_of_housemates'. - 2024-11-27 05:03:29
+
+Successfully assigned terms to taxonomy 'place_support_provided'. - 2024-11-27 05:03:29
+
+Successfully assigned terms to taxonomy 'place_accommodation_length'. - 2024-11-27 05:26:44
+
+Successfully assigned terms to taxonomy 'place_property_availability'. - 2024-11-27 05:26:44
+
+Successfully assigned terms to taxonomy 'place_gender_of_housemate'. - 2024-11-27 05:26:44
+
+Successfully assigned terms to taxonomy 'place_looking_for_a_housemate'. - 2024-11-27 05:26:44
+
+Successfully assigned terms to taxonomy 'place_who_can_live_here'. - 2024-11-27 05:26:44
+
+Successfully assigned terms to taxonomy 'place_age_of_housemates'. - 2024-11-27 05:26:44
+
+Successfully assigned terms to taxonomy 'place_support_provided'. - 2024-11-27 05:26:44
+
+Successfully assigned terms to taxonomy 'place_accommodation_length'. - 2024-11-27 05:28:40
+
+Successfully assigned terms to taxonomy 'place_property_availability'. - 2024-11-27 05:28:40
+
+Successfully assigned terms to taxonomy 'place_sda_home'. - 2024-11-27 05:28:40
+
+Successfully assigned terms to taxonomy 'place_gender_of_housemate'. - 2024-11-27 05:28:40
+
+Successfully assigned terms to taxonomy 'place_looking_for_a_housemate'. - 2024-11-27 05:28:40
+
+Successfully assigned terms to taxonomy 'place_who_can_live_here'. - 2024-11-27 05:28:40
+
+Successfully assigned terms to taxonomy 'place_age_of_housemates'. - 2024-11-27 05:28:40
+
+Successfully assigned terms to taxonomy 'place_support_provided'. - 2024-11-27 05:28:41
+
+data1: Array
+(
+    [broadbandInternetAvailable] => 1
+    [cooling] => 1
+    [coolingSystem] => 
+    [detailsNotProvided] => 
+    [dishwasher] => 1
+    [ductedVacuumSystem] => 
+    [heating] => 1
+    [heatingSystem] => 
+    [high-energy-efficiency-rating] => HIGH
+    [low-energy-efficiency-rating] => HIGH
+    [medium-energy-efficiency-rating] => HIGH
+    [payTvAccess] => 
+    [solarHotWater] => 
+    [solarPanels] => 
+    [sprinklers] => 
+)
+ - 2024-11-27 06:01:26
+
+Successfully assigned terms to taxonomy 'place_accommodation_length'. - 2024-11-27 06:01:34
+
+Successfully assigned terms to taxonomy 'place_property_availability'. - 2024-11-27 06:01:34
+
+Successfully assigned terms to taxonomy 'place_sda_home'. - 2024-11-27 06:01:34
+
+Successfully assigned terms to taxonomy 'place_looking_for_a_housemate'. - 2024-11-27 06:01:34
+
+Successfully assigned terms to taxonomy 'place_who_can_live_here'. - 2024-11-27 06:01:34
+
+Successfully assigned terms to taxonomy 'place_age_of_housemates'. - 2024-11-27 06:01:34
+
+Successfully assigned terms to taxonomy 'place_support_provided'. - 2024-11-27 06:01:34
+
+data1: Array
+(
+    [broadbandInternetAvailable] => broadband-internet-available
+    [cooling] => cooling
+    [coolingSystem] => 
+    [detailsNotProvided] => 
+    [dishwasher] => dishwasher
+    [ductedVacuumSystem] => 
+    [heating] => heating
+    [heatingSystem] => 
+    [high-energy-efficiency-rating] => 
+    [low-energy-efficiency-rating] => 
+    [medium-energy-efficiency-rating] => 
+    [payTvAccess] => 
+    [solarHotWater] => 
+    [solarPanels] => 
+    [sprinklers] => 
+)
+ - 2024-11-27 06:10:20
+
+Successfully assigned terms to taxonomy 'place_accommodation_length'. - 2024-11-27 06:10:37
+
+Successfully assigned terms to taxonomy 'place_property_availability'. - 2024-11-27 06:10:37
+
+Successfully assigned terms to taxonomy 'place_sda_home'. - 2024-11-27 06:10:37
+
+Successfully assigned terms to taxonomy 'place_who_can_live_here'. - 2024-11-27 06:10:37
+
+Successfully assigned terms to taxonomy 'place_age_of_housemates'. - 2024-11-27 06:10:37
+
+Successfully assigned terms to taxonomy 'place_support_provided'. - 2024-11-27 06:10:37
+
+data1: Array
+(
+    [broadbandInternetAvailable] => 1
+    [cooling] => 1
+    [coolingSystem] => 
+    [detailsNotProvided] => 
+    [dishwasher] => 1
+    [ductedVacuumSystem] => 
+    [heating] => 1
+    [heatingSystem] => 
+    [high-energy-efficiency-rating] => 
+    [low-energy-efficiency-rating] => 
+    [medium-energy-efficiency-rating] => 
+    [payTvAccess] => 
+    [solarHotWater] => 
+    [solarPanels] => 
+    [sprinklers] => 
+)
+ - 2024-11-27 06:12:10
+
+data2: Array
+(
+    [broadbandInternetAvailable] => broadband-internet-available
+    [cooling] => cooling
+    [coolingSystem] => 
+    [detailsNotProvided] => 
+    [dishwasher] => dishwasher
+    [ductedVacuumSystem] => 
+    [heating] => heating
+    [heatingSystem] => 
+    [high-energy-efficiency-rating] => 
+    [low-energy-efficiency-rating] => 
+    [medium-energy-efficiency-rating] => 
+    [payTvAccess] => 
+    [solarHotWater] => 
+    [solarPanels] => 
+    [sprinklers] => 
+)
+ - 2024-11-27 06:12:10
+
+Successfully assigned terms to taxonomy 'place_accommodation_length'. - 2024-11-27 06:12:15
+
+Successfully assigned terms to taxonomy 'place_property_availability'. - 2024-11-27 06:12:15
+
+Successfully assigned terms to taxonomy 'place_sda_home'. - 2024-11-27 06:12:15
+
+Successfully assigned terms to taxonomy 'place_gender_of_housemate'. - 2024-11-27 06:12:15
+
+Successfully assigned terms to taxonomy 'place_looking_for_a_housemate'. - 2024-11-27 06:12:15
+
+Successfully assigned terms to taxonomy 'place_who_can_live_here'. - 2024-11-27 06:12:15
+
+Successfully assigned terms to taxonomy 'place_age_of_housemates'. - 2024-11-27 06:12:15
+
+Successfully assigned terms to taxonomy 'place_support_provided'. - 2024-11-27 06:12:16
+
+data1: Array
+(
+    [broadbandInternetAvailable] => 
+    [cooling] => 1
+    [coolingSystem] => 
+    [detailsNotProvided] => 
+    [dishwasher] => 1
+    [ductedVacuumSystem] => 
+    [heating] => 1
+    [heatingSystem] => 
+    [high-energy-efficiency-rating] => 
+    [low-energy-efficiency-rating] => 
+    [medium-energy-efficiency-rating] => 
+    [payTvAccess] => 
+    [solarHotWater] => 
+    [solarPanels] => 
+    [sprinklers] => 
+)
+ - 2024-11-27 06:13:48
+
+data2: Array
+(
+    [broadbandInternetAvailable] => 
+    [cooling] => cooling
+    [coolingSystem] => 
+    [detailsNotProvided] => 
+    [dishwasher] => dishwasher
+    [ductedVacuumSystem] => 
+    [heating] => heating
+    [heatingSystem] => 
+    [high-energy-efficiency-rating] => 
+    [low-energy-efficiency-rating] => 
+    [medium-energy-efficiency-rating] => 
+    [payTvAccess] => 
+    [solarHotWater] => 
+    [solarPanels] => 
+    [sprinklers] => 
+)
+ - 2024-11-27 06:13:48
+
+Successfully assigned terms to taxonomy 'place_accommodation_length'. - 2024-11-27 06:14:02
+
+Successfully assigned terms to taxonomy 'place_property_availability'. - 2024-11-27 06:14:02
+
+Successfully assigned terms to taxonomy 'place_sda_home'. - 2024-11-27 06:14:02
+
+Successfully assigned terms to taxonomy 'place_gender_of_housemate'. - 2024-11-27 06:14:02
+
+Successfully assigned terms to taxonomy 'place_who_can_live_here'. - 2024-11-27 06:14:02
+
+Successfully assigned terms to taxonomy 'place_age_of_housemates'. - 2024-11-27 06:14:02
+
+Successfully assigned terms to taxonomy 'place_support_provided'. - 2024-11-27 06:14:02
+
+data1: Array
+(
+    [broadbandInternetAvailable] => 1
+    [cooling] => 1
+    [coolingSystem] => 
+    [detailsNotProvided] => 
+    [dishwasher] => 
+    [ductedVacuumSystem] => 
+    [heating] => 1
+    [heatingSystem] => 
+    [high-energy-efficiency-rating] => 
+    [low-energy-efficiency-rating] => 
+    [medium-energy-efficiency-rating] => 
+    [payTvAccess] => 
+    [solarHotWater] => 
+    [solarPanels] => 
+    [sprinklers] => 
+)
+ - 2024-11-27 06:14:25
+
+data2: Array
+(
+    [broadbandInternetAvailable] => broadband-internet-available
+    [cooling] => cooling
+    [coolingSystem] => 
+    [detailsNotProvided] => 
+    [dishwasher] => 
+    [ductedVacuumSystem] => 
+    [heating] => heating
+    [heatingSystem] => 
+    [high-energy-efficiency-rating] => 
+    [low-energy-efficiency-rating] => 
+    [medium-energy-efficiency-rating] => 
+    [payTvAccess] => 
+    [solarHotWater] => 
+    [solarPanels] => 
+    [sprinklers] => 
+)
+ - 2024-11-27 06:14:25
+
+Successfully assigned terms to taxonomy 'place_accommodation_length'. - 2024-11-27 06:14:34
+
+Successfully assigned terms to taxonomy 'place_property_availability'. - 2024-11-27 06:14:34
+
+Successfully assigned terms to taxonomy 'place_sda_home'. - 2024-11-27 06:14:34
+
+Successfully assigned terms to taxonomy 'place_gender_of_housemate'. - 2024-11-27 06:14:34
+
+Successfully assigned terms to taxonomy 'place_looking_for_a_housemate'. - 2024-11-27 06:14:34
+
+Successfully assigned terms to taxonomy 'place_who_can_live_here'. - 2024-11-27 06:14:34
+
+Successfully assigned terms to taxonomy 'place_age_of_housemates'. - 2024-11-27 06:14:34
+
+Successfully assigned terms to taxonomy 'place_support_provided'. - 2024-11-27 06:14:34
+
+data1: Array
+(
+    [broadbandInternetAvailable] => 1
+    [cooling] => 1
+    [coolingSystem] => 
+    [detailsNotProvided] => 
+    [dishwasher] => 1
+    [ductedVacuumSystem] => 
+    [heating] => 1
+    [heatingSystem] => 
+    [high-energy-efficiency-rating] => 
+    [low-energy-efficiency-rating] => 
+    [medium-energy-efficiency-rating] => 
+    [payTvAccess] => 
+    [solarHotWater] => 
+    [solarPanels] => 
+    [sprinklers] => 
+)
+ - 2024-11-27 06:15:13
+
+data2: Array
+(
+    [broadbandInternetAvailable] => broadband-internet-available
+    [cooling] => cooling
+    [coolingSystem] => 
+    [detailsNotProvided] => 
+    [dishwasher] => dishwasher
+    [ductedVacuumSystem] => 
+    [heating] => heating
+    [heatingSystem] => 
+    [high-energy-efficiency-rating] => 
+    [low-energy-efficiency-rating] => 
+    [medium-energy-efficiency-rating] => 
+    [payTvAccess] => 
+    [solarHotWater] => 
+    [solarPanels] => 
+    [sprinklers] => 
+)
+ - 2024-11-27 06:15:13
+
+Successfully assigned terms to taxonomy 'place_accommodation_length'. - 2024-11-27 06:15:21
+
+Successfully assigned terms to taxonomy 'place_property_availability'. - 2024-11-27 06:15:21
+
+Successfully assigned terms to taxonomy 'place_sda_home'. - 2024-11-27 06:15:21
+
+Successfully assigned terms to taxonomy 'place_sda_building_type'. - 2024-11-27 06:15:21
+
+Successfully assigned terms to taxonomy 'place_gender_of_housemate'. - 2024-11-27 06:15:21
+
+Successfully assigned terms to taxonomy 'place_who_can_live_here'. - 2024-11-27 06:15:22
+
+Successfully assigned terms to taxonomy 'place_sda_design_category'. - 2024-11-27 06:15:22
+
+Successfully assigned terms to taxonomy 'place_support_provided'. - 2024-11-27 06:15:22
+
+data1: Array
+(
+    [broadbandInternetAvailable] => 1
+    [cooling] => 1
+    [coolingSystem] => 
+    [detailsNotProvided] => 
+    [dishwasher] => 
+    [ductedVacuumSystem] => 
+    [heating] => 1
+    [heatingSystem] => 
+    [high-energy-efficiency-rating] => 
+    [low-energy-efficiency-rating] => 
+    [medium-energy-efficiency-rating] => 
+    [payTvAccess] => 
+    [solarHotWater] => 
+    [solarPanels] => 
+    [sprinklers] => 
+)
+ - 2024-11-27 06:15:25
+
+data2: Array
+(
+    [broadbandInternetAvailable] => broadband-internet-available
+    [cooling] => cooling
+    [coolingSystem] => 
+    [detailsNotProvided] => 
+    [dishwasher] => 
+    [ductedVacuumSystem] => 
+    [heating] => heating
+    [heatingSystem] => 
+    [high-energy-efficiency-rating] => 
+    [low-energy-efficiency-rating] => 
+    [medium-energy-efficiency-rating] => 
+    [payTvAccess] => 
+    [solarHotWater] => 
+    [solarPanels] => 
+    [sprinklers] => 
+)
+ - 2024-11-27 06:15:25
+
+Successfully assigned terms to taxonomy 'place_accommodation_length'. - 2024-11-27 06:15:36
+
+Successfully assigned terms to taxonomy 'place_property_availability'. - 2024-11-27 06:15:36
+
+Successfully assigned terms to taxonomy 'place_sda_home'. - 2024-11-27 06:15:36
+
+Successfully assigned terms to taxonomy 'place_gender_of_housemate'. - 2024-11-27 06:15:36
+
+Successfully assigned terms to taxonomy 'place_who_can_live_here'. - 2024-11-27 06:15:36
+
+Successfully assigned terms to taxonomy 'place_support_provided'. - 2024-11-27 06:15:36
+
+data1: Array
+(
+    [broadbandInternetAvailable] => 1
+    [cooling] => 1
+    [coolingSystem] => 
+    [detailsNotProvided] => 
+    [dishwasher] => 1
+    [ductedVacuumSystem] => 
+    [heating] => 1
+    [heatingSystem] => 
+    [high-energy-efficiency-rating] => LOW
+    [low-energy-efficiency-rating] => LOW
+    [medium-energy-efficiency-rating] => LOW
+    [payTvAccess] => 
+    [solarHotWater] => 
+    [solarPanels] => 
+    [sprinklers] => 
+)
+ - 2024-11-27 06:17:18
+
+data2: Array
+(
+    [broadbandInternetAvailable] => broadband-internet-available
+    [cooling] => cooling
+    [coolingSystem] => 
+    [detailsNotProvided] => 
+    [dishwasher] => dishwasher
+    [ductedVacuumSystem] => 
+    [heating] => heating
+    [heatingSystem] => 
+    [high-energy-efficiency-rating] => 
+    [low-energy-efficiency-rating] => low-energy-efficiency-rating
+    [medium-energy-efficiency-rating] => 
+    [payTvAccess] => 
+    [solarHotWater] => 
+    [solarPanels] => 
+    [sprinklers] => 
+)
+ - 2024-11-27 06:17:18
+
+data: Array
+(
+    [accommodationLength] => Array
+        (
+            [0] => ONGOING_LEASE
+        )
+
+    [propertyAvailableOptions] => BEDROOM_ONLY
+    [place_sda_home] => NON_SDA
+    [place_sda_building_type] => 
+    [place_gender_of_housemate] => Array
+        (
+            [0] => FEMALE
+        )
+
+    [place_looking_for_a_housemate] => Array
+        (
+            [0] => SOCIALISE_TOGETHER
+            [1] => THEMSELVES
+        )
+
+    [place_who_can_live_here] => Array
+        (
+            [0] => SHARE_HOUSE_WITH_DISABILITY
+        )
+
+    [place_age_of_housemates] => Array
+        (
+            [0] => FIFTEEN_TO_TWENTY_FIVE
+            [1] => TWENTY_SIX_TO_THIRTY_FIVE
+        )
+
+    [place_sda_design_category] => 
+    [place_support_provided] => Array
+        (
+            [0] => TWENTY_FOUR_HOURS
+        )
+
+)
+ - 2024-11-27 06:18:16
+
+data1: Array
+(
+    [broadbandInternetAvailable] => 1
+    [cooling] => 1
+    [coolingSystem] => 
+    [detailsNotProvided] => 
+    [dishwasher] => 1
+    [ductedVacuumSystem] => 
+    [heating] => 1
+    [heatingSystem] => 
+    [high-energy-efficiency-rating] => LOW
+    [low-energy-efficiency-rating] => LOW
+    [medium-energy-efficiency-rating] => LOW
+    [payTvAccess] => 
+    [solarHotWater] => 
+    [solarPanels] => 
+    [sprinklers] => 
+)
+ - 2024-11-27 06:18:16
+
+data2: Array
+(
+    [broadbandInternetAvailable] => broadband-internet-available
+    [cooling] => cooling
+    [coolingSystem] => 
+    [detailsNotProvided] => 
+    [dishwasher] => dishwasher
+    [ductedVacuumSystem] => 
+    [heating] => heating
+    [heatingSystem] => 
+    [high-energy-efficiency-rating] => 
+    [low-energy-efficiency-rating] => low-energy-efficiency-rating
+    [medium-energy-efficiency-rating] => 
+    [payTvAccess] => 
+    [solarHotWater] => 
+    [solarPanels] => 
+    [sprinklers] => 
+)
+ - 2024-11-27 06:18:16
+
+data: Array
+(
+    [accommodationLength] => Array
+        (
+            [0] => ONGOING_LEASE
+        )
+
+    [propertyAvailableOptions] => BEDROOM_ONLY
+    [place_sda_home] => SDA
+    [place_sda_building_type] => HOUSE
+    [place_gender_of_housemate] => Array
+        (
+            [0] => MALE
+        )
+
+    [place_looking_for_a_housemate] => Array
+        (
+            [0] => SOCIALISE_TOGETHER
+            [1] => ACTIVE_HOME
+        )
+
+    [place_who_can_live_here] => Array
+        (
+            [0] => SHARE_HOUSE_WITH_DISABILITY
+        )
+
+    [place_age_of_housemates] => Array
+        (
+            [0] => FIFTY_SIX_TO_SIXTY_FIVE
+            [1] => SIXTY_FIVE_PLUS
+        )
+
+    [place_sda_design_category] => Array
+        (
+            [0] => BASIC
+        )
+
+    [place_support_provided] => Array
+        (
+            [0] => TWENTY_FOUR_HOURS
+        )
+
+)
+ - 2024-11-27 06:19:35
+
+data2: Array
+(
+    [broadbandInternetAvailable] => 
+    [cooling] => cooling
+    [coolingSystem] => 
+    [detailsNotProvided] => 
+    [dishwasher] => dishwasher
+    [ductedVacuumSystem] => 
+    [heating] => heating
+    [heatingSystem] => 
+    [high-energy-efficiency-rating] => 
+    [low-energy-efficiency-rating] => 
+    [medium-energy-efficiency-rating] => medium-energy-efficiency-rating
+    [payTvAccess] => 
+    [solarHotWater] => 
+    [solarPanels] => 
+    [sprinklers] => 
+)
+ - 2024-11-27 06:19:35
+
+data: Array
+(
+    [accommodationLength] => Array
+        (
+            [0] => ONGOING_LEASE
+        )
+
+    [propertyAvailableOptions] => WHOLE_HOME
+    [place_sda_home] => SDA
+    [place_sda_building_type] => APARTMENT
+    [place_gender_of_housemate] => 
+    [place_looking_for_a_housemate] => 
+    [place_who_can_live_here] => Array
+        (
+            [0] => BY_YOURSELF
+            [1] => WITH_FAMILY
+            [2] => WITH_PARTNER
+        )
+
+    [place_age_of_housemates] => 
+    [place_sda_design_category] => Array
+        (
+            [0] => HIGH_PHYSICAL_SUPPORT
+        )
+
+    [place_support_provided] => Array
+        (
+        )
+
+)
+ - 2024-11-27 06:29:47
+
+data2: Array
+(
+    [housefeatures] => Array
+        (
+        )
+
+)
+ - 2024-11-27 06:29:47
+
+data: Array
+(
+    [accommodationLength] => Array
+        (
+            [0] => MEDIUM_TERM
+            [1] => ONGOING_LEASE
+            [2] => SHORT_TERM
+        )
+
+    [propertyAvailableOptions] => BEDROOM_ONLY
+    [place_sda_home] => NON_SDA
+    [place_sda_building_type] => 
+    [place_gender_of_housemate] => Array
+        (
+            [0] => MALE
+        )
+
+    [place_looking_for_a_housemate] => Array
+        (
+            [0] => SOCIALISE_TOGETHER
+            [1] => ACTIVE_HOME
+            [2] => THEMSELVES
+            [3] => SHARE_COSTS
+        )
+
+    [place_who_can_live_here] => Array
+        (
+            [0] => SHARE_HOUSE_WITH_DISABILITY
+        )
+
+    [place_age_of_housemates] => Array
+        (
+            [0] => THIRTY_SIX_TO_FOURTY_FIVE
+            [1] => FOURTY_SIX_TO_FIFTY_FIVE
+            [2] => FIFTY_SIX_TO_SIXTY_FIVE
+            [3] => SIXTY_FIVE_PLUS
+        )
+
+    [place_sda_design_category] => 
+    [place_support_provided] => Array
+        (
+            [0] => TWENTY_FOUR_HOURS
+            [1] => ONSITE_SHARED_SUPPORT
+        )
+
+)
+ - 2024-11-27 06:30:51
+
+data2: Array
+(
+    [housefeatures] => Array
+        (
+            [0] => broadband-internet-available
+            [1] => cooling
+            [4] => dishwasher
+            [6] => heating
+            [9] => medium-energy-efficiency-rating
+        )
+
+)
+ - 2024-11-27 06:30:51
+
+data: Array
+(
+    [accommodationLength] => Array
+        (
+            [0] => MEDIUM_TERM
+            [1] => ONGOING_LEASE
+            [2] => SHORT_TERM
+        )
+
+    [propertyAvailableOptions] => WHOLE_HOME
+    [place_sda_home] => SDA
+    [place_sda_building_type] => APARTMENT
+    [place_gender_of_housemate] => 
+    [place_looking_for_a_housemate] => 
+    [place_who_can_live_here] => Array
+        (
+            [0] => BY_YOURSELF
+            [1] => WITH_FAMILY
+            [2] => WITH_PARTNER
+        )
+
+    [place_age_of_housemates] => 
+    [place_sda_design_category] => Array
+        (
+            [0] => HIGH_PHYSICAL_SUPPORT
+            [1] => FULLY_ACCESSIBLE
+            [2] => IMPROVED_LIVABILITY
+        )
+
+    [place_support_provided] => Array
+        (
+            [0] => TWENTY_FOUR_HOURS
+            [1] => ONSITE_SHARED_SUPPORT
+        )
+
+    [housefeatures] => Array
+        (
+            [0] => broadband-internet-available
+            [1] => cooling
+            [4] => dishwasher
+            [6] => heating
+            [8] => high-energy-efficiency-rating
+        )
+
+)
+ - 2024-11-27 06:31:51
+
+data2: Array
+(
+    [housefeatures] => Array
+        (
+            [0] => broadband-internet-available
+            [1] => cooling
+            [4] => dishwasher
+            [6] => heating
+            [8] => high-energy-efficiency-rating
+        )
+
+)
+ - 2024-11-27 06:31:51
+
+data: Array
+(
+    [accommodationLength] => Array
+        (
+            [0] => ONGOING_LEASE
+        )
+
+    [propertyAvailableOptions] => WHOLE_HOME
+    [place_sda_home] => SDA
+    [place_sda_building_type] => DUPLEX
+    [place_gender_of_housemate] => 
+    [place_looking_for_a_housemate] => 
+    [place_who_can_live_here] => Array
+        (
+            [0] => BY_YOURSELF
+            [1] => WITH_PARTNER
+        )
+
+    [place_age_of_housemates] => 
+    [place_sda_design_category] => Array
+        (
+            [0] => IMPROVED_LIVABILITY
+        )
+
+    [place_support_provided] => Array
+        (
+            [0] => NONE_OWN_SUPPORT
+        )
+
+    [housefeatures] => Array
+        (
+            [0] => broadband-internet-available
+            [1] => cooling
+            [4] => dishwasher
+            [6] => heating
+            [8] => high-energy-efficiency-rating
+            [12] => solar-hot-water
+            [13] => solar-panels
+        )
+
+)
+ - 2024-11-27 06:33:03
+
+data2: Array
+(
+    [housefeatures] => Array
+        (
+            [0] => broadband-internet-available
+            [1] => cooling
+            [4] => dishwasher
+            [6] => heating
+            [8] => high-energy-efficiency-rating
+            [12] => solar-hot-water
+            [13] => solar-panels
+        )
+
+)
+ - 2024-11-27 06:33:03
+
+data: Array
+(
+    [accommodationLength] => Array
+        (
+            [0] => MEDIUM_TERM
+            [1] => ONGOING_LEASE
+        )
+
+    [propertyAvailableOptions] => BEDROOM_ONLY
+    [place_sda_home] => NON_SDA
+    [place_sda_building_type] => 
+    [place_gender_of_housemate] => Array
+        (
+            [0] => FEMALE
+        )
+
+    [place_looking_for_a_housemate] => Array
+        (
+            [0] => SOCIALISE_TOGETHER
+            [1] => THEMSELVES
+        )
+
+    [place_who_can_live_here] => Array
+        (
+            [0] => SHARE_HOUSE_WITH_DISABILITY
+        )
+
+    [place_age_of_housemates] => Array
+        (
+            [0] => THIRTY_SIX_TO_FOURTY_FIVE
+        )
+
+    [place_sda_design_category] => 
+    [place_support_provided] => Array
+        (
+            [0] => TWENTY_FOUR_HOURS
+        )
+
+    [housefeatures] => Array
+        (
+            [0] => broadband-internet-available
+            [1] => cooling
+            [4] => dishwasher
+            [6] => heating
+            [9] => medium-energy-efficiency-rating
+        )
+
+)
+ - 2024-11-27 06:33:08
+
+data2: Array
+(
+    [housefeatures] => Array
+        (
+            [0] => broadband-internet-available
+            [1] => cooling
+            [4] => dishwasher
+            [6] => heating
+            [9] => medium-energy-efficiency-rating
+        )
+
+)
+ - 2024-11-27 06:33:08
+
+data: Array
+(
+    [accommodationLength] => Array
+        (
+            [0] => MEDIUM_TERM
+            [1] => ONGOING_LEASE
+        )
+
+    [propertyAvailableOptions] => BEDROOM_ONLY
+    [place_sda_home] => NON_SDA
+    [place_sda_building_type] => 
+    [place_gender_of_housemate] => Array
+        (
+            [0] => NO_PREFERENCE
+        )
+
+    [place_looking_for_a_housemate] => Array
+        (
+            [0] => SOCIALISE_TOGETHER
+            [1] => THEMSELVES
+        )
+
+    [place_who_can_live_here] => Array
+        (
+            [0] => SHARE_HOUSE_WITH_DISABILITY
+        )
+
+    [place_age_of_housemates] => Array
+        (
+            [0] => TWENTY_SIX_TO_THIRTY_FIVE
+            [1] => THIRTY_SIX_TO_FOURTY_FIVE
+        )
+
+    [place_sda_design_category] => 
+    [place_support_provided] => Array
+        (
+            [0] => TWENTY_FOUR_HOURS
+        )
+
+    [housefeatures] => Array
+        (
+            [0] => broadband-internet-available
+            [1] => cooling
+            [4] => dishwasher
+            [6] => heating
+            [9] => medium-energy-efficiency-rating
+        )
+
+)
+ - 2024-11-27 06:33:12
+
+data2: Array
+(
+    [housefeatures] => Array
+        (
+            [0] => broadband-internet-available
+            [1] => cooling
+            [4] => dishwasher
+            [6] => heating
+            [9] => medium-energy-efficiency-rating
+        )
+
+)
+ - 2024-11-27 06:33:12
+
+data: Array
+(
+    [accommodationLength] => Array
+        (
+            [0] => MEDIUM_TERM
+            [1] => SHORT_TERM
+        )
+
+    [propertyAvailableOptions] => BEDROOM_ONLY
+    [place_sda_home] => NON_SDA
+    [place_sda_building_type] => 
+    [place_gender_of_housemate] => Array
+        (
+            [0] => NO_PREFERENCE
+        )
+
+    [place_looking_for_a_housemate] => Array
+        (
+            [0] => SOCIALISE_TOGETHER
+            [1] => THEMSELVES
+        )
+
+    [place_who_can_live_here] => Array
+        (
+            [0] => SHARE_HOUSE_WITH_DISABILITY
+        )
+
+    [place_age_of_housemates] => Array
+        (
+            [0] => NO_PREFERENCE
+        )
+
+    [place_sda_design_category] => 
+    [place_support_provided] => Array
+        (
+            [0] => TWENTY_FOUR_HOURS
+        )
+
+    [housefeatures] => Array
+        (
+            [0] => broadband-internet-available
+            [1] => cooling
+            [4] => dishwasher
+            [6] => heating
+            [8] => high-energy-efficiency-rating
+        )
+
+)
+ - 2024-11-27 06:33:15
+
+data2: Array
+(
+    [housefeatures] => Array
+        (
+            [0] => broadband-internet-available
+            [1] => cooling
+            [4] => dishwasher
+            [6] => heating
+            [8] => high-energy-efficiency-rating
+        )
+
+)
+ - 2024-11-27 06:33:15
+
+data: Array
+(
+    [accommodationLength] => Array
+        (
+            [0] => MEDIUM_TERM
+            [1] => ONGOING_LEASE
+            [2] => SHORT_TERM
+        )
+
+    [propertyAvailableOptions] => BEDROOM_ONLY
+    [place_sda_home] => NON_SDA
+    [place_sda_building_type] => 
+    [place_gender_of_housemate] => Array
+        (
+            [0] => FEMALE
+        )
+
+    [place_looking_for_a_housemate] => Array
+        (
+            [0] => SOCIALISE_TOGETHER
+            [1] => ACTIVE_HOME
+        )
+
+    [place_who_can_live_here] => Array
+        (
+            [0] => SHARE_HOUSE_WITH_DISABILITY
+        )
+
+    [place_age_of_housemates] => Array
+        (
+            [0] => THIRTY_SIX_TO_FOURTY_FIVE
+            [1] => FOURTY_SIX_TO_FIFTY_FIVE
+            [2] => FIFTY_SIX_TO_SIXTY_FIVE
+        )
+
+    [place_sda_design_category] => 
+    [place_support_provided] => Array
+        (
+            [0] => TWENTY_FOUR_HOURS
+        )
+
+    [housefeatures] => Array
+        (
+        )
+
+)
+ - 2024-11-27 06:33:43
+
+data2: Array
+(
+    [housefeatures] => Array
+        (
+        )
+
+)
+ - 2024-11-27 06:33:43
+
+data: Array
+(
+    [accommodationLength] => Array
+        (
+            [0] => MEDIUM_TERM
+            [1] => ONGOING_LEASE
+            [2] => SHORT_TERM
+        )
+
+    [propertyAvailableOptions] => BEDROOM_ONLY
+    [place_sda_home] => NON_SDA
+    [place_sda_building_type] => 
+    [place_gender_of_housemate] => 
+    [place_looking_for_a_housemate] => Array
+        (
+            [0] => SOCIALISE_TOGETHER
+            [1] => ACTIVE_HOME
+            [2] => THEMSELVES
+        )
+
+    [place_who_can_live_here] => Array
+        (
+            [0] => SHARE_HOUSE_WITH_DISABILITY
+        )
+
+    [place_age_of_housemates] => Array
+        (
+            [0] => NO_PREFERENCE
+        )
+
+    [place_sda_design_category] => 
+    [place_support_provided] => Array
+        (
+            [0] => TWENTY_FOUR_HOURS
+        )
+
+    [housefeatures] => Array
+        (
+            [0] => broadband-internet-available
+            [1] => cooling
+            [4] => dishwasher
+            [6] => heating
+            [8] => high-energy-efficiency-rating
+        )
+
+)
+ - 2024-11-27 06:33:46
+
+data2: Array
+(
+    [housefeatures] => Array
+        (
+            [0] => broadband-internet-available
+            [1] => cooling
+            [4] => dishwasher
+            [6] => heating
+            [8] => high-energy-efficiency-rating
+        )
+
+)
+ - 2024-11-27 06:33:46
+
+data: Array
+(
+    [accommodationLength] => Array
+        (
+            [0] => ONGOING_LEASE
+        )
+
+    [propertyAvailableOptions] => BEDROOM_ONLY
+    [place_sda_home] => NON_SDA
+    [place_sda_building_type] => 
+    [place_gender_of_housemate] => 
+    [place_looking_for_a_housemate] => 
+    [place_who_can_live_here] => Array
+        (
+            [0] => BY_YOURSELF
+        )
+
+    [place_age_of_housemates] => Array
+        (
+            [0] => NO_PREFERENCE
+        )
+
+    [place_sda_design_category] => 
+    [place_support_provided] => Array
+        (
+            [0] => TWENTY_FOUR_HOURS
+        )
+
+    [housefeatures] => Array
+        (
+            [0] => broadband-internet-available
+            [1] => cooling
+            [4] => dishwasher
+            [6] => heating
+        )
+
+)
+ - 2024-11-27 06:33:49
+
+data2: Array
+(
+    [housefeatures] => Array
+        (
+            [0] => broadband-internet-available
+            [1] => cooling
+            [4] => dishwasher
+            [6] => heating
+        )
+
+)
+ - 2024-11-27 06:33:49
+
+data: Array
+(
+    [accommodationLength] => Array
+        (
+            [0] => ONGOING_LEASE
+        )
+
+    [propertyAvailableOptions] => BEDROOM_ONLY
+    [place_sda_home] => NON_SDA
+    [place_sda_building_type] => 
+    [place_gender_of_housemate] => Array
+        (
+            [0] => FEMALE
+        )
+
+    [place_looking_for_a_housemate] => Array
+        (
+            [0] => THEMSELVES
+        )
+
+    [place_who_can_live_here] => Array
+        (
+            [0] => SHARE_HOUSE_WITH_DISABILITY
+        )
+
+    [place_age_of_housemates] => Array
+        (
+            [0] => FIFTEEN_TO_TWENTY_FIVE
+            [1] => TWENTY_SIX_TO_THIRTY_FIVE
+        )
+
+    [place_sda_design_category] => 
+    [place_support_provided] => Array
+        (
+            [0] => TWENTY_FOUR_HOURS
+        )
+
+    [housefeatures] => Array
+        (
+            [0] => broadband-internet-available
+            [1] => cooling
+            [4] => dishwasher
+            [6] => heating
+        )
+
+)
+ - 2024-11-27 06:33:51
+
+data2: Array
+(
+    [housefeatures] => Array
+        (
+            [0] => broadband-internet-available
+            [1] => cooling
+            [4] => dishwasher
+            [6] => heating
+        )
+
+)
+ - 2024-11-27 06:33:51
+
+data: Array
+(
+    [accommodationLength] => Array
+        (
+            [0] => ONGOING_LEASE
+        )
+
+    [propertyAvailableOptions] => BEDROOM_ONLY
+    [place_sda_home] => NON_SDA
+    [place_sda_building_type] => 
+    [place_gender_of_housemate] => Array
+        (
+            [0] => MALE
+        )
+
+    [place_looking_for_a_housemate] => 
+    [place_who_can_live_here] => Array
+        (
+            [0] => SHARE_HOUSE_WITH_DISABILITY
+        )
+
+    [place_age_of_housemates] => Array
+        (
+            [0] => TWENTY_SIX_TO_THIRTY_FIVE
+        )
+
+    [place_sda_design_category] => 
+    [place_support_provided] => Array
+        (
+            [0] => TWENTY_FOUR_HOURS
+        )
+
+    [housefeatures] => Array
+        (
+            [1] => cooling
+            [4] => dishwasher
+            [6] => heating
+        )
+
+)
+ - 2024-11-27 06:33:55
+
+data2: Array
+(
+    [housefeatures] => Array
+        (
+            [1] => cooling
+            [4] => dishwasher
+            [6] => heating
+        )
+
+)
+ - 2024-11-27 06:33:55
+
+data: Array
+(
+    [accommodationLength] => Array
+        (
+            [0] => ONGOING_LEASE
+        )
+
+    [propertyAvailableOptions] => BEDROOM_ONLY
+    [place_sda_home] => NON_SDA
+    [place_sda_building_type] => 
+    [place_gender_of_housemate] => Array
+        (
+            [0] => MALE
+        )
+
+    [place_looking_for_a_housemate] => Array
+        (
+            [0] => THEMSELVES
+        )
+
+    [place_who_can_live_here] => Array
+        (
+            [0] => SHARE_HOUSE_WITH_DISABILITY
+        )
+
+    [place_age_of_housemates] => Array
+        (
+            [0] => NO_PREFERENCE
+        )
+
+    [place_sda_design_category] => 
+    [place_support_provided] => Array
+        (
+            [0] => TWENTY_FOUR_HOURS
+        )
+
+    [housefeatures] => Array
+        (
+            [0] => broadband-internet-available
+            [1] => cooling
+            [6] => heating
+        )
+
+)
+ - 2024-11-27 06:33:57
+
+data2: Array
+(
+    [housefeatures] => Array
+        (
+            [0] => broadband-internet-available
+            [1] => cooling
+            [6] => heating
+        )
+
+)
+ - 2024-11-27 06:33:57
+
+data: Array
+(
+    [accommodationLength] => Array
+        (
+            [0] => MEDIUM_TERM
+            [1] => ONGOING_LEASE
+            [2] => SHORT_TERM
+        )
+
+    [propertyAvailableOptions] => WHOLE_HOME
+    [place_sda_home] => NON_SDA
+    [place_sda_building_type] => 
+    [place_gender_of_housemate] => 
+    [place_looking_for_a_housemate] => 
+    [place_who_can_live_here] => Array
+        (
+            [0] => BY_YOURSELF
+            [1] => SHARE_HOUSE_WITH_DISABILITY
+        )
+
+    [place_age_of_housemates] => 
+    [place_sda_design_category] => 
+    [place_support_provided] => Array
+        (
+            [0] => TWENTY_FOUR_HOURS
+        )
+
+    [housefeatures] => Array
+        (
+            [0] => broadband-internet-available
+            [1] => cooling
+            [4] => dishwasher
+            [6] => heating
+        )
+
+)
+ - 2024-11-27 06:35:38
+
+data2: Array
+(
+    [housefeatures] => Array
+        (
+            [0] => broadband-internet-available
+            [1] => cooling
+            [4] => dishwasher
+            [6] => heating
+        )
+
+)
+ - 2024-11-27 06:35:38
+
+Successfully assigned terms to taxonomy 'place_accommodation_length'. - 2024-11-27 06:35:45
+
+Successfully assigned terms to taxonomy 'place_property_availability'. - 2024-11-27 06:35:45
+
+Successfully assigned terms to taxonomy 'place_sda_home'. - 2024-11-27 06:35:45
+
+Successfully assigned terms to taxonomy 'housefeatures'. - 2024-11-27 06:35:46
+
+Successfully assigned terms to taxonomy 'place_who_can_live_here'. - 2024-11-27 06:35:46
+
+Successfully assigned terms to taxonomy 'place_support_provided'. - 2024-11-27 06:35:46
+
+data: Array
+(
+    [accommodationLength] => Array
+        (
+            [0] => MEDIUM_TERM
+            [1] => ONGOING_LEASE
+            [2] => SHORT_TERM
+        )
+
+    [propertyAvailableOptions] => WHOLE_HOME
+    [place_sda_home] => SDA
+    [place_sda_building_type] => APARTMENT
+    [place_gender_of_housemate] => 
+    [place_looking_for_a_housemate] => 
+    [place_who_can_live_here] => Array
+        (
+            [0] => BY_YOURSELF
+            [1] => WITH_PARTNER
+        )
+
+    [place_age_of_housemates] => 
+    [place_sda_design_category] => Array
+        (
+            [0] => IMPROVED_LIVABILITY
+        )
+
+    [place_support_provided] => Array
+        (
+            [0] => NONE_OWN_SUPPORT
+        )
+
+    [housefeatures] => Array
+        (
+            [0] => broadband-internet-available
+            [1] => cooling
+            [6] => heating
+        )
+
+    [accessibilityandsafety] => Array
+        (
+            [0] => accessible-features
+            [8] => wheelchair-accessible
+        )
+
+    [livingspacefeatures] => Array
+        (
+            [2] => built-in-wardrobes
+        )
+
+)
+ - 2024-11-27 07:03:53
+
+data2: Array
+(
+    [housefeatures] => Array
+        (
+            [0] => broadband-internet-available
+            [1] => cooling
+            [6] => heating
+        )
+
+)
+ - 2024-11-27 07:03:53
+
+Successfully assigned terms to taxonomy 'place_accommodation_length'. - 2024-11-27 07:04:02
+
+Successfully assigned terms to taxonomy 'place_property_availability'. - 2024-11-27 07:04:02
+
+Successfully assigned terms to taxonomy 'place_sda_home'. - 2024-11-27 07:04:03
+
+Successfully assigned terms to taxonomy 'place_sda_building_type'. - 2024-11-27 07:04:03
+
+Successfully assigned terms to taxonomy 'housefeatures'. - 2024-11-27 07:04:03
+
+Successfully assigned terms to taxonomy 'accessibilityandsafety'. - 2024-11-27 07:04:03
+
+Successfully assigned terms to taxonomy 'livingspacefeatures'. - 2024-11-27 07:04:03
+
+Successfully assigned terms to taxonomy 'place_who_can_live_here'. - 2024-11-27 07:04:03
+
+Successfully assigned terms to taxonomy 'place_sda_design_category'. - 2024-11-27 07:04:03
+
+Successfully assigned terms to taxonomy 'place_support_provided'. - 2024-11-27 07:04:03
+
+data: Array
+(
+    [accommodationLength] => Array
+        (
+            [0] => ONGOING_LEASE
+        )
+
+    [propertyAvailableOptions] => BEDROOM_ONLY
+    [place_sda_home] => NON_SDA
+    [place_sda_building_type] => 
+    [place_gender_of_housemate] => Array
+        (
+            [0] => MALE
+            [1] => FEMALE
+        )
+
+    [place_looking_for_a_housemate] => Array
+        (
+            [0] => SOCIALISE_TOGETHER
+            [1] => ACTIVE_HOME
+            [2] => SHARE_COSTS
+        )
+
+    [place_who_can_live_here] => Array
+        (
+            [0] => SHARE_HOUSE_WITH_DISABILITY
+        )
+
+    [place_age_of_housemates] => Array
+        (
+            [0] => NO_PREFERENCE
+        )
+
+    [place_sda_design_category] => 
+    [place_support_provided] => Array
+        (
+            [0] => TWENTY_FOUR_HOURS
+        )
+
+    [housefeatures] => Array
+        (
+            [0] => broadband-internet-available
+            [1] => cooling
+            [4] => dishwasher
+            [6] => heating
+            [8] => high-energy-efficiency-rating
+            [12] => solar-hot-water
+            [13] => solar-panels
+        )
+
+    [accessibilityandsafety] => Array
+        (
+            [2] => commonwealth-rent-assistance-available
+            [8] => wheelchair-accessible
+        )
+
+    [livingspacefeatures] => Array
+        (
+            [2] => built-in-wardrobes
+            [4] => ensuite
+            [7] => furnished
+            [10] => strong-robustconstruction
+            [11] => study
+        )
+
+)
+ - 2024-11-27 07:22:47
+
+data2: Array
+(
+    [housefeatures] => Array
+        (
+            [0] => broadband-internet-available
+            [1] => cooling
+            [4] => dishwasher
+            [6] => heating
+            [8] => high-energy-efficiency-rating
+            [12] => solar-hot-water
+            [13] => solar-panels
+        )
+
+)
+ - 2024-11-27 07:22:47
+
+Successfully assigned terms to taxonomy 'place_accommodation_length'. - 2024-11-27 07:22:55
+
+Successfully assigned terms to taxonomy 'place_property_availability'. - 2024-11-27 07:22:55
+
+Successfully assigned terms to taxonomy 'place_sda_home'. - 2024-11-27 07:22:55
+
+Successfully assigned terms to taxonomy 'housefeatures'. - 2024-11-27 07:22:55
+
+Successfully assigned terms to taxonomy 'accessibilityandsafety'. - 2024-11-27 07:22:55
+
+Successfully assigned terms to taxonomy 'livingspacefeatures'. - 2024-11-27 07:22:55
+
+Successfully assigned terms to taxonomy 'place_gender_of_housemate'. - 2024-11-27 07:22:55
+
+Successfully assigned terms to taxonomy 'place_looking_for_a_housemate'. - 2024-11-27 07:22:55
+
+Successfully assigned terms to taxonomy 'place_who_can_live_here'. - 2024-11-27 07:22:55
+
+Successfully assigned terms to taxonomy 'place_age_of_housemates'. - 2024-11-27 07:22:55
+
+Successfully assigned terms to taxonomy 'place_support_provided'. - 2024-11-27 07:22:55
+
+Location:  - 2024-11-27 08:37:42
+
+Latitude: -34.9156868 - 2024-11-27 08:37:42
+
+Longitude: 150.6360411 - 2024-11-27 08:37:42
+
+Location:  - 2024-11-27 08:42:15
+
+Latitude: -33.95793 - 2024-11-27 08:42:15
+
+Longitude: 151.002 - 2024-11-27 08:42:15
+
+Location: NSW - Southern Highlands and Shoalhaven - 2024-11-27 08:44:19
+
+Latitude: -34.4545933 - 2024-11-27 08:44:19
+
+Longitude: 150.8451519 - 2024-11-27 08:44:19
+
+Location: NSW – Regional – Northern NSW - 2024-11-27 09:12:43
+
+Latitude: -30.5015616 - 2024-11-27 09:12:43
+
+Longitude: 151.6661993 - 2024-11-27 09:12:43
+
+Location: NSW - Far West and Orana - 2024-11-27 09:20:12
+
+Latitude: -28.2411564 - 2024-11-27 09:20:12
+
+Longitude: 153.5039021 - 2024-11-27 09:20:12
+
+Location: NSW – Regional – Illawarra Shoalhaven - 2024-11-27 09:22:52
+
+Latitude: -32.1943225 - 2024-11-27 09:22:52
+
+Longitude: 152.5142797 - 2024-11-27 09:22:52
 

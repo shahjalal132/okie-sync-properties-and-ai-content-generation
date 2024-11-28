@@ -343,7 +343,7 @@ class Okie_Properties {
         $table_name = $wpdb->prefix . 'sync_properties';
 
         // Prepare the query
-        $sql = $wpdb->prepare( "SELECT * FROM $table_name WHERE status = 'pending' AND is_synced = 'no' LIMIT $this->limit" );
+        $sql = $wpdb->prepare( "SELECT * FROM $table_name WHERE status = 'updated' AND is_synced = 'no' LIMIT $this->limit" );
 
         $properties = $wpdb->get_results( $sql );
 
@@ -398,17 +398,89 @@ class Okie_Properties {
             $parking                 = $property_data['parking'] ?? 0;
             $numberOfSdaResidents    = $property_data['numberOfSdaResidents'] ?? 0;
             $ooaAppointmentAndReview = $property_data['ooaAppointmentAndReview'] ?? '';
+            $supportProvided         = $property_data['supportProvider'] ?? '';
 
-            // taxonomies
-            $accommodationLength      = $property_data['accommodationLength'] ?? '';
-            $propertyAvailableOptions = $property_data['propertyAvailableOptions'] ?? '';
-            $propertySdaType          = $property_data['propertySdaType'] ?? '';
-            $building_type            = $property->building_type ?? '';
-            // safety features
-            $accessibleFeatures       = $property_data['accessibleFeatures'];
-            $alarmSystem = $property_data['alarmSystem'];
-            $automatedDoors = $property_data['automatedDoors'];
-            $broadbandInternetAvailable = $property_data['broadbandInternetAvailable'];
+            // Taxonomies data
+            $data = [
+                'accommodationLength' => $property_data['accommodationLength'] ?? '',
+                'propertyAvailableOptions' => $property_data['propertyAvailableOptions'] ?? '',
+                'place_sda_home' => $property_data['propertySdaType'] ?? '',
+                'place_sda_building_type' => $property_data['sdaBuildingType'] ?? '',
+                'place_gender_of_housemate' => $property_data['genderOfHousemates'] ?? '',
+                'place_looking_for_a_housemate' => $property_data['lookingForAHousemate'] ?? '',
+                'place_who_can_live_here' => $property_data['whoCanLiveHere'] ?? '',
+                'place_age_of_housemates' => $property_data['ageOfHousemates'] ?? '',
+                'place_sda_design_category' => $property_data['sdaDesignCategory'] ?? '',
+                'place_support_provided' => $property_data['supportProvided'] ?? '',
+                'housefeatures' => array_filter(array(
+                    $property_data['broadbandInternetAvailable'] == 'true' ? 'broadband-internet-available' : null,
+                    $property_data['cooling'] == 'true' ? 'cooling' : null,
+                    // $property_data['coolingSystem'] == 'true' ? 'cooling-system' : null,
+                    // $property_data['detailsNotProvided'] == 'true' ? 'details-not-provided' : null,
+                    $property_data['dishwasher'] == 'true' ? 'dishwasher' : null,
+                    $property_data['ductedVacuumSystem'] == 'true' ? 'ducted-vacuum-system' : null,
+                    $property_data['heating'] == 'true' ? 'heating' : null,
+                    // $property_data['heatingSystem'] == 'true' ? 'heating-system' : null,
+                    $property_data['energyEfficiencyRating'] == 'HIGH' ? 'high-energy-efficiency-rating' : null,
+                    $property_data['energyEfficiencyRating'] == 'MEDIUM' ? 'medium-energy-efficiency-rating' : null,
+                    $property_data['energyEfficiencyRating'] == 'LOW' ? 'low-energy-efficiency-rating' : null,
+                    $property_data['payTvAccess'] == 'true' ? 'pay-tv-access' : null,
+                    $property_data['solarHotWater'] == 'true' ? 'solar-hot-water' : null,
+                    $property_data['solarPanels'] == 'true' ? 'solar-panels' : null,
+                    $property_data['sprinklers'] == 'true' ? 'sprinklers' : null,
+                )),
+                'accessibilityandsafety' => array_filter(array(
+                    $property_data['accessibleFeatures'] == 'true' ? 'accessible-features' : null,
+                    $property_data['ceilingHoist'] == 'true' ? 'ceiling-hoist' : null,
+                    $property_data['commonwealthRentAssistanceAvailable'] == 'true' ? 'commonwealth-rent-assistance-available' : null,
+                    // $property_data['DetailsNotProvided'] == 'true' ? 'details-not-provided' : null,
+                    $property_data['doorwayWidthsGreaterThan1000mm'] == 'true' ? 'doorway-widths-greater-than-1m' : null,
+                    $property_data['emergencyPowerBackup'] == 'true' ? 'emergency-power-backup' : null,
+                    $property_data['onsiteOvernightAssistance'] == 'true' ? 'onsite-overnight-assistance' : null,
+                    $property_data['petAllowed'] == 'true' ? 'pets-allowed' : null,
+                    $property_data['wheelchairAccessible'] == 'true' ? 'wheelchair-accessible' : null,
+                )),
+                'livingspacefeatures' => array_filter(array(
+                    $property_data['alarmSystem'] == 'true' ? 'alarm-system' : null,
+                    $property_data['automatedDoors'] == 'true' ? 'automated-doors' : null,
+                    $property_data['builtInWardrobes'] == 'true' ? 'built-in-wardrobes' : null,
+                    // $property_data['DetailsNotProvided'] == 'true' ? 'details-not-provided' : null,
+                    $property_data['ensuite'] == 'true' ? 'ensuite' : null,
+                    $property_data['fireSprinklers'] == 'true' ? 'fire-sprinklers' : null,
+                    $property_data['floorboards'] == 'true' ? 'floorboards' : null,
+                    $property_data['furnished'] == 'true' ? 'furnished' : null,
+                    $property_data['intercom'] == 'true' ? 'intercom' : null,
+                    // $property_data['strongAndRobustBuild'] == 'true' ? 'strong-robust-build' : null,
+                    $property_data['strongAndRobustConstruction'] == 'true' ? 'strong-robustconstruction' : null,
+                    $property_data['study'] == 'true' ? 'study' : null,
+                )),
+            ];
+            
+            // Transform input data
+            $transformed_data = [];
+            foreach ($data as $key => $value) {
+                $transformed_data[$key] = transform_data($value);
+            }
+
+            // Define taxonomy mappings
+            $taxonomies_names = [
+                'accommodationLength_tax_name' => 'place_accommodation_length',
+                'propertyAvailableOptions_tax_name' => 'place_property_availability',
+                'place_sda_home_tax_name' => 'place_sda_home',
+                'place_sda_building_type_tax_name' => 'place_sda_building_type',
+                'housefeatures_tax_name' => 'housefeatures',
+                'accessibilityandsafety_tax_name' => 'accessibilityandsafety',
+                'livingspacefeatures_tax_name' => 'livingspacefeatures',
+                'place_gender_of_housemate_tax_name' => 'place_gender_of_housemate',
+                'place_looking_for_a_housemate_tax_name' => 'place_looking_for_a_housemate',
+                'place_who_can_live_here_tax_name' => 'place_who_can_live_here',
+                'place_age_of_housemates_tax_name' => 'place_age_of_housemates',
+                'place_sda_design_category_tax_name' => 'place_sda_design_category',
+                'place_support_provided_tax_name' => 'place_support_provided',
+                'area_tax_name' => 'area',
+            ];
+
+
 
             // return "Beds : $beds, Baths : $bathrooms, Parking : $parking, NumberOfSdaResidents : $numberOfSdaResidents";
 
@@ -417,7 +489,7 @@ class Okie_Properties {
                 'beds'            => $beds,
                 'bathrooms'       => $bathrooms,
                 'parking'         => $parking,
-                'location'        => array( 'location' => $location, 'map_picker' => '', 'latitude' => $latitude, 'longitude' => $longitude ),
+                'location'        => array( 'address' => $location, 'map_picker' => '', 'latitude' => $latitude, 'longitude' => $longitude ),
                 'location-2'      => array(),
                 'location-3'      => array(),
                 'location-4'      => array(),
@@ -430,7 +502,7 @@ class Okie_Properties {
                 'location-11'     => array(),
                 'rooms'           => $number_of_rooms,
                 'sda-residents'   => $numberOfSdaResidents,
-                'text-2'          => '',
+                'text-2'          => $supportProvided,
                 'text-3'          => '',
                 'text-4'          => $ooaAppointmentAndReview,
                 // Nearby places data
@@ -449,7 +521,9 @@ class Okie_Properties {
                 'wikilink'        => '',
                 'lac_details'     => '',
             ];
-
+            put_program_logs("Location: " . $location);
+            put_program_logs("Latitude: " . $latitude);
+            put_program_logs("Longitude: " . $longitude);
             // post data
             $post_data = array(
                 'post_title'   => sanitize_text_field( $title ),
@@ -524,6 +598,12 @@ class Okie_Properties {
                 if ( is_wp_error( $post_id ) ) {
                     throw new \Exception( 'Failed to insert post: ' . $post_id->get_error_message() );
                 }
+
+                // Fetch term IDs for taxonomies
+                $terms_ids = match_terms_and_get_ids( $transformed_data, $taxonomies_names);
+
+                // Assign terms to the post
+                assign_terms_to_post($post_id, $terms_ids, $taxonomies_names);
 
                 // update is synced status
                 $wpdb->update(
