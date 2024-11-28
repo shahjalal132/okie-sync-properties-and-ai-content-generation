@@ -30,9 +30,9 @@ class Okie_Properties {
         $this->apiEndpoint                           = get_option( 'okie_chatgpt_api_endpoint' );
         $this->apiSecretKey                          = get_option( 'okie_chatgpt_api_secret_key' );
         $this->limit                                 = get_option( 'option1', 1 );
-        $this->title_rewrite_instruction             = get_option( 'okie_title_rewrite_instruction' );
-        $this->short_description_rewrite_instruction = get_option( 'okie_short_rewrite_instruction' );
-        $this->description_rewrite_instruction       = get_option( 'okie_description_rewrite_instruction' );
+        $this->title_rewrite_instruction             = get_option( 'option2', '' );
+        $this->short_description_rewrite_instruction = get_option( 'option4', '' );
+        $this->description_rewrite_instruction       = get_option( 'option5', '' );
     }
 
     public function register_rest_route() {

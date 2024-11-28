@@ -47,6 +47,19 @@ class Admin_Sub_Menu {
 
         $option1 = sanitize_text_field( $_POST['option1'] );
         $option2 = sanitize_text_field( $_POST['option2'] );
+        $option3 = sanitize_text_field( $_POST['option3'] );
+        $option4 = sanitize_text_field( $_POST['option4'] );
+        $option5 = sanitize_text_field( $_POST['option5'] );
+
+        $options = sprintf(
+            'Option 1: %s, Option 2: %s, Option 3: %s, Option 4: %s, Option 5: %s',
+            $option1,
+            $option2,
+            $option3,
+            $option4,
+            $option5
+        );
+        // $this->put_program_logs( $options );
 
         /* if ( empty( $option1 ) || empty( $option2 ) ) {
             wp_send_json_error( 'An error occurred! Please fill all the fields.' );
@@ -54,6 +67,9 @@ class Admin_Sub_Menu {
 
         update_option( 'option1', $option1 );
         update_option( 'option2', $option2 );
+        update_option( 'option3', $option3 );
+        update_option( 'option4', $option4 );
+        update_option( 'option5', $option5 );
 
         wp_send_json_success( 'Options saved successfully!' );
         die();

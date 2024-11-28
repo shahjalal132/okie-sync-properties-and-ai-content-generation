@@ -125,8 +125,12 @@
 
     // save options start
     $("#save_options").on("click", function () {
+
       const option1 = $("#option1").val();
       const option2 = $("#option2").val();
+      const option3 = $("#option3").val();
+      const option4 = $("#option4").val();
+      const option5 = $("#option5").val();
 
       // check if option1 value > 100 return error
       if (option1 > 100) {
@@ -149,6 +153,9 @@
           action: "save_options",
           option1: option1,
           option2: option2,
+          option3: option3,
+          option4: option4,
+          option5: option5,
         },
         success: function (response) {
           // remove loading spinner
