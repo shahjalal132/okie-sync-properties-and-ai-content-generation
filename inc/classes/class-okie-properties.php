@@ -670,6 +670,9 @@ class Okie_Properties {
                 'pl_website4' => $website4,
                 'pl_website5' => $website5,
                 'pl_short_description' => $short_description,
+                'pl_longitude' => $longitude,
+                'pl_latitude' => $latitude,
+                'pl_location' => $location,
 
 
             ];
