@@ -428,12 +428,13 @@ class Okie_Properties {
             $sda_design_category         = $property->sda_design_category ?? '';
             $booked_status               = $property->booked_status ?? '';
             $vacancy                     = $property->vacancy ?? 0;
-            $has_fire_sprinklers         = $property->has_fire_sprinklers ?? 0;
-            $has_breakout_room           = $property->has_breakout_room ?? 0;
-            $onsite_overnight_assistance = $property->onsite_overnight_assistance ?? 0;
+            $has_fire_sprinklers         = $property->has_fire_sprinklers ?? '';
+            $has_breakout_room           = $property->has_breakout_room ?? '';
+            $onsite_overnight_assistance = $property->onsite_overnight_assistance ?? '';
             $email                       = $property->email ?? '';
             $phone                       = $property->phone ?? '';
             $image_urls                  = $property->image_urls ?? '';
+            
             // put_program_logs( 'Image URLs: ' . $image_urls );
             $image_urls = json_decode( $image_urls, true );
 
@@ -449,6 +450,57 @@ class Okie_Properties {
             $numberOfSdaResidents    = $property_data['numberOfSdaResidents'] ?? 0;
             $ooaAppointmentAndReview = $property_data['ooaAppointmentAndReview'] ?? '';
             $supportProvided         = $property_data['supportProvider'] ?? '';
+
+            // property additional information
+            $date_available_to_move_in = $property_data['dateAvailableToMoveIn'] ?? '';
+            $energy_efficiency_rating  = $property_data['energyEfficiencyRating'] ?? '';
+            $gym                      = $property_data['gym'] == 'true' ? 'Gym' : null;
+            $hasooa                   = $property_data['hasOoa'] == 'true' ? 'Hasooa' : null;
+            $liftaccessible           = $property_data['liftAccessible'] == 'true' ? 'Lift Accessible' : null;
+            $listingid                = $property_data['listingId'] ?? '';
+            $mediumtermaccommodationfunding  = $property_data['mediumTermAccommodationFunding'] == 'true' ? 'Medium Term Accommodation Funding' : null;
+            $numberofpeoplesharing          = $property_data['numberOfPeopleSharing'] ?? '';
+            $outdoorarea                   = $property_data['outdoorArea'] == 'true' ? 'Outdoor Area' : null;
+            $postcode                    = $property_data['postcode'] ?? '';
+            $propertyprice              = $property_data['propertyPrice'] ?? '';
+            $property_type              = $property_data['propertyType'] ?? '';
+            $reasonablerentcontrassetbyndia = $property_data['reasonableRentContrAsSetByNdia'] == 'true' ? 'Reasonable Rent Contrasset By NDIA' : null;
+            $rumpusroom                 = $property_data['rumpusRoom'] == 'true' ? 'Rumpus Room' : null;
+            $sdaamount                  = $property_data['sdaAmount'] ?? '';
+            $sdalocation                = $property_data['sdaLocation'] ?? '';
+            $sayoverwhichsupportproviderisooa = $property_data['sayOverWhichSUpportProviderIsOoa'] == 'true' ? 'Say Over Which Support Provider Is Ooa' : null;
+            $state                      = $property_data['state'] ?? '';
+            $status                     = $property_data['status'] ?? '';
+            $suburb                     = $property_data['suburb'] ?? '';
+            $youdecideonyourowncoresupports = $property_data['youDecideOnYourOwnCoreSupports'] == 'true' ? 'You Decide On Your Own Core Supports' : null;
+            $publisheddate              = date( 'Y-m-d H:i:s', strtotime( $property_data['publishedDate'] ?? '') );
+            
+            $expirydate                 = date( 'Y-m-d H:i:s', strtotime( $property_data['expiryDate'] ?? '') );
+            $number_of_toilets          = $property_data['numberOfToilets'] ?? '';
+            $shortid                    = $property_data['shortId'] ?? '';
+            $listing_certified          = $property_data['listingCertified'] == 'true' ? 'Listing Certified' : null;
+            $listinglevel               = $property_data['listingLevel'] ?? '';
+            $onsiteactiveovernightsupport = $property_data['onsiteActiveOvernightSupport'] == 'true' ? 'Onsite Active Overnight Support' : null;
+            $wheelchairaccessibleparking = $property_data['wheelchairAccessibleParking'] ?? '';
+            $tagstatus                  = $property_data['tagStatus'] ?? '';
+            $open_for_inspection        = $property_data['openForInspection'] == 'true' ? 'Open For Inspection' : null;
+            $openforinspectiondate      = $property_data['openForInspectionDate'] ?? '';
+            $inspectionregisterlink     = $property_data['inspectionRegisterLink'] ?? '';
+            $propertypricepercentage    = $property_data['propertyPricePercentage'] ?? '';
+            $tenantincomepercentage     = $property_data['tenantIncomePercentage'] == 'true' ? 'Tenant Income Percentage' : null;
+            $providershortid            = $property_data['providerShortId'] ?? '';
+            $short_description          = $property_data['shortDescription'] ?? '';
+
+            $max_price_per_room = $property->max_price_per_room ?? '';
+            $website1           = $property->website1 ?? '';
+            $website2           = $property->website2 ?? '';
+            $website3           = $property->website3 ?? '';
+            $website4           = $property->website4 ?? '';
+            $website5           = $property->website5 ?? '';
+            
+
+
+
 
             // Taxonomies data
             $data = [
@@ -568,6 +620,58 @@ class Okie_Properties {
                 'wikitext'        => '',
                 'wikilink'        => '',
                 'lac_details'     => '',
+                // Property Additional information
+                'pl_date_available_to_move_in' => $date_available_to_move_in,
+                'pl_energy_efficiency_rating' => $energy_efficiency_rating,
+                'pl_gym'               => $gym,
+                'pl_hasooa'            => $hasooa,
+                'pl_liftaccessible'           => $liftaccessible,
+                'pl_listingid'         => $listingid,
+                'pl_mediumtermaccommodationfunding' => $mediumtermaccommodationfunding,
+                'pl_numberofpeoplesharing' => $numberofpeoplesharing,
+                // 'pl_ooaappointmentandreview' => $ooaAppointmentAndReview,
+                'pl_outdoorarea' => $outdoorarea,
+                'pl_postcode' => $postcode,
+                'pl_propertyprice' => $propertyprice,
+                'pl_property_type' => $property_type,
+                'pl_reasonablerentcontrassetbyndia' => $reasonablerentcontrassetbyndia,
+                'pl_rumpusroom' => $rumpusroom,
+                'pl_sdaamount' => $sdaamount,
+                'pl_sdalocation' => $sdalocation,
+                'pl_sayoverwhichsupportproviderisooa' => $sayoverwhichsupportproviderisooa,
+                'pl_state' => $state,
+                'pl_status' => $status,
+                'pl_suburb' => $suburb,
+                'pl_youdecideonyourowncoresupports' => $youdecideonyourowncoresupports,
+                'pl_publisheddate' => $publisheddate,
+                'pl_expirydate' => $expirydate,
+                'pl_number_of_toilets' => $number_of_toilets,
+                'pl_shortid' => $shortid,
+                'pl_listing_certified' => $listing_certified,
+                'pl_listinglevel' => $listinglevel,
+                'pl_onsiteactiveovernightsupport' => $onsiteactiveovernightsupport,
+                'pl_wheelchairaccessibleparking' => $wheelchairaccessibleparking,
+                'pl_tagstatus' => $tagstatus,
+                'pl_open_for_inspection' => $open_for_inspection,
+                'pl_openforinspectiondate' => $openforinspectiondate,
+                'pl_inspectionregisterlink' => $inspectionregisterlink,
+                'pl_propertypricepercentage' => $propertypricepercentage,
+                'pl_tenantincomepercentage' => $tenantincomepercentage,
+                'pl_providershortid' => $providershortid,
+                'pl_max_price_per_room' => $max_price_per_room,
+                'pl_vacancy' => $vacancy,
+                'pl_has_fire_sprintklers' => $has_fire_sprinklers,
+                'pl_has_breakout_room' => $has_breakout_room,
+                'pl_email' => $email,
+                'pl_phone' => $phone,
+                'pl_website1' => $website1,
+                'pl_website2' => $website2,
+                'pl_website3' => $website3,
+                'pl_website4' => $website4,
+                'pl_website5' => $website5,
+                'pl_short_description' => $short_description,
+
+
             ];
 
             // post data
