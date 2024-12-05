@@ -30,8 +30,8 @@ class Okie_Properties {
         $this->apiEndpoint                           = get_option( 'okie_chatgpt_api_endpoint' );
         $this->apiSecretKey                          = get_option( 'okie_chatgpt_api_secret_key' );
         $this->limit                                 = get_option( 'option1', 1 );
-        $this->title_rewrite_instruction             = get_option( 'option2', '' );
-        $this->short_description_rewrite_instruction = get_option( 'option4', '' );
+        $this->title_rewrite_instruction             = get_option( 'option2', '[Number of Bedrooms] Bedroom Home | [Location] | [Type of Home] | Okie — Extract the number of bedrooms and location from the description. use "SDA," "MTA," "STA," "ILO," or "SIL" for type if mentioned, "(Non SDA)" if stated as not registered, or "General Listing" if unspecified. always end with "Okie"' );
+        $this->short_description_rewrite_instruction = get_option( 'option4', '"Discover [Number of Bedrooms] Bedroom [Type of Home] in [Location]. Features include [Key Features]. Contact Okie to find your ideal home today!" — Ensure 120-160 characters, include bedrooms, type (e.g., SDA, MTA, STA, SIL, ILO, or (Non SDA)), location, 1-2 key features, and a CTA for engagement.' );
         $this->description_rewrite_instruction       = get_option( 'option5', '' );
     }
 
@@ -198,7 +198,7 @@ class Okie_Properties {
 
         // Prepare the SQL query
         $sql = "
-            SELECT wsp.id, wsp.property_id, wsp.name, wsp.long_description, wsp.short_description
+            SELECT wsp.id, wsp.property_id, wsp.name, wsp.long_description, wsp.short_description, wsp.property_data
             FROM {$properties_table} wsp WHERE wsp.status = 'pending'
             LIMIT {$this->limit}
         ";
@@ -226,23 +226,25 @@ class Okie_Properties {
                 // $this->put_program_logs( 'old description: ' . $long_desc );
                 $short_desc = $result->short_description ?? '';
                 // $this->put_program_logs( 'old short description: ' . $short_desc );
+                $property_data = $result->property_data ?? '';
 
                 // Generate title
-                $new_title = $this->rewrite_content_via_chatgpt( $this->title_rewrite_instruction, $title );
+                $new_title = $this->rewrite_content_via_chatgpt( $this->title_rewrite_instruction, $property_data );
                 if ( strpos( $new_title, 'Error:' ) === 0 ) {
                     throw new \Exception( "Failed to generate title for property ID: {$property_row_id}" );
                 }
                 // $this->put_program_logs( 'new title: ' . $new_title );
 
+
                 // Generate short description
-                $new_short_desc = $this->rewrite_content_via_chatgpt( $this->short_description_rewrite_instruction, $short_desc );
+                $new_short_desc = $this->rewrite_content_via_chatgpt( $this->short_description_rewrite_instruction, $property_data );
                 if ( strpos( $new_short_desc, 'Error:' ) === 0 ) {
                     throw new \Exception( "Failed to generate short description for property ID: {$property_row_id}" );
                 }
                 // $this->put_program_logs( 'new short description: ' . $new_short_desc );
 
                 // Generate a new description
-                $new_description = $this->rewrite_content_via_chatgpt( $this->description_rewrite_instruction, $long_desc );
+                $new_description = $this->rewrite_content_via_chatgpt( $this->description_rewrite_instruction, $long_desc);
                 if ( strpos( $new_description, 'Error:' ) === 0 ) {
                     throw new \Exception( "Failed to generate description for property ID: {$property_row_id}" );
                 }
@@ -423,6 +425,7 @@ class Okie_Properties {
             $property_id                 = $property->property_id ?? '';
             $title                       = $property->name ?? '';
             $description                 = $property->long_description ?? '';
+            $short_description           = $property->short_description ?? '';
             $location                    = $property->location ?? '';
             $number_of_rooms             = $property->number_of_rooms ?? 0;
             $sda_design_category         = $property->sda_design_category ?? '';
@@ -489,7 +492,6 @@ class Okie_Properties {
             $propertypricepercentage    = $property_data['propertyPricePercentage'] ?? '';
             $tenantincomepercentage     = $property_data['tenantIncomePercentage'] == 'true' ? 'Tenant Income Percentage' : null;
             $providershortid            = $property_data['providerShortId'] ?? '';
-            $short_description          = $property_data['shortDescription'] ?? '';
 
             $max_price_per_room = $property->max_price_per_room ?? '';
             $website1           = $property->website1 ?? '';
@@ -740,8 +742,8 @@ class Okie_Properties {
 
                 $post_id = wp_insert_post( $post_data );
 
-                // set property gallery images
-                set_property_gallery_images( $post_id, $image_urls );
+                // set product images with unique image names
+                set_product_images_with_unique_image_name( $post_id, $image_urls );
 
                 // set additional information's
                 foreach ( $additional_infos as $key => $value ) {
