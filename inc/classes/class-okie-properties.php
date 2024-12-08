@@ -222,11 +222,16 @@ class Okie_Properties {
                 $property_row_id = $result->property_id;
                 $title           = $result->name ?? '';
                 // $this->put_program_logs( 'old title: ' . $title );
-                $long_desc = $result->long_description ?? '';
+                // $long_desc = $result->long_description ?? '';
                 // $this->put_program_logs( 'old description: ' . $long_desc );
                 $short_desc = $result->short_description ?? '';
                 // $this->put_program_logs( 'old short description: ' . $short_desc );
                 $property_data = $result->property_data ?? '';
+
+                // Decode property data
+                $propertys_data = json_decode( $property_data, true );
+                $long_desc     = $propertys_data['propertyDescriptionLong'] ?? '';
+                // put_program_logs( 'old long description: ' . $long_desc );
 
                 // Generate title
                 $new_title = $this->rewrite_content_via_chatgpt( $this->title_rewrite_instruction, $property_data );
@@ -743,7 +748,7 @@ class Okie_Properties {
                 $post_id = wp_insert_post( $post_data );
 
                 // set product images with unique image names
-                set_product_images_with_unique_image_name( $post_id, $image_urls );
+                set_property_gallery_images( $post_id, $image_urls );
 
                 // set additional information's
                 foreach ( $additional_infos as $key => $value ) {
