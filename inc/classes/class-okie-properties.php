@@ -497,6 +497,7 @@ class Okie_Properties {
             $propertypricepercentage    = $property_data['propertyPricePercentage'] ?? '';
             $tenantincomepercentage     = $property_data['tenantIncomePercentage'] == 'true' ? 'Tenant Income Percentage' : null;
             $providershortid            = $property_data['providerShortId'] ?? '';
+            $support_provider_website   = $property_data['supportProviderWebsite'] ?? '';
 
             $max_price_per_room = $property->max_price_per_room ?? '';
             $website1           = $property->website1 ?? '';
@@ -671,6 +672,7 @@ class Okie_Properties {
                 'pl_has_breakout_room' => $has_breakout_room,
                 'pl_email' => $email,
                 'pl_phone' => $phone,
+                'pl_support_provider_website' => $support_provider_website,
                 'pl_website1' => $website1,
                 'pl_website2' => $website2,
                 'pl_website3' => $website3,
