@@ -124,6 +124,7 @@ class Okie_Properties {
                 // $this->put_program_logs( 'Total properties fetched: ' . count( $all_properties ) );
                 $startDb = time();
 
+                // insert properties to database
                 seed_properties_to_database( $all_properties );
 
                 return [
@@ -145,8 +146,29 @@ class Okie_Properties {
     }
 
     public function get_hash_value() {
-        // Initialize cURL
-        $curl = curl_init();
+
+        // get hash from laravel application start
+        $_url      = "https://arandomdomain.space/public/get-hash-key";
+        $_response = wp_remote_get( $_url );
+        // get body from response
+        $_key = wp_remote_retrieve_body( $_response );
+
+        $return_message = '';
+        if ( !empty( $_key ) ) {
+            update_option( 'okie_api_hash_key', $_key );
+            $return_message = "Hash key Found $_key";
+        } else {
+            $return_message = "Hash key not found";
+        }
+
+        return [
+            'status'  => 'success',
+            'message' => $return_message,
+        ];
+        // get hash from laravel application end
+
+        // get hash key from direct api process start
+        /* $curl = curl_init();
         curl_setopt_array( $curl, array(
             CURLOPT_URL            => 'https://www.housinghub.org.au/search-results?latitude=-33.8688197&longitude=151.2092955&location_string=Sydney%20NSW%2C%20Australia',
             CURLOPT_RETURNTRANSFER => true,
@@ -188,7 +210,8 @@ class Okie_Properties {
         return [
             'status'  => 'error',
             'message' => 'Key not found in response.',
-        ];
+        ]; */
+        // get hash key from direct api process end
     }
 
     public function rewrite_contents_callback() {
@@ -230,7 +253,7 @@ class Okie_Properties {
 
                 // Decode property data
                 $propertys_data = json_decode( $property_data, true );
-                $long_desc     = $propertys_data['propertyDescriptionLong'] ?? '';
+                $long_desc      = $propertys_data['propertyDescriptionLong'] ?? '';
                 // put_program_logs( 'old long description: ' . $long_desc );
 
                 // Generate title
@@ -249,7 +272,7 @@ class Okie_Properties {
                 // $this->put_program_logs( 'new short description: ' . $new_short_desc );
 
                 // Generate a new description
-                $new_description = $this->rewrite_content_via_chatgpt( $this->description_rewrite_instruction, $long_desc);
+                $new_description = $this->rewrite_content_via_chatgpt( $this->description_rewrite_instruction, $long_desc );
                 if ( strpos( $new_description, 'Error:' ) === 0 ) {
                     throw new \Exception( "Failed to generate description for property ID: {$property_row_id}" );
                 }
@@ -282,11 +305,15 @@ class Okie_Properties {
 
     public function fetch_properties_from_api_via_state( $hash, $state ) {
 
-        $url = sprintf(
+        // url for direct request to api
+        /* $url = sprintf(
             "https://www.housinghub.org.au/_next/data/%s/search-results.json?state=%s&checkboxRent=true&sort=posted_desc",
             urlencode( $hash ),
             urlencode( $state )
-        );
+        ); */
+
+        // url for request to laravel application
+        $url = sprintf( "https://arandomdomain.space/public/get-properties/%s/%s", $hash, $state );
 
         $curl = curl_init();
         curl_setopt_array( $curl, array(
@@ -301,6 +328,7 @@ class Okie_Properties {
         ) );
 
         $response = curl_exec( $curl );
+        // $this->put_program_logs( 'get properties response: ' . $response );
 
         if ( curl_errno( $curl ) ) {
             $error_message = curl_error( $curl );
@@ -442,7 +470,7 @@ class Okie_Properties {
             $email                       = $property->email ?? '';
             $phone                       = $property->phone ?? '';
             $image_urls                  = $property->image_urls ?? '';
-            
+
             // put_program_logs( 'Image URLs: ' . $image_urls );
             $image_urls = json_decode( $image_urls, true );
 
@@ -460,44 +488,44 @@ class Okie_Properties {
             $supportProvided         = $property_data['supportProvider'] ?? '';
 
             // property additional information
-            $date_available_to_move_in = $property_data['dateAvailableToMoveIn'] ?? '';
-            $energy_efficiency_rating  = $property_data['energyEfficiencyRating'] ?? '';
-            $gym                      = $property_data['gym'] == 'true' ? 'Gym' : null;
-            $hasooa                   = $property_data['hasOoa'] == 'true' ? 'Hasooa' : null;
-            $liftaccessible           = $property_data['liftAccessible'] == 'true' ? 'Lift Accessible' : null;
-            $listingid                = $property_data['listingId'] ?? '';
-            $mediumtermaccommodationfunding  = $property_data['mediumTermAccommodationFunding'] == 'true' ? 'Medium Term Accommodation Funding' : null;
-            $numberofpeoplesharing          = $property_data['numberOfPeopleSharing'] ?? '';
-            $outdoorarea                   = $property_data['outdoorArea'] == 'true' ? 'Outdoor Area' : null;
-            $postcode                    = $property_data['postcode'] ?? '';
-            $propertyprice              = $property_data['propertyPrice'] ?? '';
-            $property_type              = $property_data['propertyType'] ?? '';
-            $reasonablerentcontrassetbyndia = $property_data['reasonableRentContrAsSetByNdia'] == 'true' ? 'Reasonable Rent Contrasset By NDIA' : null;
-            $rumpusroom                 = $property_data['rumpusRoom'] == 'true' ? 'Rumpus Room' : null;
-            $sdaamount                  = $property_data['sdaAmount'] ?? '';
-            $sdalocation                = $property_data['sdaLocation'] ?? '';
+            $date_available_to_move_in        = $property_data['dateAvailableToMoveIn'] ?? '';
+            $energy_efficiency_rating         = $property_data['energyEfficiencyRating'] ?? '';
+            $gym                              = $property_data['gym'] == 'true' ? 'Gym' : null;
+            $hasooa                           = $property_data['hasOoa'] == 'true' ? 'Hasooa' : null;
+            $liftaccessible                   = $property_data['liftAccessible'] == 'true' ? 'Lift Accessible' : null;
+            $listingid                        = $property_data['listingId'] ?? '';
+            $mediumtermaccommodationfunding   = $property_data['mediumTermAccommodationFunding'] == 'true' ? 'Medium Term Accommodation Funding' : null;
+            $numberofpeoplesharing            = $property_data['numberOfPeopleSharing'] ?? '';
+            $outdoorarea                      = $property_data['outdoorArea'] == 'true' ? 'Outdoor Area' : null;
+            $postcode                         = $property_data['postcode'] ?? '';
+            $propertyprice                    = $property_data['propertyPrice'] ?? '';
+            $property_type                    = $property_data['propertyType'] ?? '';
+            $reasonablerentcontrassetbyndia   = $property_data['reasonableRentContrAsSetByNdia'] == 'true' ? 'Reasonable Rent Contrasset By NDIA' : null;
+            $rumpusroom                       = $property_data['rumpusRoom'] == 'true' ? 'Rumpus Room' : null;
+            $sdaamount                        = $property_data['sdaAmount'] ?? '';
+            $sdalocation                      = $property_data['sdaLocation'] ?? '';
             $sayoverwhichsupportproviderisooa = $property_data['sayOverWhichSUpportProviderIsOoa'] == 'true' ? 'Say Over Which Support Provider Is Ooa' : null;
-            $state                      = $property_data['state'] ?? '';
-            $status                     = $property_data['status'] ?? '';
-            $suburb                     = $property_data['suburb'] ?? '';
-            $youdecideonyourowncoresupports = $property_data['youDecideOnYourOwnCoreSupports'] == 'true' ? 'You Decide On Your Own Core Supports' : null;
-            $publisheddate              = date( 'Y-m-d H:i:s', strtotime( $property_data['publishedDate'] ?? '') );
-            
-            $expirydate                 = date( 'Y-m-d H:i:s', strtotime( $property_data['expiryDate'] ?? '') );
-            $number_of_toilets          = $property_data['numberOfToilets'] ?? '';
-            $shortid                    = $property_data['shortId'] ?? '';
-            $listing_certified          = $property_data['listingCertified'] == 'true' ? 'Listing Certified' : null;
-            $listinglevel               = $property_data['listingLevel'] ?? '';
+            $state                            = $property_data['state'] ?? '';
+            $status                           = $property_data['status'] ?? '';
+            $suburb                           = $property_data['suburb'] ?? '';
+            $youdecideonyourowncoresupports   = $property_data['youDecideOnYourOwnCoreSupports'] == 'true' ? 'You Decide On Your Own Core Supports' : null;
+            $publisheddate                    = date( 'Y-m-d H:i:s', strtotime( $property_data['publishedDate'] ?? '' ) );
+
+            $expirydate                   = date( 'Y-m-d H:i:s', strtotime( $property_data['expiryDate'] ?? '' ) );
+            $number_of_toilets            = $property_data['numberOfToilets'] ?? '';
+            $shortid                      = $property_data['shortId'] ?? '';
+            $listing_certified            = $property_data['listingCertified'] == 'true' ? 'Listing Certified' : null;
+            $listinglevel                 = $property_data['listingLevel'] ?? '';
             $onsiteactiveovernightsupport = $property_data['onsiteActiveOvernightSupport'] == 'true' ? 'Onsite Active Overnight Support' : null;
-            $wheelchairaccessibleparking = $property_data['wheelchairAccessibleParking'] ?? '';
-            $tagstatus                  = $property_data['tagStatus'] ?? '';
-            $open_for_inspection        = $property_data['openForInspection'] == 'true' ? 'Open For Inspection' : null;
-            $openforinspectiondate      = $property_data['openForInspectionDate'] ?? '';
-            $inspectionregisterlink     = $property_data['inspectionRegisterLink'] ?? '';
-            $propertypricepercentage    = $property_data['propertyPricePercentage'] ?? '';
-            $tenantincomepercentage     = $property_data['tenantIncomePercentage'] == 'true' ? 'Tenant Income Percentage' : null;
-            $providershortid            = $property_data['providerShortId'] ?? '';
-            $support_provider_website   = $property_data['supportProviderWebsite'] ?? '';
+            $wheelchairaccessibleparking  = $property_data['wheelchairAccessibleParking'] ?? '';
+            $tagstatus                    = $property_data['tagStatus'] ?? '';
+            $open_for_inspection          = $property_data['openForInspection'] == 'true' ? 'Open For Inspection' : null;
+            $openforinspectiondate        = $property_data['openForInspectionDate'] ?? '';
+            $inspectionregisterlink       = $property_data['inspectionRegisterLink'] ?? '';
+            $propertypricepercentage      = $property_data['propertyPricePercentage'] ?? '';
+            $tenantincomepercentage       = $property_data['tenantIncomePercentage'] == 'true' ? 'Tenant Income Percentage' : null;
+            $providershortid              = $property_data['providerShortId'] ?? '';
+            $support_provider_website     = $property_data['supportProviderWebsite'] ?? '';
 
             $max_price_per_room = $property->max_price_per_room ?? '';
             $website1           = $property->website1 ?? '';
@@ -505,7 +533,7 @@ class Okie_Properties {
             $website3           = $property->website3 ?? '';
             $website4           = $property->website4 ?? '';
             $website5           = $property->website5 ?? '';
-            
+
 
 
 
@@ -593,95 +621,95 @@ class Okie_Properties {
             // return "Beds : $beds, Baths : $bathrooms, Parking : $parking, NumberOfSdaResidents : $numberOfSdaResidents";
 
             $additional_infos = [
-                '_property_id'    => $property_id,
-                'beds'            => $beds,
-                'bathrooms'       => $bathrooms,
-                'parking'         => $parking,
-                'location'        => array( 'address' => $location, 'map_picker' => '', 'latitude' => $latitude, 'longitude' => $longitude ),
-                'location-2'      => array(),
-                'location-3'      => array(),
-                'location-4'      => array(),
-                'location-5'      => array(),
-                'location-6'      => array(),
-                'location-7'      => array(),
-                'location-8'      => array(),
-                'location-9'      => array(),
-                'location-10'     => array(),
-                'location-11'     => array(),
-                'rooms'           => $number_of_rooms,
-                'sda-residents'   => $numberOfSdaResidents,
-                'text-2'          => $supportProvided,
-                'text-3'          => '',
-                'text-4'          => $ooaAppointmentAndReview,
+                '_property_id'                        => $property_id,
+                'beds'                                => $beds,
+                'bathrooms'                           => $bathrooms,
+                'parking'                             => $parking,
+                'location'                            => array( 'address' => $location, 'map_picker' => '', 'latitude' => $latitude, 'longitude' => $longitude ),
+                'location-2'                          => array(),
+                'location-3'                          => array(),
+                'location-4'                          => array(),
+                'location-5'                          => array(),
+                'location-6'                          => array(),
+                'location-7'                          => array(),
+                'location-8'                          => array(),
+                'location-9'                          => array(),
+                'location-10'                         => array(),
+                'location-11'                         => array(),
+                'rooms'                               => $number_of_rooms,
+                'sda-residents'                       => $numberOfSdaResidents,
+                'text-2'                              => $supportProvided,
+                'text-3'                              => '',
+                'text-4'                              => $ooaAppointmentAndReview,
                 // Nearby places data
-                'shopping'        => '',
-                'parks'           => '',
-                'medical_centre'  => '',
-                'hospital'        => '',
-                'train'           => '',
-                'bus'             => 1,
-                'recreational'    => '',
-                'fast_food'       => '',
-                'descriptionarea' => '',
-                'counciltext'     => '',
-                'councillink'     => '',
-                'wikitext'        => '',
-                'wikilink'        => '',
-                'lac_details'     => '',
+                'shopping'                            => '',
+                'parks'                               => '',
+                'medical_centre'                      => '',
+                'hospital'                            => '',
+                'train'                               => '',
+                'bus'                                 => 1,
+                'recreational'                        => '',
+                'fast_food'                           => '',
+                'descriptionarea'                     => '',
+                'counciltext'                         => '',
+                'councillink'                         => '',
+                'wikitext'                            => '',
+                'wikilink'                            => '',
+                'lac_details'                         => '',
                 // Property Additional information
-                'pl_date_available_to_move_in' => $date_available_to_move_in,
-                'pl_energy_efficiency_rating' => $energy_efficiency_rating,
-                'pl_gym'               => $gym,
-                'pl_hasooa'            => $hasooa,
-                'pl_liftaccessible'           => $liftaccessible,
-                'pl_listingid'         => $listingid,
-                'pl_mediumtermaccommodationfunding' => $mediumtermaccommodationfunding,
-                'pl_numberofpeoplesharing' => $numberofpeoplesharing,
+                'pl_date_available_to_move_in'        => $date_available_to_move_in,
+                'pl_energy_efficiency_rating'         => $energy_efficiency_rating,
+                'pl_gym'                              => $gym,
+                'pl_hasooa'                           => $hasooa,
+                'pl_liftaccessible'                   => $liftaccessible,
+                'pl_listingid'                        => $listingid,
+                'pl_mediumtermaccommodationfunding'   => $mediumtermaccommodationfunding,
+                'pl_numberofpeoplesharing'            => $numberofpeoplesharing,
                 // 'pl_ooaappointmentandreview' => $ooaAppointmentAndReview,
-                'pl_outdoorarea' => $outdoorarea,
-                'pl_postcode' => $postcode,
-                'pl_propertyprice' => $propertyprice,
-                'pl_property_type' => $property_type,
-                'pl_reasonablerentcontrassetbyndia' => $reasonablerentcontrassetbyndia,
-                'pl_rumpusroom' => $rumpusroom,
-                'pl_sdaamount' => $sdaamount,
-                'pl_sdalocation' => $sdalocation,
+                'pl_outdoorarea'                      => $outdoorarea,
+                'pl_postcode'                         => $postcode,
+                'pl_propertyprice'                    => $propertyprice,
+                'pl_property_type'                    => $property_type,
+                'pl_reasonablerentcontrassetbyndia'   => $reasonablerentcontrassetbyndia,
+                'pl_rumpusroom'                       => $rumpusroom,
+                'pl_sdaamount'                        => $sdaamount,
+                'pl_sdalocation'                      => $sdalocation,
                 'pl_sayoverwhichsupportproviderisooa' => $sayoverwhichsupportproviderisooa,
-                'pl_state' => $state,
-                'pl_status' => $status,
-                'pl_suburb' => $suburb,
-                'pl_youdecideonyourowncoresupports' => $youdecideonyourowncoresupports,
-                'pl_publisheddate' => $publisheddate,
-                'pl_expirydate' => $expirydate,
-                'pl_number_of_toilets' => $number_of_toilets,
-                'pl_shortid' => $shortid,
-                'pl_listing_certified' => $listing_certified,
-                'pl_listinglevel' => $listinglevel,
-                'pl_onsiteactiveovernightsupport' => $onsiteactiveovernightsupport,
-                'pl_wheelchairaccessibleparking' => $wheelchairaccessibleparking,
-                'pl_tagstatus' => $tagstatus,
-                'pl_open_for_inspection' => $open_for_inspection,
-                'pl_openforinspectiondate' => $openforinspectiondate,
-                'pl_inspectionregisterlink' => $inspectionregisterlink,
-                'pl_propertypricepercentage' => $propertypricepercentage,
-                'pl_tenantincomepercentage' => $tenantincomepercentage,
-                'pl_providershortid' => $providershortid,
-                'pl_max_price_per_room' => $max_price_per_room,
-                'pl_vacancy' => $vacancy,
-                'pl_has_fire_sprintklers' => $has_fire_sprinklers,
-                'pl_has_breakout_room' => $has_breakout_room,
-                'pl_email' => $email,
-                'pl_phone' => $phone,
-                'pl_support_provider_website' => $support_provider_website,
-                'pl_website1' => $website1,
-                'pl_website2' => $website2,
-                'pl_website3' => $website3,
-                'pl_website4' => $website4,
-                'pl_website5' => $website5,
-                'pl_short_description' => $short_description,
-                'pl_longitude' => $longitude,
-                'pl_latitude' => $latitude,
-                'pl_location' => $location,
+                'pl_state'                            => $state,
+                'pl_status'                           => $status,
+                'pl_suburb'                           => $suburb,
+                'pl_youdecideonyourowncoresupports'   => $youdecideonyourowncoresupports,
+                'pl_publisheddate'                    => $publisheddate,
+                'pl_expirydate'                       => $expirydate,
+                'pl_number_of_toilets'                => $number_of_toilets,
+                'pl_shortid'                          => $shortid,
+                'pl_listing_certified'                => $listing_certified,
+                'pl_listinglevel'                     => $listinglevel,
+                'pl_onsiteactiveovernightsupport'     => $onsiteactiveovernightsupport,
+                'pl_wheelchairaccessibleparking'      => $wheelchairaccessibleparking,
+                'pl_tagstatus'                        => $tagstatus,
+                'pl_open_for_inspection'              => $open_for_inspection,
+                'pl_openforinspectiondate'            => $openforinspectiondate,
+                'pl_inspectionregisterlink'           => $inspectionregisterlink,
+                'pl_propertypricepercentage'          => $propertypricepercentage,
+                'pl_tenantincomepercentage'           => $tenantincomepercentage,
+                'pl_providershortid'                  => $providershortid,
+                'pl_max_price_per_room'               => $max_price_per_room,
+                'pl_vacancy'                          => $vacancy,
+                'pl_has_fire_sprintklers'             => $has_fire_sprinklers,
+                'pl_has_breakout_room'                => $has_breakout_room,
+                'pl_email'                            => $email,
+                'pl_phone'                            => $phone,
+                'pl_support_provider_website'         => $support_provider_website,
+                'pl_website1'                         => $website1,
+                'pl_website2'                         => $website2,
+                'pl_website3'                         => $website3,
+                'pl_website4'                         => $website4,
+                'pl_website5'                         => $website5,
+                'pl_short_description'                => $short_description,
+                'pl_longitude'                        => $longitude,
+                'pl_latitude'                         => $latitude,
+                'pl_location'                         => $location,
 
 
             ];
